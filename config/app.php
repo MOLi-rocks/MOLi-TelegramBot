@@ -140,10 +140,10 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        MOLiBot\Providers\AppServiceProvider::class,
+        MOLiBot\Providers\AuthServiceProvider::class,
+        MOLiBot\Providers\EventServiceProvider::class,
+        MOLiBot\Providers\RouteServiceProvider::class,
 	Telegram\Bot\Laravel\TelegramServiceProvider::class,
 
     ],

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace MOLiBot\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use MOLiBot\Http\Requests;
+use MOLiBot\Http\Controllers\Controller;
 
 use Telegram;
 use Validator;

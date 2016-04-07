@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: App
-        psr4_prefix: App
+        namespace: MOLiBot
+        psr4_prefix: MOLiBot
         src_path: app

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace MOLiBot\Jobs;
 
 use Illuminate\Bus\Queueable;
 
