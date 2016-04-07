@@ -34,6 +34,7 @@ class TelegramController extends Controller
     public function postSendMessage(Request $request)
     {
         $rules = [
+            'chatid' => 'required',
             'message' => 'required'
         ];
 
@@ -44,20 +45,20 @@ class TelegramController extends Controller
             //return redirect()->back()
             //    ->with('status', 'danger')
             //    ->with('message', 'Message is required');
-            $error = $validator->errors()->all();
-            return response()->json(compact('error'), 400);
+            $errors = $validator->errors()->all();
+            return response()->json(["status" => "fail", "errors" => $errors], 400);
         }
 
         //Telegram::sendMessage('58915887', $request['message']);
         Telegram::sendMessage([
-            'chat_id' => '58915887', 
+            'chat_id' => $request['chatid'],
             'text' => $request['message']
         ]);
 
         //return redirect()->back()
         //    ->with('status', 'success')
         //    ->with('message', 'Message sent');
-        return response()->json(["status" => "success", "message" => "Message sent"], 200);
+        return response()->json(["status" => "success", "message" => $request['message']], 200);
     }
 
     /**
