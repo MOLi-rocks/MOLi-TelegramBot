@@ -57,5 +57,6 @@ return [
     */
     'commands' => [
         Telegram\Bot\Commands\HelpCommand::class,
+        MOLiBot\Commands\MapCommand::class,
     ],
 ];

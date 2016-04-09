@@ -18,3 +18,10 @@ Route::get('/', function () {
 Route::get('get-updates',   'TelegramController@getUpdates');
 //Route::get('send-message',  'TelegramController@getSendMessage');
 Route::post('send-message', 'TelegramController@postSendMessage');
+
+Route::post(env('TELEGRAM_BOT_TOKEN', 'YOUR-BOT-TOKEN'), function () {
+    $update = Telegram::commandsHandler(true);
+    // Commands handler method returns an Update object.
+    // So you can further process $update object
+    // to however you want.
+});
