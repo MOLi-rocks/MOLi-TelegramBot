@@ -15,9 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('get-updates',   'TelegramController@getUpdates');
-//Route::get('send-message',  'TelegramController@getSendMessage');
-Route::post('send-message', 'TelegramController@postSendMessage');
+Route::post('message', 'TelegramController@postSendMessage');
 
 Route::post(env('TELEGRAM_BOT_TOKEN', 'YOUR-BOT-TOKEN'), function () {
     $update = Telegram::commandsHandler(true);
