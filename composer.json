@@ -7,7 +7,8 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "irazasyed/telegram-bot-sdk": "^2.0"
+        "irazasyed/telegram-bot-sdk": "^2.0",
+        "ktamas77/firebase-php": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

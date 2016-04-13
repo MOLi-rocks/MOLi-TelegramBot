@@ -59,5 +59,6 @@ return [
         Telegram\Bot\Commands\HelpCommand::class,
         MOLiBot\Commands\StartCommand::class,
         MOLiBot\Commands\MapCommand::class,
+        MOLiBot\Commands\DoorStatusCommand::class,
     ],
 ];
