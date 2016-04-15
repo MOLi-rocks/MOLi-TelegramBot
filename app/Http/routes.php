@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Redirect::to('https://moli.rocks');
 });
 
 Route::post('message', 'TelegramController@postSendMessage');
