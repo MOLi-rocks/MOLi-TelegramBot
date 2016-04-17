@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+use Telegram\Bot\Exceptions\TelegramSDKException;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -44,6 +46,10 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
+        }
+
+        if ($e instanceof TelegramSDKException) {
+            return response()->json($e->getResponseData(), $e->getHttpStatusCode());
         }
 
         return parent::render($request, $e);

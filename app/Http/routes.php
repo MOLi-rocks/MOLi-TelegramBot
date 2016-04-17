@@ -11,15 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return Redirect::to('https://moli.rocks');
-});
+Route::get('/', 'MOLiBotController@getIndex');
 
-Route::post('message', 'TelegramController@postSendMessage');
+Route::post('messages', 'TelegramController@postSendMessage');
 
-Route::post(env('TELEGRAM_BOT_TOKEN'), function () {
-    $update = Telegram::commandsHandler(true);
-    // Commands handler method returns an Update object.
-    // So you can further process $update object
-    // to however you want.
-});
+Route::post('photos', 'TelegramController@postSendPhoto');
+
+Route::post('locations', 'TelegramController@postSendLocation');
+
+Route::post(env('TELEGRAM_BOT_TOKEN'), 'TelegramController@postWebhook');
