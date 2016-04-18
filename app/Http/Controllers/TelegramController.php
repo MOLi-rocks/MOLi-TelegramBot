@@ -30,7 +30,7 @@ class TelegramController extends Controller
 
     public function postSendPhoto(Request $request)
     {
-        $response = Telegram::sendPhoto([
+        return $send = Telegram::sendPhoto([
             'chat_id' => $request['chat_id'],
             'photo' => $request['photo']
             //'caption' => 'Some caption'

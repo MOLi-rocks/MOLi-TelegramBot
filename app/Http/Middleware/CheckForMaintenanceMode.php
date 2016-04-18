@@ -40,8 +40,12 @@ class CheckForMaintenanceMode
     {
         if ($this->app->isDownForMaintenance()) {
             if ($request->is( env('TELEGRAM_BOT_TOKEN') )) {
-                Telegram::replyWithMessage(['text' => 'Bot is under Maintenance']);
-                //Log::info($request->chat->id);
+                $msgfrom = $request->all()['message']['chat']['id'];
+                Telegram::sendMessage([
+                    'chat_id' => $msgfrom,
+                    'text' => 'Bot is under Maintenance'
+                ]);
+                abort(200);
             }
 
             return response()->json([
