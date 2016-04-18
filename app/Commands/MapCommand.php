@@ -15,13 +15,16 @@ class MapCommand extends Command
     /**
      * @var string Command Description
      */
-    protected $description = "Map Command to show where is MOLi";
+    protected $description = "用地圖告訴你 MOLi 在哪裡";
 
     /**
      * @inheritdoc
      */
     public function handle($arguments)
     {
+        $this->replyWithChatAction(['action' => Actions::TYPING]);
+
+        $this->replyWithMessage(['text' => '我們在這裡呦～']);
         // This will send a message using `sendMessage` method behind the scenes to
         // the user/chat id who triggered this command.
         // `replyWith<Message|Photo|Audio|Video|Voice|Document|Sticker|Location|ChatAction>()` all the available methods are dynamically

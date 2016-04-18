@@ -15,7 +15,7 @@ class DoorStatusCommand extends Command
     /**
      * @var string Command Description
      */
-    protected $description = "Check status of MOLi Door";
+    protected $description = "現在 MOLi 是開的還是關的呢？";
 
     /**
      * @inheritdoc
@@ -26,12 +26,14 @@ class DoorStatusCommand extends Command
         $status = $firebase->get('/status');
 
         if ($status == 1) {
-            $reply = 'MOLi 關門中';
+            $reply = 'MOLi 現在 關門中';
         } else if ($status == 0) {
-            $reply = 'MOLi 開門中';
+            $reply = 'MOLi 現在 開門中';
         } else {
-            $reply = '我現在 GG 中 Orz';
+            $reply = '狀態不明 ~_~ 猴子們正在努力找出問題';
         }
+
+        $this->replyWithChatAction(['action' => Actions::TYPING]);
         // This will send a message using `sendMessage` method behind the scenes to
         // the user/chat id who triggered this command.
         // `replyWith<Message|Photo|Audio|Video|Voice|Document|Sticker|Location|ChatAction>()` all the available methods are dynamically
