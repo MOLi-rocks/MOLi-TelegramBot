@@ -30,12 +30,20 @@ class TelegramController extends Controller
 
     public function postSendPhoto(Request $request)
     {
-        //
+        $response = Telegram::sendPhoto([
+            'chat_id' => $request['chat_id'],
+            'photo' => $request['photo']
+            //'caption' => 'Some caption'
+        ]);
     }
 
     public function postSendLocation(Request $request)
     {
-        //
+        return $send = Telegram::sendLocation([
+            'chat_id' => $request['chat_id'],
+            'latitude' => $request['latitude'],
+            'longitude' => $request['longitude']
+        ]);
     }
 
     public function postWebhook(Request $request)
