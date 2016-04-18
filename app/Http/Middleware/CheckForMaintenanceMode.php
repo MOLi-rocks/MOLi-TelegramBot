@@ -7,7 +7,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Telegram;
-use Log;
 
 class CheckForMaintenanceMode
 {
