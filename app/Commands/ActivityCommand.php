@@ -5,8 +5,6 @@ namespace MOLiBot\Commands;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
-use Log;
-
 class ActivityCommand extends Command
 {
     /**
