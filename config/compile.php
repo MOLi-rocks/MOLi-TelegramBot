@@ -14,7 +14,12 @@ return [
     */
 
     'files' => [
-        //
+        'app/Http/Controllers/TelegramController.php',
+        'app/Commands/ActivityCommand.php',
+        'app/Commands/DoorStatusCommand.php',
+        'app/Commands/HelpCommand.php',
+        'app/Commands/MapCommand.php',
+        'app/Commands/StartCommand.php',
     ],
 
     /*
