@@ -47,11 +47,27 @@ class TelegramController extends Controller
 
             return $send;
         } else {
-            return $send = Telegram::sendPhoto([
+            $client = new \GuzzleHttp\Client([
+                'headers' => [
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36)'
+                ]
+            ]);
+
+            $response = $client->request('GET', $request['photo']);
+
+            $fileName = rand(11111,99999);
+
+            storage::disk('local')->put($fileName.'.jpg', $response->getBody());
+
+            $send = Telegram::sendPhoto([
                 'chat_id' => $request['chat_id'],
-                'photo' => $request['photo']
+                'photo' => '../storage/app/'.$fileName.'.jpg'
                 //'caption' => 'Some caption'
             ]);
+
+            Storage::disk('local')->delete($fileName.'.jpg');
+
+            return $send;
         }
     }
 
