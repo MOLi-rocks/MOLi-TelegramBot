@@ -9,6 +9,7 @@ use MOLiBot\Http\Controllers\Controller;
 
 use Telegram;
 use Validator;
+use Storage;
 
 class TelegramController extends Controller
 {
@@ -30,11 +31,28 @@ class TelegramController extends Controller
 
     public function postSendPhoto(Request $request)
     {
-        return $send = Telegram::sendPhoto([
-            'chat_id' => $request['chat_id'],
-            'photo' => $request['photo']
-            //'caption' => 'Some caption'
-        ]);
+        if ($request->hasFile('photo')) {
+            $fileName = rand(11111,99999);
+            $extension = $request['photo']->getClientOriginalExtension();
+
+            storage::disk('local')->put($fileName.'.'.$extension, file_get_contents($request->file('photo')->getRealPath()));
+
+            $send = Telegram::sendPhoto([
+                'chat_id' => $request['chat_id'],
+                'photo' => '../storage/app/'.$fileName.'.'.$extension
+                //'caption' => 'Some caption'
+            ]);
+
+            Storage::disk('local')->delete($fileName.'.'.$extension);
+
+            return $send;
+        } else {
+            return $send = Telegram::sendPhoto([
+                'chat_id' => $request['chat_id'],
+                'photo' => $request['photo']
+                //'caption' => 'Some caption'
+            ]);
+        }
     }
 
     public function postSendLocation(Request $request)
