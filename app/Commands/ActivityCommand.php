@@ -17,19 +17,34 @@ class ActivityCommand extends Command
     /**
      * @var string Command Description
      */
-    protected $description = "顯示 MOLi 未來兩週的公開活動";
+    protected $description = "顯示 MOLi 未來公開活動";
 
     /**
      * @inheritdoc
      */
     public function handle($arguments)
     {
-        $json = json_decode(file_get_contents('http://moli.kktix.cc/events.json'), true);
-        Log::info($json);
-        // This will send a message using `sendMessage` method behind the scenes to
-        // the user/chat id who triggered this command.
-        // `replyWith<Message|Photo|Audio|Video|Voice|Document|Sticker|Location|ChatAction>()` all the available methods are dynamically
-        // handled when you replace `send<Method>` with `replyWith` and use the same parameters - except chat_id does NOT need to be included in the array.
-        $this->replyWithMessage(['text' => 'test']);
+        $client = new \GuzzleHttp\Client(['base_uri' => 'https://moli.rocks/']);
+        $response = $client->request('GET', 'kktix/events.json');
+        $body = $response->getBody();
+        $json = json_decode($body, true);
+        $activity = 0;
+
+        foreach ($json['entry'] as $num => $detail) {
+            if ( strtotime($detail['published']) > strtotime('now') ) {
+                $this->replyWithChatAction(['action' => Actions::TYPING]);
+
+                $this->replyWithMessage([
+                    'text' => $detail['title'] . PHP_EOL . '' . PHP_EOL . $detail['content'] . PHP_EOL . '' . PHP_EOL . $detail['url']
+                ]);
+
+                $activity++;
+            } else break;
+        }
+
+        if ($activity == 0) {
+            $this->replyWithChatAction(['action' => Actions::TYPING]);
+            $this->replyWithMessage(['text' => '最近無排定活動，歡迎在群組挖坑' . PHP_EOL . 'https://www.facebook.com/groups/MOLi.rocks']);
+        }
     }
 }
