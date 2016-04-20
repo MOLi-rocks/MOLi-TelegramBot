@@ -55,6 +55,8 @@ class TelegramController extends Controller
 
             return $send;
         } else {
+            //收到網址的話先把圖抓下來，因為有些 host 沒有 User-Agent 這個 header 的話會沒辦法用
+            //Ex: hydra DVR
             $client = new \GuzzleHttp\Client([
                 'headers' => [
                     'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36)'
