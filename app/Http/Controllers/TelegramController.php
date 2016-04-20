@@ -31,16 +31,9 @@ class TelegramController extends Controller
 
     public function postSendPhoto(Request $request)
     {
-        if (!$request->has('photo') || !$request->has('chat_id')) {
-            return $send = Telegram::sendPhoto([
-                'chat_id' => $request['chat_id'],
-                'photo' => $request['photo']
-                //'caption' => 'Some caption'
-            ]);
-        }
+        $fileName = rand(11111,99999);
 
-        if ($request->hasFile('photo')) {
-            $fileName = rand(11111,99999);
+        if ( $request->hasFile('photo') ) {
             $extension = $request['photo']->getClientOriginalExtension();
 
             storage::disk('local')->put($fileName.'.'.$extension, file_get_contents($request->file('photo')->getRealPath()));
@@ -54,7 +47,9 @@ class TelegramController extends Controller
             Storage::disk('local')->delete($fileName.'.'.$extension);
 
             return $send;
-        } else {
+        }
+
+        if ( $request->input('photo') ) {
             //收到網址的話先把圖抓下來，因為有些 host 沒有 User-Agent 這個 header 的話會沒辦法用
             //Ex: hydra DVR
             $client = new \GuzzleHttp\Client([
@@ -64,8 +59,6 @@ class TelegramController extends Controller
             ]);
 
             $response = $client->request('GET', $request['photo']);
-
-            $fileName = rand(11111,99999);
 
             $type = explode("/",$response->getHeader('Content-Type')[0]);
 
@@ -81,14 +74,14 @@ class TelegramController extends Controller
                 Storage::disk('local')->delete($fileName.'.'.$type[1]);
 
                 return $send;
-            } else {
-                return $send = Telegram::sendPhoto([
-                'chat_id' => $request['chat_id'],
-                'photo' => $request['photo']
-                //'caption' => 'Some caption'
-                ]);
             }
         }
+
+        return $send = Telegram::sendPhoto([
+            'chat_id' => $request->input('chat_id', ''),
+            'photo' => $request->input('photo', '')
+            //'caption' => 'Some caption'
+        ]);
     }
 
     public function postSendLocation(Request $request)
