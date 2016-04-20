@@ -31,6 +31,14 @@ class TelegramController extends Controller
 
     public function postSendPhoto(Request $request)
     {
+        if (!$request->has('photo') || !$request->has('chat_id')) {
+            return $send = Telegram::sendPhoto([
+                'chat_id' => $request['chat_id'],
+                'photo' => $request['photo']
+                //'caption' => 'Some caption'
+            ]);
+        }
+
         if ($request->hasFile('photo')) {
             $fileName = rand(11111,99999);
             $extension = $request['photo']->getClientOriginalExtension();
@@ -57,17 +65,27 @@ class TelegramController extends Controller
 
             $fileName = rand(11111,99999);
 
-            storage::disk('local')->put($fileName.'.jpg', $response->getBody());
+            $type = explode("/",$response->getHeader('Content-Type')[0]);
 
-            $send = Telegram::sendPhoto([
+            if ($type[0] == 'image') {
+                storage::disk('local')->put($fileName.'.'.$type[1], $response->getBody());
+
+                $send = Telegram::sendPhoto([
+                    'chat_id' => $request['chat_id'],
+                    'photo' => '../storage/app/'.$fileName.'.'.$type[1]
+                    //'caption' => 'Some caption'
+                ]);
+
+                Storage::disk('local')->delete($fileName.'.'.$type[1]);
+
+                return $send;
+            } else {
+                return $send = Telegram::sendPhoto([
                 'chat_id' => $request['chat_id'],
-                'photo' => '../storage/app/'.$fileName.'.jpg'
+                'photo' => $request['photo']
                 //'caption' => 'Some caption'
-            ]);
-
-            Storage::disk('local')->delete($fileName.'.jpg');
-
-            return $send;
+                ]);
+            }
         }
     }
 
