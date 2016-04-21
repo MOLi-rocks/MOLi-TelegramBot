@@ -23,15 +23,19 @@ class TelegramController extends Controller
 
     public function postSendMessage(Request $request)
     {
+        $notification = $request->input('disable_notification', 'false');
+
         return $send = Telegram::sendMessage([
             'chat_id' => $request['chat_id'],
-            'text' => $request['text']
+            'text' => $request['text'],
+            'disable_notification' => (bool)$notification
         ]);
     }
 
     public function postSendPhoto(Request $request)
     {
         $fileName = rand(11111,99999);
+        $notification = $request->input('disable_notification', 'false');
 
         if ( $request->hasFile('photo') ) {
             $extension = $request['photo']->getClientOriginalExtension();
@@ -40,7 +44,8 @@ class TelegramController extends Controller
 
             $send = Telegram::sendPhoto([
                 'chat_id' => $request['chat_id'],
-                'photo' => '../storage/app/'.$fileName.'.'.$extension
+                'photo' => '../storage/app/'.$fileName.'.'.$extension,
+                'disable_notification' => (bool)$notification
                 //'caption' => 'Some caption'
             ]);
 
@@ -67,7 +72,8 @@ class TelegramController extends Controller
 
                 $send = Telegram::sendPhoto([
                     'chat_id' => $request['chat_id'],
-                    'photo' => '../storage/app/'.$fileName.'.'.$type[1]
+                    'photo' => '../storage/app/'.$fileName.'.'.$type[1],
+                    'disable_notification' => (bool)$notification
                     //'caption' => 'Some caption'
                 ]);
 
@@ -79,17 +85,20 @@ class TelegramController extends Controller
 
         return $send = Telegram::sendPhoto([
             'chat_id' => $request->input('chat_id', ''),
-            'photo' => $request->input('photo', '')
+            'photo' => $request->input('photo', ''),
+            'disable_notification' => (bool)$notification
             //'caption' => 'Some caption'
         ]);
     }
 
     public function postSendLocation(Request $request)
     {
+        $notification = $request->input('disable_notification', 'false');
         return $send = Telegram::sendLocation([
             'chat_id' => $request['chat_id'],
             'latitude' => $request['latitude'],
-            'longitude' => $request['longitude']
+            'longitude' => $request['longitude'],
+            'disable_notification' => (bool)$notification
         ]);
     }
 
