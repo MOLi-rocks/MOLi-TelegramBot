@@ -13,10 +13,12 @@
 
 Route::get('/', 'MOLiBotController@getIndex');
 
-Route::post('messages', 'TelegramController@postSendMessage');
+Route::group(['middleware' => 'bot.token'], function () {
+    Route::post('messages', 'TelegramController@postSendMessage');
 
-Route::post('photos', 'TelegramController@postSendPhoto');
+    Route::post('photos', 'TelegramController@postSendPhoto');
 
-Route::post('locations', 'TelegramController@postSendLocation');
+    Route::post('locations', 'TelegramController@postSendLocation');
+});
 
 Route::post(env('TELEGRAM_BOT_TOKEN'), 'TelegramController@postWebhook');

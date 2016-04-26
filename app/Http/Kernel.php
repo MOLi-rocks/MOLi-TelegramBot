@@ -31,5 +31,6 @@ class Kernel extends HttpKernel
         'auth' => \MOLiBot\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \MOLiBot\Http\Middleware\RedirectIfAuthenticated::class,
+        'bot.token' => \MOLiBot\Http\Middleware\VerifyAPIToken::class,
     ];
 }
