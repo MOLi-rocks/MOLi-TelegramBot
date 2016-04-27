@@ -10,6 +10,8 @@ use MOLiBot\Http\Controllers\Controller;
 use Telegram;
 use Validator;
 use Storage;
+use \GuzzleHttp\Client as GuzzleHttpClient;
+use \GuzzleHttp\Exception\RequestException as GuzzleHttpRequestException;
 
 class TelegramController extends Controller
 {
@@ -54,13 +56,17 @@ class TelegramController extends Controller
         if ( $request->input('photo') ) {
             //收到網址的話先把圖抓下來，因為有些 host 沒有 User-Agent 這個 header 的話會沒辦法用
             //Ex: hydra DVR
-            $client = new \GuzzleHttp\Client([
+            $client = new GuzzleHttpClient([
                 'headers' => [
                     'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36)'
                 ]
             ]);
 
-            $response = $client->request('GET', $request['photo']);
+            try {
+                $response = $client->request('GET', $request['photo']);
+            } catch (GuzzleHttpRequestException $e) {
+                return response()->json(['massages' => 'Can\'t Get Photo From Url'], 404);
+            }
 
             $type = explode("/",$response->getHeader('Content-Type')[0]);
 
