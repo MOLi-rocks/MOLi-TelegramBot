@@ -53,6 +53,10 @@ class Handler extends ExceptionHandler
             return response()->json($e->getResponseData(), $e->getHttpStatusCode());
         }
 
+        if (env('APP_ENV') == 'production') {
+            return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 400);
+        }
+
         return parent::render($request, $e);
     }
 }

@@ -24,6 +24,6 @@ class VerifyAPIToken
                 return $next($request);
             }
         }
-        return response()->json(['massages' => 'token_invalid'], 404);
+        return response()->json(['massages' => 'token_invalid'], 403);
     }
 }
