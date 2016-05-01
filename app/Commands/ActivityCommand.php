@@ -22,13 +22,20 @@ class ActivityCommand extends Command
      */
     public function handle($arguments)
     {
-        $client = new \GuzzleHttp\Client(['base_uri' => 'https://moli.rocks/']);
-        $response = $client->request('GET', 'kktix/events.json', [
-            'headers' => [
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36)',
-                'Accept'     => 'application/json'
-            ]
-        ]);
+        try {
+            $client = new \GuzzleHttp\Client(['base_uri' => 'https://moli.rocks/']);
+            $response = $client->request('GET', 'kktix/events.json', [
+                'headers' => [
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36)',
+                    'Accept'     => 'application/json'
+                ]
+            ]);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $this->replyWithChatAction(['action' => Actions::TYPING]);
+            $this->replyWithMessage(['text' => '網路連線異常 QAQ']);
+            return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
+        }
+
         $body = $response->getBody();
         $json = json_decode($body, true);
         $activity = 0;

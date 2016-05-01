@@ -24,13 +24,16 @@ class DoorStatusCommand extends Command
     {
         $firebase = new \Firebase\FirebaseLib(env('FIREBASE'));
         $status = $firebase->get('/status');
-
-        if ($status == 1) {
-            $reply = 'MOLi 現在 關門中';
-        } else if ($status == 0) {
-            $reply = 'MOLi 現在 開門中';
+        if ( $status ) {
+            if ($status == '1') {
+                $reply = 'MOLi 現在 關門中';
+            } else if ($status == '0') {
+                $reply = 'MOLi 現在 開門中';
+            } else {
+                $reply = '門壞了，猴子們正在努力解決問題！';
+            }
         } else {
-            $reply = '狀態不明 ~_~ 猴子們正在努力找出問題';
+            $reply = '網路狀況不佳，不知道門怎麼了 ~_~';
         }
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
