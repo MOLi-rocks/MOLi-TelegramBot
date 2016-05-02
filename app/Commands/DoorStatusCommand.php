@@ -5,6 +5,11 @@ namespace MOLiBot\Commands;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
+use Telegram;
+use Storage;
+use \GuzzleHttp\Client as GuzzleHttpClient;
+use \GuzzleHttp\Exception\RequestException as GuzzleHttpRequestException;
+
 class DoorStatusCommand extends Command
 {
    /**
@@ -22,8 +27,12 @@ class DoorStatusCommand extends Command
      */
     public function handle($arguments)
     {
+        //get text use $update->all()['message']['text']
+        $update = Telegram::getWebhookUpdates();
+
         $firebase = new \Firebase\FirebaseLib(env('FIREBASE'));
         $status = $firebase->get('/status');
+
         if ( $status ) {
             if ($status == '1') {
                 $reply = 'MOLi 現在 關門中';
@@ -42,5 +51,37 @@ class DoorStatusCommand extends Command
         // `replyWith<Message|Photo|Audio|Video|Voice|Document|Sticker|Location|ChatAction>()` all the available methods are dynamically
         // handled when you replace `send<Method>` with `replyWith` and use the same parameters - except chat_id does NOT need to be included in the array.
         $this->replyWithMessage(['text' => $reply]);
+        
+        if ( $update->all()['message']['chat']['type'] == 'private' ) {
+
+            $client = new GuzzleHttpClient([
+                'headers' => [
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36)'
+                ]
+            ]);
+
+            try {
+                $response = $client->request('GET', 'http://10.32.21.59/cgi-bin/wappaint?camera_no=0&animation=0&name=aa&password=11&time=1460000886&pic_size=3');
+            } catch (GuzzleHttpRequestException $e) {
+                return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
+            }
+
+            $type = explode("/",$response->getHeader('Content-Type')[0]);
+
+            if ($type[0] == 'image') {
+                $fileName = rand(11111,99999);
+
+                storage::disk('local')->put($fileName.'.'.$type[1], $response->getBody());
+
+                $send = Telegram::sendPhoto([
+                    'chat_id' => $update->all()['message']['chat']['id'],
+                    'photo' => '../storage/app/'.$fileName.'.'.$type[1],
+                ]);
+
+                Storage::disk('local')->delete($fileName.'.'.$type[1]);
+            }
+
+            return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
+        }
     } 
 }
