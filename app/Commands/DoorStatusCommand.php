@@ -33,16 +33,12 @@ class DoorStatusCommand extends Command
         $firebase = new \Firebase\FirebaseLib(env('FIREBASE'));
         $status = $firebase->get('/status');
 
-        if ( $status ) {
-            if ($status == '1') {
-                $reply = 'MOLi 現在 關門中';
-            } else if ($status == '0') {
-                $reply = 'MOLi 現在 開門中';
-            } else {
-                $reply = '門壞了，猴子們正在努力解決問題！';
-            }
+        if ($status === '1') {
+            $reply = 'MOLi 現在 關門中';
+        } else if ($status === '0') {
+            $reply = 'MOLi 現在 開門中';
         } else {
-            $reply = '網路狀況不佳，不知道門怎麼了 ~_~';
+            $reply = '壞了，猴子們正在努力解決問題！';
         }
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
@@ -56,7 +52,7 @@ class DoorStatusCommand extends Command
 
             $client = new GuzzleHttpClient([
                 'headers' => [
-                    'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36)'
+                    'User-Agent' => 'MOLi Bot'
                 ]
             ]);
 
