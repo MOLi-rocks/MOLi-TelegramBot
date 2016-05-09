@@ -4,7 +4,7 @@ namespace MOLiBot\Commands;
 
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
-
+use Log;
 use Telegram;
 use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
@@ -57,7 +57,9 @@ class DoorStatusCommand extends Command
             ]);
 
             try {
-                $response = $client->request('GET', 'http://10.32.21.59/cgi-bin/wappaint?camera_no=0&animation=0&name=aa&password=11&time=1460000886&pic_size=3');
+                $move = $client->request('GET', env('SCREEN_TABLE'))->getBody();
+                sleep(2);
+                $response = $client->request('GET', env('SCREEN_SHOT'));
             } catch (GuzzleHttpRequestException $e) {
                 return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
             }
