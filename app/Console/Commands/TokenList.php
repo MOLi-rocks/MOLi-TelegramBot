@@ -39,7 +39,14 @@ class TokenList extends Command
      */
     public function handle()
     {
+        $result = array();
         $tokens = Storage::disk('local')->files('/api/');
-        var_dump($tokens);
+        foreach ($tokens as $token) {
+            $puretoken = explode('/', $token);
+            $who = Storage::disk('local')->get($token);
+            array_push($result, array($who, $puretoken[1]));
+        }
+        $headers = ['User', 'Token'];
+        $this->table($headers, $result);
     }
 }
