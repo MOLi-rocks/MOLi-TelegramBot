@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         Commands\Inspire::class,
         Commands\TokenGenerator::class,
         Commands\TokenList::class,
+        Commands\TokenDelete::class,
     ];
 
     /**
