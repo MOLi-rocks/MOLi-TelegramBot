@@ -40,7 +40,9 @@ class TokenGenerator extends Command
      */
     public function handle()
     {
+        $who = $this->ask('who will use this token?');
         $fp = md5(((float) date ( "YmdHis" ) + rand(100,999)).rand(1000,9999));
-        Storage::disk('local')->put('/api/'.$fp, '');
+        Storage::disk('local')->put('/api/'.$fp, $who);
+        $this->info('Token is '.$fp);
     }
 }
