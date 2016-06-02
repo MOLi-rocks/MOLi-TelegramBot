@@ -4,7 +4,7 @@ namespace MOLiBot\Commands;
 
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
-use Log;
+
 use Telegram;
 use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
