@@ -13,6 +13,8 @@
 
 Route::get('/', 'MOLiBotController@getIndex');
 
+Route::get('/ncnu-rss', 'MOLiBotController@getNCNU_RSS');
+
 Route::group(['middleware' => 'bot.token'], function () {
     Route::post('messages', 'TelegramController@postSendMessage');
 

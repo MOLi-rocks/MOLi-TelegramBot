@@ -10,7 +10,8 @@
         "irazasyed/telegram-bot-sdk": "^2.0",
         "ktamas77/firebase-php": "dev-master",
         "barryvdh/laravel-cors": "^0.8.0",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "soapbox/laravel-formatter": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
