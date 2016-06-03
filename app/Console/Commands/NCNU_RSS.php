@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 
 use SoapBox\Formatter\Formatter;
 use Telegram;
+use Storage;
 
 class NCNU_RSS extends Command
 {
@@ -44,18 +45,30 @@ class NCNU_RSS extends Command
         $formatter = Formatter::make($fileContents, Formatter::XML);
         $json = $formatter->toArray();
         $items = $json['channel']['item'];
-        
+
+        if (Storage::disk('local')->has('RSS_stopFlag')) {
+            $end = Storage::disk('local')->get('RSS_stopFlag');
+        } else {
+            Storage::disk('local')->put('RSS_stopFlag', '0');
+            $end = Storage::disk('local')->get('RSS_stopFlag');
+        }
+
+        $start = $items[0]['guid'];
+
         foreach ($items as $item) {
-            if (strtotime($item['pubDate']) - strtotime('now') / 60 <= 60) {
+            if ($item['guid'] != $end) {
                 Telegram::sendMessage([
                     'chat_id' => '@ncnu_news',
                     'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link']
                 ]);
             } else {
-                $this->info('Nothing to send!');
                 break;
             }
             sleep(5);
         }
+        Storage::disk('local')->delete('RSS_stopFlag');
+        sleep(1);
+        Storage::disk('local')->put('RSS_stopFlag', $start);
+        $this->info('Mission Complete!');
     }
 }
