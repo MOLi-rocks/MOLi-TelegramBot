@@ -35,6 +35,6 @@ class Kernel extends ConsoleKernel
                  ->hourly();
 
         $schedule->command('rss:check')
-                 ->hourly()->withoutOverlapping();
+                 ->everyTenMinutes()->withoutOverlapping();
     }
 }
