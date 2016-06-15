@@ -46,29 +46,38 @@ class NCNU_RSS extends Command
         $json = $formatter->toArray();
         $items = $json['channel']['item'];
 
-        if (Storage::disk('local')->has('RSS_stopFlag')) {
-            $end = Storage::disk('local')->get('RSS_stopFlag');
+        if (Storage::disk('local')->has('RSS_published')) {
+            $content = Storage::disk('local')->get('RSS_published');
         } else {
-            Storage::disk('local')->put('RSS_stopFlag', '0');
-            $end = Storage::disk('local')->get('RSS_stopFlag');
+            Storage::disk('local')->put('RSS_published', '0');
+            $content = Storage::disk('local')->get('RSS_published');
         }
 
-        $start = $items[0]['guid'];
+        $published = json_decode($content);
+        $publishedArray = array();
 
         foreach ($items as $item) {
-            if ($item['guid'] != $end) {
+            $publishedArray[] = $item['guid'];
+            foreach ($published as $publishedguid) {
+                if ($item['guid'] == $publishedguid) {
+                    $news = 'N';
+                    break;
+                } else {
+                    $news = 'Y';
+                }
+            }
+            if ($news == 'Y') {
                 Telegram::sendMessage([
                     'chat_id' => '@ncnu_news',
                     'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link']
                 ]);
-            } else {
-                break;
             }
             sleep(5);
         }
-        Storage::disk('local')->delete('RSS_stopFlag');
+
+        Storage::disk('local')->delete('RSS_published');
         sleep(1);
-        Storage::disk('local')->put('RSS_stopFlag', $start);
+        Storage::disk('local')->put('RSS_published', json_encode($publishedArray));
         $this->info('Mission Complete!');
     }
 }
