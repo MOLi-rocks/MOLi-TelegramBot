@@ -27,6 +27,15 @@ class DoorStatusCommand extends Command
      */
     public function handle($arguments)
     {
+        $host = explode('/', env('FIREBASE'));
+        $fp = fsockopen($host[2], 443, $errno, $errstr, 1);
+        if (!$fp) {
+            $this->replyWithChatAction(['action' => Actions::TYPING]);
+            $this->replyWithMessage(['text' => '網路連線異常 QAQ']);
+            return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
+        }
+        fclose($fp);
+
         //get text use $update->all()['message']['text']
         $update = Telegram::getWebhookUpdates();
 
@@ -38,7 +47,7 @@ class DoorStatusCommand extends Command
         } else if ($status === '0') {
             $reply = 'MOLi 現在 開門中';
         } else {
-            $reply = '壞了，猴子們正在努力解決問題！';
+            $reply = '門鎖狀態不明，猴子們正努力維修中！';
         }
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
@@ -57,8 +66,6 @@ class DoorStatusCommand extends Command
             ]);
 
             try {
-                $move = $client->request('GET', env('SCREEN_TABLE'))->getBody();
-                sleep(2);
                 $response = $client->request('GET', env('SCREEN_SHOT'));
             } catch (GuzzleHttpRequestException $e) {
                 return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
