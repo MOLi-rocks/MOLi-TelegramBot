@@ -36,6 +36,10 @@ class HelpCommand extends Command
                 $text .= sprintf('/%s - %s'.PHP_EOL, $name, $handler->getDescription());
         }
 
+        $text .= sprintf('Hints: ' . PHP_EOL);
+        $text .= sprintf('1. 加入 MOLi 廣播頻道( https://telegram.me/MOLi_Channel )以獲得即時開關門資訊' . PHP_EOL);
+        $text .= sprintf('2. 加入"非官方"暨大最新公告( https://telegram.me/ncnu_news )以快速獲得校內最新公告資訊' . PHP_EOL);
+
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $this->replyWithMessage(compact('text'));
