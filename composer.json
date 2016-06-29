@@ -8,7 +8,6 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "irazasyed/telegram-bot-sdk": "^2.0",
-        "ktamas77/firebase-php": "dev-master",
         "barryvdh/laravel-cors": "^0.8.0",
         "guzzlehttp/guzzle": "^6.2",
         "soapbox/laravel-formatter": "^2.0"
