@@ -30,7 +30,7 @@ class ActivityCommand extends Command
                     'Accept'     => 'application/json'
                 ]
             ]);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        } catch (\GuzzleHttp\Exception\TransferException $e) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
             $this->replyWithMessage(['text' => '網路連線異常 QAQ']);
             return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');

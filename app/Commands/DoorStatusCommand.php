@@ -8,7 +8,7 @@ use Telegram\Bot\Commands\Command;
 use Telegram;
 use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
-use \GuzzleHttp\Exception\RequestException as GuzzleHttpRequestException;
+use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 
 class DoorStatusCommand extends Command
 {
@@ -30,8 +30,9 @@ class DoorStatusCommand extends Command
         $client = new GuzzleHttpClient();
 
         try {
-            $response = $client->get('https://bot.moli.rocks:8000');
-        } catch (GuzzleHttpRequestException $e) {
+            $response = $client->request('GET', 'https://bot.moli.rocks:8000', ['timeout' => 10]);
+        } catch (GuzzleHttpTransferException $e) {
+            $this->replyWithMessage(['text' => '門鎖狀態不明，猴子們正努力維修中！']);
             return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
         }
 
@@ -69,8 +70,9 @@ class DoorStatusCommand extends Command
             ]);
 
             try {
-                $response = $client->request('GET', env('SCREEN_SHOT'));
-            } catch (GuzzleHttpRequestException $e) {
+                $response = $client->request('GET', env('SCREEN_SHOT'), ['timeout' => 10]);
+            } catch (GuzzleHttpTransferException $e) {
+                $this->replyWithMessage(['text' => '暫時無法取得截圖！']);
                 return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
             }
 
