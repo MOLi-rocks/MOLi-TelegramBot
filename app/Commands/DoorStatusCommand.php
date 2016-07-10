@@ -75,7 +75,7 @@ class DoorStatusCommand extends Command
             ]);
 
             try {
-                $response = $client->request('GET', env('SCREEN_SHOT'), ['timeout' => 10]);
+                $response = $client->request('GET', env('SCREEN_SHOT'));
             } catch (GuzzleHttpTransferException $e) {
                 $this->replyWithMessage(['text' => '暫時無法取得截圖！']);
                 return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
