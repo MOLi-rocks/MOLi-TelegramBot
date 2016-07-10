@@ -32,11 +32,16 @@ class DoorStatusCommand extends Command
         try {
             $response = $client->request('GET', 'https://bot.moli.rocks:8000', ['timeout' => 10]);
         } catch (GuzzleHttpTransferException $e) {
-            $this->replyWithMessage(['text' => '門鎖狀態不明，猴子們正努力維修中！']);
+            $this->replyWithMessage(['text' => '網路連線異常！QQ']);
             return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
         }
 
-        $status = json_decode($response->getBody())->{'Status'};
+
+        if (isset(json_decode($response->getBody())->{'Status'})) {
+            $status = json_decode($response->getBody())->{'Status'};
+        } else {
+            $status = -3;// 隨便設定一個非 0 或 1 的值就當作壞掉了
+        }
 
         //get text use $update->all()['message']['text']
         $update = Telegram::getWebhookUpdates();
