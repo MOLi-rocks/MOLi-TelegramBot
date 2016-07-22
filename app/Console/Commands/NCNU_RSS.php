@@ -60,6 +60,7 @@ class NCNU_RSS extends Command
 
         $published = json_decode($content);
         $publishedArray = array();
+        $getChanged = 'N';
 
         foreach ($items as $item) {
             $publishedArray[] = $item['guid'];
@@ -72,6 +73,7 @@ class NCNU_RSS extends Command
                 }
             }
             if ($news == 'Y') {
+                $getChanged = 'Y';
                 Telegram::sendMessage([
                     'chat_id' => env('NEWS_CHANNEL'),
                     'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link']
@@ -80,9 +82,12 @@ class NCNU_RSS extends Command
             }
         }
 
-        Storage::disk('local')->delete('RSS_published');
-        sleep(1);
-        Storage::disk('local')->put('RSS_published', json_encode($publishedArray));
+        if ($getChanged == 'Y') {
+            Storage::disk('local')->delete('RSS_published');
+            sleep(1);
+            Storage::disk('local')->put('RSS_published', json_encode($publishedArray));
+        }
+
         $this->info('Mission Complete!');
     }
 }
