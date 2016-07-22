@@ -41,7 +41,12 @@ class NCNU_RSS extends Command
      */
     public function handle()
     {
-        $fileContents = file_get_contents('http://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx');
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'http://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $fileContents = curl_exec($ch);
+        curl_close($ch);
+
         $formatter = Formatter::make($fileContents, Formatter::XML);
         $json = $formatter->toArray();
         $items = $json['channel']['item'];
@@ -49,7 +54,7 @@ class NCNU_RSS extends Command
         if (Storage::disk('local')->has('RSS_published')) {
             $content = Storage::disk('local')->get('RSS_published');
         } else {
-            Storage::disk('local')->put('RSS_published', '0');
+            Storage::disk('local')->put('RSS_published', '[""]');
             $content = Storage::disk('local')->get('RSS_published');
         }
 
@@ -68,11 +73,11 @@ class NCNU_RSS extends Command
             }
             if ($news == 'Y') {
                 Telegram::sendMessage([
-                    'chat_id' => '@ncnu_news',
+                    'chat_id' => env('NCNU_NEWS_CHANNEL'),
                     'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link']
                 ]);
+                sleep(5);
             }
-            sleep(5);
         }
 
         Storage::disk('local')->delete('RSS_published');
