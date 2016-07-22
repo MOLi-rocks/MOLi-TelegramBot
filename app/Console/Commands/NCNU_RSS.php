@@ -73,7 +73,7 @@ class NCNU_RSS extends Command
             }
             if ($news == 'Y') {
                 Telegram::sendMessage([
-                    'chat_id' => env('NCNU_NEWS_CHANNEL'),
+                    'chat_id' => env('NEWS_CHANNEL'),
                     'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link']
                 ]);
                 sleep(5);
