@@ -4,7 +4,6 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use SoapBox\Formatter\Formatter;
 use Telegram;
 use Storage;
 
@@ -41,14 +40,7 @@ class NCNU_RSS extends Command
      */
     public function handle()
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $fileContents = curl_exec($ch);
-        curl_close($ch);
-
-        $formatter = Formatter::make($fileContents, Formatter::XML);
-        $json = $formatter->toArray();
+        $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getNCNU_RSS();
         $items = $json['channel']['item'];
 
         if (Storage::disk('local')->has('RSS_published')) {
