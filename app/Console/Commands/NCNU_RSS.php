@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 
 use Telegram;
 use Storage;
+use Fukuball\Jieba\Jieba;
+use Fukuball\Jieba\Finalseg;
 
 class NCNU_RSS extends Command
 {
@@ -40,6 +42,8 @@ class NCNU_RSS extends Command
      */
     public function handle()
     {
+        Jieba::init();
+        Finalseg::init();
         $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getNCNU_RSS();
         $items = $json['channel']['item'];
 
@@ -53,6 +57,7 @@ class NCNU_RSS extends Command
         $published = json_decode($content);
         $publishedArray = array();
         $getChanged = 'N';
+        $hashtag = '';
 
         foreach ($items as $item) {
             $publishedArray[] = $item['guid'];
@@ -66,12 +71,18 @@ class NCNU_RSS extends Command
             }
             if ($news == 'Y') {
                 $getChanged = 'Y';
+                $seg_list = Jieba::cut($item['title'], false);
+                foreach($seg_list as $seg_list_item) {
+                    $hashtag .= '#' . $seg_list_item . ' ';
+                }
+
                 Telegram::sendMessage([
                     'chat_id' => env('NEWS_CHANNEL'),
-                    'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link']
+                    'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'] . PHP_EOL . PHP_EOL . $hashtag
                 ]);
                 sleep(5);
             }
+            $hashtag = '';
         }
 
         if ($getChanged == 'Y') {
