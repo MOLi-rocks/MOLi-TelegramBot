@@ -31,4 +31,10 @@ class MOLiBotController extends Controller
         $json = $formatter->toArray();
         return $json;
     }
+
+    public function postNCDR(Request $request)
+    {
+        //use $request->getContent() to get raw data
+        return response('<?xml version="1.0" encoding="utf-8" ?> <Data><Status>true</Status></Data>', 200);
+    }
 }

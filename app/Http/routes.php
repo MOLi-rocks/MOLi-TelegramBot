@@ -24,3 +24,5 @@ Route::group(['middleware' => 'bot.token'], function () {
 });
 
 Route::post(env('TELEGRAM_BOT_TOKEN'), 'TelegramController@postWebhook');
+
+Route::post(env('NCDR_URL'), 'MOLiBotController@postNCDR');
