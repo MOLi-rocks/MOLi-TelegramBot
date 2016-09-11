@@ -37,5 +37,8 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('rss:check')
                  ->everyTenMinutes()->withoutOverlapping();
+        
+        $schedule->command('kktix:check')
+                 ->everyTenMinutes()->withoutOverlapping();
     }
 }
