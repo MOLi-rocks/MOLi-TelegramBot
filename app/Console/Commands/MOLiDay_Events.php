@@ -72,16 +72,13 @@ class MOLiDay_Events extends Command
             }
             if ($new == 'Y') {
                 $getChanged = 'Y';
-                //Telegram::sendMessage([
-                //    'chat_id' => env('NEWS_CHANNEL'),
-                //    'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'] . PHP_EOL . PHP_EOL . $hashtag
-                //]);
-                $this->info($event->title);
-                $this->info($event->summary);
-                $this->info($event->content);
-                $this->info($event->url);
-                $this->info('');
-                $this->info('');
+                Telegram::sendMessage([
+                    'chat_id' => env('NEWS_CHANNEL'),
+                    'text' => 'MOLiDay 新活動：' . PHP_EOL . $event->title . PHP_EOL . PHP_EOL .
+                        '活動簡介：' . PHP_EOL . $event->summary . PHP_EOL . PHP_EOL .
+                        '活動地點：' . PHP_EOL . $event->content . PHP_EOL . PHP_EOL .
+                        '報名網址：' . PHP_EOL . $event->url . PHP_EOL . PHP_EOL
+                ]);
                 sleep(5);
             }
         }
