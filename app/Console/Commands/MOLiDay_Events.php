@@ -73,7 +73,7 @@ class MOLiDay_Events extends Command
             if ($new == 'Y') {
                 $getChanged = 'Y';
                 Telegram::sendMessage([
-                    'chat_id' => env('NEWS_CHANNEL'),
+                    'chat_id' => env('MOLi_CHANNEL'),
                     'text' => 'MOLiDay 新活動：' . PHP_EOL . $event->title . PHP_EOL . PHP_EOL .
                         '活動簡介：' . PHP_EOL . $event->summary . PHP_EOL . PHP_EOL .
                         '活動地點：' . PHP_EOL . $event->content . PHP_EOL . PHP_EOL .
