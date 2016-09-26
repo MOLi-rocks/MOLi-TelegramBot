@@ -9,6 +9,8 @@ use MOLiBot\Http\Controllers\Controller;
 
 use SoapBox\Formatter\Formatter;
 
+use Log;
+
 class MOLiBotController extends Controller
 {
     /**
@@ -35,6 +37,7 @@ class MOLiBotController extends Controller
     public function postNCDR(Request $request)
     {
         //use $request->getContent() to get raw data
+        Log::info($request->getContent());
         return response('<?xml version="1.0" encoding="utf-8" ?> <Data><Status>true</Status></Data>', 200);
     }
 }
