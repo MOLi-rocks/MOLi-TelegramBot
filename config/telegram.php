@@ -61,5 +61,6 @@ return [
         MOLiBot\Commands\MapCommand::class,
         MOLiBot\Commands\DoorStatusCommand::class,
         MOLiBot\Commands\ActivityCommand::class,
+        MOLiBot\Commands\WhoamiCommand::class,
     ],
 ];
