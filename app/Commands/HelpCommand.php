@@ -29,7 +29,7 @@ class HelpCommand extends Command
      */
     public function handle($arguments)
     {
-        $text = $this->helptext();
+        $text = $this->helptext();//call use MOLiBot\Commands\HelpList at app/Commands/HelpList.php
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 

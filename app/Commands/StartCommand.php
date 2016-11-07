@@ -36,7 +36,7 @@ class StartCommand extends Command
         // This will update the chat status to typing...
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $text = $this->helptext();
+        $text = $this->helptext();//call use MOLiBot\Commands\HelpList at app/Commands/HelpList.php
 
         // This will prepare a list of available commands and send the user.
         // First, Get an array of all registered commands
