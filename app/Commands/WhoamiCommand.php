@@ -39,9 +39,8 @@ class WhoamiCommand extends Command
         $this->replyWithMessage([
             'text' => '您是 '.$first_name.PHP_EOL.
                 '您所設定的 username 為 @'.$username.PHP_EOL.
-                '您的 Telegram user ID 為 `'.$userid.'`'.PHP_EOL.
-                '目前所在的頻道 ID 為 `'.$chatid.'`',
-            'parse_mode' => 'Markdown'
+                '您的 Telegram user ID 為 '.$userid.PHP_EOL.
+                '目前所在的頻道 ID 為 '.$chatid,
         ]);
     }
 }
