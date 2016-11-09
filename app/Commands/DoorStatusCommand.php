@@ -46,8 +46,8 @@ class DoorStatusCommand extends Command
         //get text use $update->all()['message']['text']
         $update = Telegram::getWebhookUpdates();
 
-		$reply = '';
-		return $reply.array_get([
+		//$reply = '';
+		$reply.array_get([
 			'1' => 'MOLi 現在 關門中',
 			'0' => 'MOLi 現在 開門中',
 		], $status, '門鎖狀態不明，猴子們正努力維修中！');
