@@ -46,11 +46,18 @@ class DoorStatusCommand extends Command
         //get text use $update->all()['message']['text']
         $update = Telegram::getWebhookUpdates();
 
-		$reply = '';
-		return $reply.array_get([
-			'1' => 'MOLi 現在 關門中',
-			'0' => 'MOLi 現在 開門中',
-		], $status, '門鎖狀態不明，猴子們正努力維修中！');
+        switch ($status){
+            case "1":
+                $reply = 'MOLi 現在 關門中';
+            break;
+
+            case "0":
+                $reply = 'MOLi 現在 開門中';
+            break;
+
+            default:
+                $reply = '門鎖狀態不明，猴子們正努力維修中！';
+        }
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
         // This will send a message using `sendMessage` method behind the scenes to
