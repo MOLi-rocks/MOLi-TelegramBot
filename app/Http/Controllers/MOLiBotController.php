@@ -38,7 +38,7 @@ class MOLiBotController extends Controller
     {
         //use $request->getContent() to get raw data
         Log::info($request->getContent());
-        return response('<?xml version="1.0" encoding="utf-8" ?> <Data><Status>true</Status></Data>')
+        return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>{0}</Status></Data>')
             ->header('Content-Type', 'text/xml');
     }
 }
