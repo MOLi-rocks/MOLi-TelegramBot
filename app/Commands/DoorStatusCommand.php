@@ -64,10 +64,9 @@ class DoorStatusCommand extends Command
         // the user/chat id who triggered this command.
         // `replyWith<Message|Photo|Audio|Video|Voice|Document|Sticker|Location|ChatAction>()` all the available methods are dynamically
         // handled when you replace `send<Method>` with `replyWith` and use the same parameters - except chat_id does NOT need to be included in the array.
-        $this->replyWithMessage(['text' => $reply]);
+        $send = $this->replyWithMessage(['text' => $reply]);
         
         if ( $update->all()['message']['chat']['type'] == 'private' ) {
-
             $client = new GuzzleHttpClient([
                 'headers' => [
                     'User-Agent' => 'MOLi Bot'
@@ -90,6 +89,7 @@ class DoorStatusCommand extends Command
 
                 $send = Telegram::sendPhoto([
                     'chat_id' => $update->all()['message']['chat']['id'],
+                    'reply_to_message_id' => $send->getMessageId(),
                     'photo' => '../storage/app/'.$fileName.'.'.$type[1],
                 ]);
 
