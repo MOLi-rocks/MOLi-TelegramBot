@@ -14,12 +14,12 @@ class Kernel extends HttpKernel
     protected $middleware = [
         //\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \MOLiBot\Http\Middleware\CheckForMaintenanceMode::class,
-        \MOLiBot\Http\Middleware\EncryptCookies::class,
-        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-        \Illuminate\Session\Middleware\StartSession::class,
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        //\MOLiBot\Http\Middleware\EncryptCookies::class,
+        //\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        //\Illuminate\Session\Middleware\StartSession::class,
+        //\Illuminate\View\Middleware\ShareErrorsFromSession::class,
         //\MOLiBot\Http\Middleware\VerifyCsrfToken::class,
-        'Barryvdh\Cors\HandleCors',
+        \Barryvdh\Cors\HandleCors::class,
     ];
 
     /**
