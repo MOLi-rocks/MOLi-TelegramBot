@@ -26,6 +26,7 @@ class MOLiBotController extends Controller
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'http://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
         $fileContents = curl_exec($ch);
         curl_close($ch);
 
@@ -38,7 +39,7 @@ class MOLiBotController extends Controller
     {
         //use $request->getContent() to get raw data
         Log::info($request->getContent());
-        return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>{0}</Status></Data>')
+        return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
             ->header('Content-Type', 'text/xml');
     }
 }
