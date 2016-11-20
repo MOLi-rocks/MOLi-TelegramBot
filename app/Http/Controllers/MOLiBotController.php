@@ -8,8 +8,7 @@ use MOLiBot\Http\Requests;
 use MOLiBot\Http\Controllers\Controller;
 
 use SoapBox\Formatter\Formatter;
-
-use Log;
+use Telegram;
 
 class MOLiBotController extends Controller
 {
@@ -38,7 +37,12 @@ class MOLiBotController extends Controller
     public function postNCDR(Request $request)
     {
         //use $request->getContent() to get raw data
-        Log::info($request->getContent());
+        $formatter = Formatter::make($request->getContent(), Formatter::XML);
+        $json = $formatter->toArray();
+        Telegram::sendMessage([
+            'chat_id' => env('MOLi_CHANNEL'),
+            'text' => $json,
+        ]);
         return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
             ->header('Content-Type', 'text/xml');
     }
