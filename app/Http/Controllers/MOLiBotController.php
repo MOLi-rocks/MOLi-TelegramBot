@@ -40,7 +40,7 @@ class MOLiBotController extends Controller
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
         Telegram::sendMessage([
-            'chat_id' => env('TEST_CHANNEL'),
+            'chat_id' => env('MOLi_CHANNEL'),
             'text' => json_encode($json, JSON_UNESCAPED_UNICODE),
         ]);
         return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
