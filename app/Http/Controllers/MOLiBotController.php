@@ -39,10 +39,21 @@ class MOLiBotController extends Controller
         //use $request->getContent() to get raw data
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
-        Telegram::sendMessage([
-            'chat_id' => env('MOLi_CHANNEL'),
-            'text' => json_encode($json, JSON_UNESCAPED_UNICODE),
-        ]);
+
+        if (!isset($json['info']['description'])) {
+            foreach ($json['info'] as $info) {
+                Telegram::sendMessage([
+                    'chat_id' => env('TEST_CHANNEL'),
+                    'text' => $info['description'],
+                ]);
+            }
+        } else {
+            Telegram::sendMessage([
+                'chat_id' => env('TEST_CHANNEL'),
+                'text' => $json['info']['description'],
+            ]);
+        }
+
         return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
             ->header('Content-Type', 'text/xml');
     }
