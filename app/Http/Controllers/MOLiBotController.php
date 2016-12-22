@@ -57,4 +57,24 @@ class MOLiBotController extends Controller
         return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
             ->header('Content-Type', 'text/xml');
     }
+
+    public function getStaffContect($keyword)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'http://ccweb1.ncnu.edu.tw/telquery/csvstaff2query.asp?name=' . urlencode($keyword) . '?1482238246');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
+        $fileContents = curl_exec($ch);
+        curl_close($ch);
+
+        $array = array();
+
+        $contents_array = str_getcsv($fileContents, "\n");
+
+        foreach ($contents_array as $content_item) {
+            array_push($array, explode(",", $content_item));
+        }
+
+        return response()->json($array);
+    }
 }

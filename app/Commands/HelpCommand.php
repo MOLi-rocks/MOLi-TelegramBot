@@ -14,7 +14,7 @@ trait HelpList
 
         $text = '';
 
-        $hidden = ['start', 'whoami'];//不想顯示在 help 及 start 的指令請填在這個陣列
+        $hidden = ['start', 'whoami', 'staffcontect'];//不想顯示在 help 及 start 的指令請填在這個陣列
 
         $commands = array_except($commands, $hidden);
 
