@@ -72,7 +72,12 @@ class MOLiBotController extends Controller
         $contents_array = str_getcsv($fileContents, "\n");
 
         foreach ($contents_array as $content_item) {
-            array_push($array, explode(",", $content_item));
+            $tmparray = array();
+            $items = explode(",", $content_item);
+            foreach ($items as $item) {
+                array_push($tmparray, trim($item, "\"\r\n "));
+            }
+            array_push($array, $tmparray);
         }
 
         return response()->json($array);
