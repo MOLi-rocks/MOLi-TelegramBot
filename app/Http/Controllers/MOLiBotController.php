@@ -73,13 +73,13 @@ class MOLiBotController extends Controller
 
         foreach ($contents_array as $content_item) {
             $tmparray = array();
-            $items = explode(",", $content_item);
+            $items = explode(",\"", $content_item);
             foreach ($items as $item) {
                 array_push($tmparray, trim($item, "\"\r\n "));
             }
             array_push($array, $tmparray);
         }
 
-        return response()->json($array);
+        return $array;
     }
 }

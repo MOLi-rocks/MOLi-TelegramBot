@@ -30,7 +30,7 @@ class SearchStaffContectCommand extends Command
         if (empty($arguments)) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-            $this->replyWithMessage(['text' => '請輸入一個關鍵字']);
+            $this->replyWithMessage(['text' => '請直接在指令後方加上關鍵字以便查詢']);
 
             return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
         }
@@ -41,8 +41,27 @@ class SearchStaffContectCommand extends Command
 
         $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContect($keyword);
 
+        $text = '';
+
+        $count = 0;
+
+        if (count($json) > 12) {
+            $text .= '結果超過 10 筆，建議使用更精確關鍵字搜尋或至 http://ccweb1.ncnu.edu.tw/telquery/StaffQuery.asp 直接搜尋' . PHP_EOL . PHP_EOL . PHP_EOL;
+        }
+
+        foreach ($json as $index => $items) {
+            if ($index !== 0 && $count < 10) {
+                $text .= $json[0][0] . ': ' . $json[$index][0] . PHP_EOL .
+                         $json[0][2] . ': ' . $json[$index][2] . PHP_EOL .
+                         $json[0][4] . ': ' . $json[$index][4] . PHP_EOL .
+                         $json[0][6] . ': ' . $json[$index][6] . PHP_EOL .
+                         $json[0][7] . ': ' . $json[$index][7] . PHP_EOL . PHP_EOL . PHP_EOL;
+                $count++;
+            }
+        }
+
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $this->replyWithMessage(['text' => $json]);
+        $this->replyWithMessage(['text' => $text]);
     }
 }
