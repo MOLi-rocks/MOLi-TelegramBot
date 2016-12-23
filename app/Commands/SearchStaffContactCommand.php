@@ -7,13 +7,13 @@ use Telegram\Bot\Commands\Command;
 
 use Telegram;
 
-class SearchStaffContectCommand extends Command
+class SearchStaffContactCommand extends Command
 {
     /**
      * @var string Command Name
      */
 
-    protected $name = "staffcontect";
+    protected $name = "staffcontact";
 
     /**
      * @var string Command Description

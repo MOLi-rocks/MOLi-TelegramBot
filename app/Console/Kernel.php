@@ -22,7 +22,6 @@ class Kernel extends ConsoleKernel
         Commands\TokenDelete::class,
         Commands\NCNU_RSS::class,
         Commands\MOLiDay_Events::class,
-        //Commands\NCNU_StaffContactInformation::class,
     ];
 
     /**
