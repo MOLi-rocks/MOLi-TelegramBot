@@ -58,7 +58,7 @@ class MOLiBotController extends Controller
             ->header('Content-Type', 'text/xml');
     }
 
-    public function getStaffContect($keyword)
+    public function getStaffContact($keyword = NULL)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'http://ccweb1.ncnu.edu.tw/telquery/csvstaff2query.asp?name=' . urlencode($keyword) . '?1482238246');

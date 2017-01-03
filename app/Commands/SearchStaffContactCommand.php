@@ -39,7 +39,7 @@ class SearchStaffContactCommand extends Command
 
         $keyword = $args[0];
 
-        $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContect($keyword);
+        $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContact($keyword);
 
         $text = '';
 
