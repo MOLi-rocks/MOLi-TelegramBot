@@ -8,8 +8,7 @@ use MOLiBot\Http\Requests;
 use MOLiBot\Http\Controllers\Controller;
 
 use SoapBox\Formatter\Formatter;
-
-use Log;
+use Telegram;
 
 class MOLiBotController extends Controller
 {
@@ -26,6 +25,7 @@ class MOLiBotController extends Controller
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'http://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
         $fileContents = curl_exec($ch);
         curl_close($ch);
 
@@ -37,8 +37,49 @@ class MOLiBotController extends Controller
     public function postNCDR(Request $request)
     {
         //use $request->getContent() to get raw data
-        Log::info($request->getContent());
-        return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>{0}</Status></Data>')
+        $formatter = Formatter::make($request->getContent(), Formatter::XML);
+        $json = $formatter->toArray();
+
+        if (!isset($json['info']['description'])) {
+            foreach ($json['info'] as $info) {
+                Telegram::sendMessage([
+                    'chat_id' => env('TEST_CHANNEL'),
+                    'text' => $info['description'],
+                ]);
+            }
+        } else {
+            Telegram::sendMessage([
+                'chat_id' => env('TEST_CHANNEL'),
+                'text' => $json['info']['description'],
+            ]);
+        }
+
+        return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
             ->header('Content-Type', 'text/xml');
+    }
+
+    public function getStaffContact($keyword = NULL)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'http://ccweb1.ncnu.edu.tw/telquery/csvstaff2query.asp?name=' . urlencode($keyword) . '?1482238246');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
+        $fileContents = curl_exec($ch);
+        curl_close($ch);
+
+        $array = array();
+
+        $contents_array = str_getcsv($fileContents, "\n");
+
+        foreach ($contents_array as $content_item) {
+            $tmparray = array();
+            $items = explode(",\"", $content_item);
+            foreach ($items as $item) {
+                array_push($tmparray, trim($item, "\"\r\n "));
+            }
+            array_push($array, $tmparray);
+        }
+
+        return $array;
     }
 }
