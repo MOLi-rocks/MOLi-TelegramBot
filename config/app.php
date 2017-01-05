@@ -15,6 +15,8 @@ return [
 
     'debug' => env('APP_DEBUG', false),
 
+    'env' => env('APP_ENV', 'production'),
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -113,13 +115,11 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
-        Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
         Illuminate\Cache\CacheServiceProvider::class,
         Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
-        Illuminate\Routing\ControllerServiceProvider::class,
         Illuminate\Cookie\CookieServiceProvider::class,
         Illuminate\Database\DatabaseServiceProvider::class,
         Illuminate\Encryption\EncryptionServiceProvider::class,
@@ -145,7 +145,7 @@ return [
         MOLiBot\Providers\EventServiceProvider::class,
         MOLiBot\Providers\RouteServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
-        'Barryvdh\Cors\ServiceProvider',
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
@@ -194,7 +194,7 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-	'Telegram'  => Telegram\Bot\Laravel\Facades\Telegram::class,
+        'Telegram'  => Telegram\Bot\Laravel\Facades\Telegram::class,
 
     ],
 
