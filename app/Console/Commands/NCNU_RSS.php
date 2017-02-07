@@ -42,6 +42,8 @@ class NCNU_RSS extends Command
      */
     public function handle()
     {
+        ini_set('memory_limit', '1024M');
+
         Jieba::init(array('mode'=>'default','dict'=>'big'));
         Finalseg::init();
         $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getNCNU_RSS();
