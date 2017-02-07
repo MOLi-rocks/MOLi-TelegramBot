@@ -42,7 +42,7 @@ class NCNU_RSS extends Command
      */
     public function handle()
     {
-        Jieba::init();
+        Jieba::init(array('mode'=>'default','dict'=>'big'));
         Finalseg::init();
         $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getNCNU_RSS();
         $items = $json['channel']['item'];
@@ -71,7 +71,7 @@ class NCNU_RSS extends Command
             }
             if ($news == 'Y') {
                 $getChanged = 'Y';
-                $seg_list = Jieba::cut($item['title'], false);
+                $seg_list = Jieba::cut($item['title']);
                 foreach($seg_list as $seg_list_item) {
                     $hashtag .= '#' . $seg_list_item . ' ';
                 }
