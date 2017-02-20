@@ -42,29 +42,23 @@ class MOLiBotController extends Controller
 
     public function postNCDR(Request $request)
     {
-        $channelto = env('TEST_CHANNEL');
         //use $request->getContent() to get raw data
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
 
-        foreach ($this->NCDR_to_BOTChannel_list as $to_BOTChannel_item) {
-            if ($to_BOTChannel_item == $json['info']['event']) {
-                $channelto = env('MOLi_CHANNEL');
-                break;
-            }
-        }
+        foreach ($json['info'] as $info) {
+            $channelto = env('TEST_CHANNEL');
 
-        if (!isset($json['info']['description'])) {
-            foreach ($json['info'] as $info) {
-                Telegram::sendMessage([
-                    'chat_id' => $channelto,
-                    'text' => $info['description'],
-                ]);
+            foreach ($this->NCDR_to_BOTChannel_list as $to_BOTChannel_item) {
+                if ($to_BOTChannel_item == $info['event']) {
+                    $channelto = env('MOLi_CHANNEL');
+                    break;
+                }
             }
-        } else {
+
             Telegram::sendMessage([
                 'chat_id' => $channelto,
-                'text' => $json['info']['description'],
+                'text' => $info['description'],
             ]);
         }
 
