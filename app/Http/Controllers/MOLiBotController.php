@@ -12,6 +12,12 @@ use Telegram;
 
 class MOLiBotController extends Controller
 {
+    private $NCDR_to_BOTChannel_list;
+
+    public function __construct() {
+        $this->NCDR_to_BOTChannel_list = array('地震'); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
+    }
+
     /**
      * 回應對 GET / 的請求
      */
@@ -36,20 +42,28 @@ class MOLiBotController extends Controller
 
     public function postNCDR(Request $request)
     {
+        $channelto = env('TEST_CHANNEL');
         //use $request->getContent() to get raw data
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
 
+        foreach ($this->NCDR_to_BOTChannel_list as $to_BOTChannel_item) {
+            if ($to_BOTChannel_item == $json['info']['event']) {
+                $channelto = env('MOLi_CHANNEL');
+                break;
+            }
+        }
+
         if (!isset($json['info']['description'])) {
             foreach ($json['info'] as $info) {
                 Telegram::sendMessage([
-                    'chat_id' => env('TEST_CHANNEL'),
+                    'chat_id' => $channelto,
                     'text' => $info['description'],
                 ]);
             }
         } else {
             Telegram::sendMessage([
-                'chat_id' => env('TEST_CHANNEL'),
+                'chat_id' => $channelto,
                 'text' => $json['info']['description'],
             ]);
         }
