@@ -46,20 +46,36 @@ class MOLiBotController extends Controller
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
 
-        foreach ($json['info'] as $info) {
+        if ($json['Status'] == 'Actual') {
             $channelto = env('TEST_CHANNEL');
 
-            foreach ($this->NCDR_to_BOTChannel_list as $to_BOTChannel_item) {
-                if ($to_BOTChannel_item == $info['event']) {
-                    $channelto = env('MOLi_CHANNEL');
-                    break;
-                }
-            }
+            if (!isset($json['info']['description'])) {
+                foreach ($json['info'] as $info) {
+                    foreach ($this->NCDR_to_BOTChannel_list as $to_BOTChannel_item) {
+                        if ($to_BOTChannel_item == $info['event']) {
+                            $channelto = env('MOLi_CHANNEL');
+                            break;
+                        }
+                    }
 
-            Telegram::sendMessage([
-                'chat_id' => $channelto,
-                'text' => $info['description'],
-            ]);
+                    Telegram::sendMessage([
+                        'chat_id' => $channelto,
+                        'text' => $info['description'],
+                    ]);
+                }
+            } else {
+                foreach ($this->NCDR_to_BOTChannel_list as $to_BOTChannel_item) {
+                    if ($to_BOTChannel_item == $info['event']) {
+                        $channelto = env('MOLi_CHANNEL');
+                        break;
+                    }
+                }
+
+                Telegram::sendMessage([
+                    'chat_id' => $channelto,
+                    'text' => $json['info']['description'],
+                ]);
+            }
         }
 
         return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
