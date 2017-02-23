@@ -46,7 +46,7 @@ class MOLiBotController extends Controller
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
 
-        if ($json['Status'] == 'Actual') {
+        if ($json['status'] == 'Actual') {
             $channelto = env('TEST_CHANNEL');
 
             if (!isset($json['info']['description'])) {
