@@ -41,7 +41,7 @@ class MOLiDay_Events extends Command
     public function handle()
     {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://moli.rocks/kktix/events.json');
+        curl_setopt($ch, CURLOPT_URL, 'https://moli.kktix.cc/events.json');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
         $fileContents = curl_exec($ch);

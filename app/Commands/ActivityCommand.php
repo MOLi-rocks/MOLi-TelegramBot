@@ -23,10 +23,10 @@ class ActivityCommand extends Command
     public function handle($arguments)
     {
         try {
-            $client = new \GuzzleHttp\Client(['base_uri' => 'https://moli.rocks/']);
-            $response = $client->request('GET', 'kktix/events.json', [
+            $client = new \GuzzleHttp\Client(['base_uri' => 'https://moli.kktix.cc/']);
+            $response = $client->request('GET', 'events.json', [
                 'headers' => [
-                    'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36)',
+                    'User-Agent' => 'MOLi Bot',
                     'Accept'     => 'application/json'
                 ]
             ]);
