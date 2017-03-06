@@ -43,8 +43,12 @@ class MOLiDay_Events extends Command
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://moli.kktix.cc/events.json');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
         $fileContents = curl_exec($ch);
+        if (curl_errno($ch) == 28) {
+            //Log CURL Timeout message
+        }
         curl_close($ch);
 
         $json = json_decode($fileContents);

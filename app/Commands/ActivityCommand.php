@@ -22,13 +22,15 @@ class ActivityCommand extends Command
      */
     public function handle($arguments)
     {
+        $client = new GuzzleHttpClient();
+
         try {
-            $client = new \GuzzleHttp\Client(['base_uri' => 'https://moli.kktix.cc/']);
-            $response = $client->request('GET', 'events.json', [
+            $response = $client->request('GET', 'https://moli.kktix.cc/events.json', [
                 'headers' => [
                     'User-Agent' => 'MOLi Bot',
                     'Accept'     => 'application/json'
-                ]
+                ],
+                'timeout' => 10
             ]);
         } catch (\GuzzleHttp\Exception\TransferException $e) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);

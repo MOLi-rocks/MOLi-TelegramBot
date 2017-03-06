@@ -32,6 +32,7 @@ class DoorStatusCommand extends Command
         try {
             $response = $client->request('GET', 'https://bot.moli.rocks:8000', ['timeout' => 10]);
         } catch (GuzzleHttpTransferException $e) {
+            $this->replyWithChatAction(['action' => Actions::TYPING]);
             $this->replyWithMessage(['text' => '服務未啟動']);
             return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
         }
