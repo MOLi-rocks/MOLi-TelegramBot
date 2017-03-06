@@ -5,6 +5,10 @@ namespace MOLiBot\Commands;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
+use Telegram;
+use \GuzzleHttp\Client as GuzzleHttpClient;
+use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
+
 class ActivityCommand extends Command
 {
     /**
