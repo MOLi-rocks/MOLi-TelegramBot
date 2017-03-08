@@ -131,7 +131,7 @@ class TelegramController extends Controller
         ]
         */
         if ( isset($update->all()['message']['new_chat_members']) && $update->all()['message']['chat']['id'] != -1001029969071 ) { //-1001029969071 = MOLi group
-            $telegram->sendMessage([
+            Telegram::sendMessage([
                 'chat_id' => $update->all()['message']['chat']['id'],
                 'text' => 'Hello World',
                 'reply_to_message_id' => $update->all()['message']['message_id']
