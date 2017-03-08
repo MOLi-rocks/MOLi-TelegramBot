@@ -130,27 +130,38 @@ class TelegramController extends Controller
             }
         ]
         */
-        if ( isset($update->all()['message']['new_chat_members']) && $update->all()['message']['chat']['id'] != -1001029969071 ) { //-1001029969071 = MOLi group
+        if ( isset($update->all()['message']['new_chat_members']) && $update->all()['message']['chat']['id'] == -1001029969071 ) { //-1001029969071 = MOLi group
             Telegram::sendMessage([
                 'chat_id' => $update->all()['message']['chat']['id'],
-                'text' => 'Hello World',
-                'reply_to_message_id' => $update->all()['message']['message_id']
+                'reply_to_message_id' => $update->all()['message']['message_id'],
+                'text' => 
+                    '歡迎來到 MOLi（創新自造者開放實驗室），這裡是讓大家一起創造、分享、實踐的開放空間。' . PHP_EOL . PHP_EOL .
+                    '以下是一些資訊連結：' . PHP_EOL . PHP_EOL .
+                    '/* MOLi 相關 */' . PHP_EOL .
+                    '- MOLi Bot @MOLiRocks_bot' . PHP_EOL .
+                    '- MOLi 廣播頻道 @MOLi_Channel' . PHP_EOL .
+                    '- MOLi 知識中心 http://hackfoldr.org/MOLi/' . PHP_EOL .
+                    '- MOLi 首頁 https://MOLi.Rocks' . PHP_EOL . PHP_EOL .
+                    '/* NCNU 相關 */' . PHP_EOL .
+                    '- 暨大最新公告 @NCNU_NEWS'  . PHP_EOL . PHP_EOL .
+                    '/* Telegram 相關 */' . PHP_EOL .
+                    '- Telegram 非官方中文站 https://telegram.how'
             ]);
-            //歡迎來到 MOLi（創新自造者開放實驗室），這裡是讓大家一起創造、分享、實踐的開放空間。
-            //
-            //以下是一些資訊連結：
-            //
-            ///* MOLi 相關 */
-            //- MOLi Bot @MOLiRocks_bot
-            //- MOLi 廣播頻道 @MOLi_Channel
-            //- MOLi 知識中心 http://hackfoldr.org/MOLi/
-            //- MOLi 首頁 https://MOLi.Rocks
-            //
-            ///* NCNU 相關 */
-            //- 暨大最新公告 @NCNU_NEWS
-            //
-            ///* Telegram 相關 */
-            //- Telegram 非官方中文站 https://telegram.how
+                //歡迎來到 MOLi（創新自造者開放實驗室），這裡是讓大家一起創造、分享、實踐的開放空間。
+                //
+                //以下是一些資訊連結：
+                //
+                ///* MOLi 相關 */
+                //- MOLi Bot @MOLiRocks_bot
+                //- MOLi 廣播頻道 @MOLi_Channel
+                //- MOLi 知識中心 http://hackfoldr.org/MOLi/
+                //- MOLi 首頁 https://MOLi.Rocks
+                //
+                ///* NCNU 相關 */
+                //- 暨大最新公告 @NCNU_NEWS
+                //
+                ///* Telegram 相關 */
+                //- Telegram 非官方中文站 https://telegram.how
         }
     }
 }
