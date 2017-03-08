@@ -112,6 +112,45 @@ class TelegramController extends Controller
         // Commands handler method returns an Update object.
         // So you can further process $update object
         // to however you want.
-        Log::info($update);
+        //Log::info($update);
+
+        /*
+        "new_chat_members":[
+             {
+                "id": (number),
+                "first_name":"",
+                "last_name":"",
+                "username":""
+            },
+            {
+                "id": (number),
+                "first_name":"",
+                "last_name":"",
+                "username":""
+            }
+        ]
+        */
+        if ( isset($update->all()['message']['new_chat_members']) && $update->all()['message']['chat']['username'] != 'MOLi_rocks' ) {
+            $telegram->sendMessage([
+                'chat_id' => $update->all()['message']['chat']['id'],
+                'text' => 'Hello World',
+                'reply_to_message_id' => $update->all()['message']['message_id']
+            ]);
+            //歡迎來到 MOLi（創新自造者開放實驗室），這裡是讓大家一起創造、分享、實踐的開放空間。
+            //
+            //以下是一些資訊連結：
+            //
+            ///* MOLi 相關 */
+            //- MOLi Bot @MOLiRocks_bot
+            //- MOLi 廣播頻道 @MOLi_Channel
+            //- MOLi 知識中心 http://hackfoldr.org/MOLi/
+            //- MOLi 首頁 https://MOLi.Rocks
+            //
+            ///* NCNU 相關 */
+            //- 暨大最新公告 @NCNU_NEWS
+            //
+            ///* Telegram 相關 */
+            //- Telegram 非官方中文站 https://telegram.how
+        }
     }
 }
