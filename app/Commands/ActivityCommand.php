@@ -39,7 +39,7 @@ class ActivityCommand extends Command
         } catch (\GuzzleHttp\Exception\TransferException $e) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
             $this->replyWithMessage(['text' => '網路連線異常 QAQ']);
-            return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK'); // 強制結束 command
+            return response('OK', 200); // 強制結束 command
         }
 
         $body = $response->getBody();

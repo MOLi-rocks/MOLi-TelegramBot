@@ -44,7 +44,7 @@ class CheckForMaintenanceMode
                     'chat_id' => $msgfrom,
                     'text' => 'Bot is under Maintenance'
                 ]);
-                return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
+                return response('OK', 200);
             }
 
             return response()->json([
