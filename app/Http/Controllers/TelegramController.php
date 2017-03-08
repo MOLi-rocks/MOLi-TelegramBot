@@ -113,7 +113,5 @@ class TelegramController extends Controller
         // So you can further process $update object
         // to however you want.
         Log::info($update);
-
-        return response()->json(['ok' => 'true']);
     }
 }
