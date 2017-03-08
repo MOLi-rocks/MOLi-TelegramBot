@@ -112,7 +112,6 @@ class TelegramController extends Controller
         // Commands handler method returns an Update object.
         // So you can further process $update object
         // to however you want.
-        $updates = Telegram::getWebhookUpdates();
         Log::info($updates);
 
         return response()->json(['ok' => 'true']);

@@ -61,6 +61,7 @@ class DoorStatusCommand extends Command
         }
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
+
         $send = $this->replyWithMessage(['text' => $reply]);
         
         if ( $update->all()['message']['chat']['type'] == 'private' ) {
@@ -92,6 +93,8 @@ class DoorStatusCommand extends Command
 
                 Storage::disk('local')->delete($fileName.'.'.$type[1]);
             }
+
+            return response()->json(['ok' => 'true']);
         }
     } 
 }
