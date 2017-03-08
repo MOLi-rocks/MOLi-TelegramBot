@@ -13,8 +13,6 @@ use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\RequestException as GuzzleHttpRequestException;
 
-use Log;
-
 class TelegramController extends Controller
 {
 
@@ -112,6 +110,5 @@ class TelegramController extends Controller
         // Commands handler method returns an Update object.
         // So you can further process $update object
         // to however you want.
-        Log::info($update);
     }
 }

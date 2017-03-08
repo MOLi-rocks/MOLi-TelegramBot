@@ -32,7 +32,7 @@ class SearchStaffContactCommand extends Command
 
             $this->replyWithMessage(['text' => '請直接在指令後方加上關鍵字以便查詢']);
 
-            return response()->json(['ok' => 'true']); // 強制結束 command
+            return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK'); // 強制結束 command
         }
 
         $args = explode(" ", $arguments);

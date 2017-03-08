@@ -34,7 +34,7 @@ class DoorStatusCommand extends Command
         } catch (GuzzleHttpTransferException $e) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
             $this->replyWithMessage(['text' => '服務未啟動']);
-            return response()->json(['ok' => 'true']); // 強制結束 command
+            return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK'); // 強制結束 command
         }
 
 
@@ -75,7 +75,7 @@ class DoorStatusCommand extends Command
                 $response = $client->request('GET', env('SCREEN_SHOT'), ['timeout' => 10]);
             } catch (GuzzleHttpTransferException $e) {
                 $this->replyWithMessage(['text' => '暫時無法取得截圖！']);
-                return response()->json(['ok' => 'true']); // 強制結束 command
+                return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK'); // 強制結束 command
             }
 
             $type = explode("/",$response->getHeader('Content-Type')[0]);
@@ -93,8 +93,6 @@ class DoorStatusCommand extends Command
 
                 Storage::disk('local')->delete($fileName.'.'.$type[1]);
             }
-
-            return response()->json(['ok' => 'true']);
         }
     } 
 }
