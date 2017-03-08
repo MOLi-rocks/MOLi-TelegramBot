@@ -34,7 +34,7 @@ class DoorStatusCommand extends Command
         } catch (GuzzleHttpTransferException $e) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
             $this->replyWithMessage(['text' => '服務未啟動']);
-            return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
+            return response()->json(['ok' => 'true']); // 強制結束 command
         }
 
 
@@ -61,10 +61,6 @@ class DoorStatusCommand extends Command
         }
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
-        // This will send a message using `sendMessage` method behind the scenes to
-        // the user/chat id who triggered this command.
-        // `replyWith<Message|Photo|Audio|Video|Voice|Document|Sticker|Location|ChatAction>()` all the available methods are dynamically
-        // handled when you replace `send<Method>` with `replyWith` and use the same parameters - except chat_id does NOT need to be included in the array.
         $send = $this->replyWithMessage(['text' => $reply]);
         
         if ( $update->all()['message']['chat']['type'] == 'private' ) {
@@ -78,7 +74,7 @@ class DoorStatusCommand extends Command
                 $response = $client->request('GET', env('SCREEN_SHOT'), ['timeout' => 10]);
             } catch (GuzzleHttpTransferException $e) {
                 $this->replyWithMessage(['text' => '暫時無法取得截圖！']);
-                return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
+                return response()->json(['ok' => 'true']); // 強制結束 command
             }
 
             $type = explode("/",$response->getHeader('Content-Type')[0]);
@@ -96,8 +92,6 @@ class DoorStatusCommand extends Command
 
                 Storage::disk('local')->delete($fileName.'.'.$type[1]);
             }
-
-            return (new \Illuminate\Http\Response)->setStatusCode(200, 'OK');
         }
     } 
 }
