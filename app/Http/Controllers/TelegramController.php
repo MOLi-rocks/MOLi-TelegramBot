@@ -115,20 +115,46 @@ class TelegramController extends Controller
         //Log::info($update);
 
         /*
-        "new_chat_members":[
-             {
-                "id": (number),
-                "first_name":"",
-                "last_name":"",
-                "username":""
-            },
-            {
-                "id": (number),
-                "first_name":"",
-                "last_name":"",
-                "username":""
+        {
+            "update_id":(number),
+            "message":{
+                "message_id":(number),
+                "from":{
+                    "id":(number),
+                    "first_name":"",
+                    "username":""
+                },
+                "chat":{
+                    "id":(number),
+                    "title":"",
+                    "username":"",
+                    "type":""
+                },
+                "date":(number),
+                "new_chat_participant":{
+                    "id":(number),
+                    "first_name":"",
+                    "username":""
+                },
+                "new_chat_member":{
+                    "id":(number),
+                    "first_name":"",
+                    "username":""
+                },
+                "new_chat_members":[
+                {
+                    "id":(number),
+                    "first_name":"",
+                    "username":""
+                },
+                {
+                    "id":(number),
+                    "first_name":"",
+                    "username":""
+                }
+                ]
             }
-        ]
+        }
         */
         if ( isset($update->all()['message']['new_chat_members']) && $update->all()['message']['chat']['id'] == -1001029969071 ) { //-1001029969071 = MOLi group
             Telegram::sendMessage([
