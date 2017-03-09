@@ -30,12 +30,14 @@ class SearchStaffContactCommand extends Command
         if (empty($arguments)) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-            $this->replyWithMessage(['text' => '請直接在指令後方加上關鍵字以便查詢']);
+            $this->replyWithMessage(['text' => '請直接在指令後方加上關鍵字以便查詢', ]);
 
             return response('OK', 200); // 強制結束 command
         }
 
         $args = explode(" ", $arguments);
+
+        $update = Telegram::getWebhookUpdates();
 
         $keyword = $args[0];
 
@@ -50,7 +52,7 @@ class SearchStaffContactCommand extends Command
         $count = 0;
 
         if (count($json) <= 1) {
-            $this->replyWithMessage(['text' => '查無資料 QQ']);
+            $this->replyWithMessage(['text' => '查無資料 QQ', 'reply_to_message_id' => $update->all()['message']['message_id']]);
             return response('OK', 200);
         }
 
@@ -71,6 +73,6 @@ class SearchStaffContactCommand extends Command
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $this->replyWithMessage(['text' => $text]);
+        $this->replyWithMessage(['text' => $text, 'reply_to_message_id' => $update->all()['message']['message_id']]);
     }
 }
