@@ -27,17 +27,17 @@ class SearchStaffContactCommand extends Command
 
     public function handle($arguments)
     {
+        $update = Telegram::getWebhookUpdates();
+
         if (empty($arguments)) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-            $this->replyWithMessage(['text' => '請直接在指令後方加上關鍵字以便查詢', ]);
+            $this->replyWithMessage(['text' => '請直接在指令後方加上關鍵字以便查詢', 'reply_to_message_id' => $update->all()['message']['message_id']]);
 
             return response('OK', 200); // 強制結束 command
         }
 
         $args = explode(" ", $arguments);
-
-        $update = Telegram::getWebhookUpdates();
 
         $keyword = $args[0];
 

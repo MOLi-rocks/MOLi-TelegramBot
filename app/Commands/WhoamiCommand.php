@@ -41,6 +41,7 @@ class WhoamiCommand extends Command
                 '您所設定的 username 為 @'.$username.PHP_EOL.
                 '您的 Telegram user ID 為 '.$userid.PHP_EOL.
                 '目前所在的頻道 ID 為 '.$chatid,
+            'reply_to_message_id' => $update->all()['message']['message_id']
         ]);
     }
 }
