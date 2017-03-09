@@ -39,7 +39,11 @@ class SearchStaffContactCommand extends Command
 
         $keyword = $args[0];
 
-        $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContact($keyword);
+        if ( substr($keyword, -3) == '大帥哥' ) {
+            $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContact('張世杰');
+        } else {
+            $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContact($keyword);
+        }
 
         $text = '';
 
