@@ -45,6 +45,11 @@ class SearchStaffContactCommand extends Command
 
         $count = 0;
 
+        if (count($json) <= 1) {
+            $this->replyWithMessage(['text' => '查無資料 QQ']);
+            return response('OK', 200);
+        }
+
         if (count($json) > 12) {
             $text .= '結果超過 10 筆，建議使用更精確關鍵字搜尋或至 http://ccweb1.ncnu.edu.tw/telquery/StaffQuery.asp 直接搜尋' . PHP_EOL . PHP_EOL . PHP_EOL;
         }
