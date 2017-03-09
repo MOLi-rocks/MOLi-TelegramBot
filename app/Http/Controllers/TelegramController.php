@@ -197,5 +197,7 @@ class TelegramController extends Controller
                 ///* Telegram 相關 */
                 //- Telegram 非官方中文站 https://telegram.how
         }
+
+        return response('OK', 200);
     }
 }

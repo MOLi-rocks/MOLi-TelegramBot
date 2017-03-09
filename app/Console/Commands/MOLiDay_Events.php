@@ -52,7 +52,7 @@ class MOLiDay_Events extends Command
         curl_close($ch);
 
         $json = json_decode($fileContents);
-        $events = $json->entry;
+        $events = $json['entry'];
 
         if (Storage::disk('local')->has('KKTIX_published')) {
             $content = Storage::disk('local')->get('KKTIX_published');
