@@ -30,5 +30,7 @@ class MapCommand extends Command
         // `replyWith<Message|Photo|Audio|Video|Voice|Document|Sticker|Location|ChatAction>()` all the available methods are dynamically
         // handled when you replace `send<Method>` with `replyWith` and use the same parameters - except chat_id does NOT need to be included in the array.
         $this->replyWithLocation(['latitude' => 23.9519631, 'longitude' => 120.9274402]);
+
+        return response('OK', 200);
     }
 }

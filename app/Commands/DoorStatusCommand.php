@@ -94,5 +94,7 @@ class DoorStatusCommand extends Command
                 Storage::disk('local')->delete($fileName.'.'.$type[1]);
             }
         }
+
+        return response('OK', 200);
     } 
 }

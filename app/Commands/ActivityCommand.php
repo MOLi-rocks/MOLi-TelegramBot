@@ -62,5 +62,7 @@ class ActivityCommand extends Command
             $this->replyWithChatAction(['action' => Actions::TYPING]);
             $this->replyWithMessage(['text' => '最近無排定活動，歡迎在群組挖坑' . PHP_EOL . 'https://www.facebook.com/groups/MOLi.rocks']);
         }
+
+        return response('OK', 200);
     }
 }

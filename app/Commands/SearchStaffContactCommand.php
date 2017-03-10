@@ -74,5 +74,7 @@ class SearchStaffContactCommand extends Command
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $this->replyWithMessage(['text' => $text, 'reply_to_message_id' => $update->all()['message']['message_id']]);
+
+        return response('OK', 200);
     }
 }

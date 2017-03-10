@@ -43,5 +43,7 @@ class WhoamiCommand extends Command
                 '目前所在的頻道 ID 為 '.$chatid,
             'reply_to_message_id' => $update->all()['message']['message_id']
         ]);
+
+        return response('OK', 200);
     }
 }

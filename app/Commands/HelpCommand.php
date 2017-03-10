@@ -59,6 +59,8 @@ class HelpCommand extends Command
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $this->replyWithMessage(compact('text'));
+
+        return response('OK', 200);
     }
 
 }
