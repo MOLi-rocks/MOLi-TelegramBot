@@ -13,7 +13,10 @@ class PublishedKKTIXTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('Published_KKTIX', function (Blueprint $table) {
+            $table->string('url');
+            $table->primary('url');
+        });
     }
 
     /**
@@ -23,6 +26,6 @@ class PublishedKKTIXTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('Published_KKTIX');
     }
 }
