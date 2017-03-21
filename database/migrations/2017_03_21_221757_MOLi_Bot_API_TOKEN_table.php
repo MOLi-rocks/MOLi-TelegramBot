@@ -13,7 +13,10 @@ class MOLiBotAPITOKENTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('API_TOKEN', function (Blueprint $table) {
+            $table->string('token');
+            $table->primary('token');
+        });
     }
 
     /**
@@ -23,6 +26,6 @@ class MOLiBotAPITOKENTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('API_TOKEN');
     }
 }
