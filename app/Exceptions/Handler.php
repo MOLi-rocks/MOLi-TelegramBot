@@ -11,6 +11,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Validation\ValidationException;
 
 use Telegram\Bot\Exceptions\TelegramSDKException;
+use Log;
 
 class Handler extends ExceptionHandler
 {
@@ -54,7 +55,8 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof TelegramSDKException) {
-            return response()->json($e->getResponseData(), $e->getHttpStatusCode());
+            Log:info($e);
+            return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 200);
         }
 
         if (env('APP_ENV') == 'production') {
