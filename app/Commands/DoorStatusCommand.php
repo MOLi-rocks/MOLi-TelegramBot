@@ -77,22 +77,12 @@ class DoorStatusCommand extends Command
                 $this->replyWithMessage(['text' => '暫時無法取得截圖！']);
                 return response('OK', 200);// 強制結束 command
             }
-
-            $type = explode("/",$response->getHeader('Content-Type')[0]);
-
-            if ($type[0] == 'image') {
-                $fileName = rand(11111,99999);
-
-                storage::disk('local')->put($fileName.'.'.$type[1], $response->getBody());
-
-                $send = Telegram::sendPhoto([
-                    'chat_id' => $update->all()['message']['chat']['id'],
-                    'reply_to_message_id' => $send->getMessageId(),
-                    'photo' => '../storage/app/'.$fileName.'.'.$type[1],
-                ]);
-
-                Storage::disk('local')->delete($fileName.'.'.$type[1]);
-            }
+           
+            $send = Telegram::sendPhoto([
+                'chat_id' => $update->all()['message']['chat']['id'],
+                'reply_to_message_id' => $send->getMessageId(),
+                'photo' => env('SCREEN_SHOT'),
+            ]);
         }
 
         return response('OK', 200);
