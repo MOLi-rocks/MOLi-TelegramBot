@@ -3,7 +3,7 @@
 namespace MOLiBot\Http\Middleware;
 
 use Closure;
-use Storage;
+use MOLiBot\MOLi_Bot_API_TOKEN;
 
 class VerifyAPIToken
 {
@@ -16,14 +16,10 @@ class VerifyAPIToken
      */
     public function handle($request, Closure $next)
     {
-        $tokens = Storage::disk('local')->files('/api');
-        
-        foreach ($tokens as $val) {
-            $token = explode("/", $val);
-            if ($request->header('Authorization') == $token[1]) {
-                return $next($request);
-            }
+        if ( MOLi_Bot_API_TOKEN::where('token', $request->header('Authorization'))->exists() ) {
+            return $next($request);
         }
-        return response()->json(['massages' => 'token_invalid'], 403);
+
+        return response()->json(['massages' => 'token_invalid or not provide'], 403);
     }
 }
