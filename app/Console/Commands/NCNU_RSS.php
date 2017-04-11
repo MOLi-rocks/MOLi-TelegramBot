@@ -5,7 +5,7 @@ namespace MOLiBot\Console\Commands;
 use Illuminate\Console\Command;
 
 use Telegram;
-use Storage;
+use MOLiBot\Published_NCNU_RSS;
 use Fukuball\Jieba\Jieba;
 use Fukuball\Jieba\Finalseg;
 
@@ -45,35 +45,19 @@ class NCNU_RSS extends Command
         ini_set('memory_limit', '1024M');
 
         Jieba::init(array('mode'=>'default','dict'=>'big'));
+
         Finalseg::init();
+
         $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getNCNU_RSS();
+
         $items = $json['channel']['item'];
 
-        if (Storage::disk('local')->has('RSS_published')) {
-            $content = Storage::disk('local')->get('RSS_published');
-        } else {
-            Storage::disk('local')->put('RSS_published', '[""]');
-            $content = Storage::disk('local')->get('RSS_published');
-        }
-
-        $published = json_decode($content);
-        $publishedArray = array();
-        $getChanged = 'N';
-        $hashtag = '';
-
         foreach ($items as $item) {
-            $publishedArray[] = $item['guid'];
-            foreach ($published as $publishedguid) {
-                if ($item['guid'] == $publishedguid) {
-                    $news = 'N';
-                    break;
-                } else {
-                    $news = 'Y';
-                }
-            }
-            if ($news == 'Y') {
-                $getChanged = 'Y';
+            $hashtag = '';
+
+            if ( !Published_NCNU_RSS::where('guid', $item['guid'])->exists() ) {
                 $seg_list = Jieba::cut($item['title']);
+
                 foreach($seg_list as $seg_list_item) {
                     $hashtag .= '#' . $seg_list_item . ' ';
                 }
@@ -82,15 +66,11 @@ class NCNU_RSS extends Command
                     'chat_id' => env('NEWS_CHANNEL'),
                     'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'] . PHP_EOL . PHP_EOL . $hashtag
                 ]);
+
+                Published_NCNU_RSS::create(['guid' => $item['guid'], 'title' => $item['title']]);
+
                 sleep(5);
             }
-            $hashtag = '';
-        }
-
-        if ($getChanged == 'Y') {
-            Storage::disk('local')->delete('RSS_published');
-            sleep(1);
-            Storage::disk('local')->put('RSS_published', json_encode($publishedArray));
         }
 
         $this->info('Mission Complete!');
