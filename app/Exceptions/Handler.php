@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler
             }
 
             if ($e instanceof TelegramSDKException) {
-                Log:info($e);
+                Log::info($e);
                 return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 400);
             }
         }
