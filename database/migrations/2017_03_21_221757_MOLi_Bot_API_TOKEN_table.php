@@ -14,9 +14,8 @@ class MOLiBotAPITOKENTable extends Migration
     public function up()
     {
         Schema::create('API_TOKEN', function (Blueprint $table) {
-            $table->string('token');
+            $table->string('token')->primary();
             $table->string('user');
-            $table->primary('token');
         });
     }
 

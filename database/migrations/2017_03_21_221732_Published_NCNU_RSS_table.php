@@ -14,8 +14,8 @@ class PublishedNCNURSSTable extends Migration
     public function up()
     {
         Schema::create('Published_NCNU_RSS', function (Blueprint $table) {
-            $table->string('uuid');
-            $table->primary('uuid');
+            $table->string('guid')->primary();
+            $table->string('title');
         });
     }
 
