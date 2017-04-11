@@ -4,7 +4,8 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Storage;
+use Carbon\Carbon;
+use MOLiBot\MOLi_Bot_API_TOKEN;
 use Hash;
 
 class TokenGenerator extends Command
@@ -42,7 +43,7 @@ class TokenGenerator extends Command
     {
         $who = $this->ask('who will use this token?');
         $fp = md5(((float) date ( "YmdHis" ) + rand(100,999)).rand(1000,9999));
-        Storage::disk('local')->put('/api/'.$fp, $who);
-        $this->info('Token is '.$fp);
+        MOLi_Bot_API_TOKEN::create(['token' => $fp, 'user' => $who]);
+        $this->info('Token for ' . $who . ' is ' . $fp);
     }
 }
