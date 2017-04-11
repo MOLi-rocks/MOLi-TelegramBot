@@ -5,7 +5,7 @@ namespace MOLiBot\Console\Commands;
 use Illuminate\Console\Command;
 
 use Telegram;
-use Storage;
+use MOLiBot\Published_KKTIX;
 
 class MOLiDay_Events extends Command
 {
@@ -54,29 +54,8 @@ class MOLiDay_Events extends Command
         $json = json_decode($fileContents);
         $events = $json->entry;
 
-        if (Storage::disk('local')->has('KKTIX_published')) {
-            $content = Storage::disk('local')->get('KKTIX_published');
-        } else {
-            Storage::disk('local')->put('KKTIX_published', '[""]');
-            $content = Storage::disk('local')->get('KKTIX_published');
-        }
-
-        $published = json_decode($content);
-        $publishedArray = array();
-        $getChanged = 'N';
-
         foreach ($events as $event) {
-            $publishedArray[] = $event->url;
-            foreach ($published as $publishedurl) {
-                if ($event->url == $publishedurl) {
-                    $new = 'N';
-                    break;
-                } else {
-                    $new = 'Y';
-                }
-            }
-            if ($new == 'Y') {
-                $getChanged = 'Y';
+            if ( !Published_KKTIX::where('url', $event->url)->exists() ) {
                 Telegram::sendMessage([
                     'chat_id' => env('MOLi_CHANNEL'),
                     'text' => 'MOLiDay 新活動：' . PHP_EOL . $event->title . PHP_EOL . PHP_EOL .
@@ -84,14 +63,11 @@ class MOLiDay_Events extends Command
                         '活動地點：' . PHP_EOL . $event->content . PHP_EOL . PHP_EOL .
                         '報名網址：' . PHP_EOL . $event->url . PHP_EOL . PHP_EOL
                 ]);
+
+                Published_KKTIX::create(['url' => $event->url, 'title' => $event->title]);
+
                 sleep(5);
             }
-        }
-
-        if ($getChanged == 'Y') {
-            Storage::disk('local')->delete('KKTIX_published');
-            sleep(1);
-            Storage::disk('local')->put('KKTIX_published', json_encode($publishedArray));
         }
 
         $this->info('Mission Complete!');
