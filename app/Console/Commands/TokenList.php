@@ -4,7 +4,7 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Storage;
+use MOLiBot\MOLi_Bot_API_TOKEN;
 
 class TokenList extends Command
 {
@@ -39,14 +39,8 @@ class TokenList extends Command
      */
     public function handle()
     {
-        $result = array();
-        $tokens = Storage::disk('local')->files('/api/');
-        foreach ($tokens as $token) {
-            $puretoken = explode('/', $token);
-            $who = Storage::disk('local')->get($token);
-            array_push($result, array($who, $puretoken[1]));
-        }
-        $headers = ['User', 'Token'];
-        $this->table($headers, $result);
+        $tokens = MOLi_Bot_API_TOKEN::all(['user', 'token', 'created_at'])->toArray();
+        $headers = ['User', 'Token', 'created_at'];
+        $this->table($headers, $tokens);
     }
 }

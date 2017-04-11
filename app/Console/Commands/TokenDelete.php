@@ -4,7 +4,7 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Storage;
+use MOLiBot\MOLi_Bot_API_TOKEN;
 
 class TokenDelete extends Command
 {
@@ -40,9 +40,9 @@ class TokenDelete extends Command
     public function handle()
     {
         $token = $this->argument('token');
-        if (Storage::disk('local')->has('/api/'.$token)) {
+        if (MOLi_Bot_API_TOKEN::where('token', $token)->exists()) {
             if ($this->confirm('Are You Sure to Delete This Token?')) {
-                Storage::disk('local')->delete('/api/'.$token);
+                MOLi_Bot_API_TOKEN::where('token', $token)->delete();
                 $this->info('Token Delete Success!');
             }
         } else {
