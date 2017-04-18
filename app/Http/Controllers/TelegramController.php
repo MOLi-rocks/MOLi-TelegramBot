@@ -28,9 +28,9 @@ class TelegramController extends Controller
     public function postSendMessage(Request $request)
     {
         return $send = Telegram::sendMessage([
-            'chat_id' => $request['chat_id'],
-            'text' => $request['text'],
-            'disable_notification' => $request->input('disable_notification')
+            'chat_id' => $request->input('chat_id', ''),
+            'text' => $request->input('text', ''),
+            'disable_notification' => $request->input('disable_notification', false)
         ]);
     }
 
@@ -41,20 +41,9 @@ class TelegramController extends Controller
         $imgpath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
 
         if ( $request->hasFile('photo') ) {
-            $extension = $request['photo']->getClientOriginalExtension();
+            $extension = $request->photo->extension();
 
             Storage::disk('local')->put($fileName.'.'.$extension, file_get_contents($request->file('photo')->getRealPath()));
-
-            $send = Telegram::sendPhoto([
-                'chat_id' => $request['chat_id'],
-                'photo' => $imgpath.$fileName.'.'.$extension,
-                'disable_notification' => $request->input('disable_notification')
-                //'caption' => 'Some caption'
-            ]);
-
-            Storage::disk('local')->delete($fileName.'.'.$extension);
-
-            return $send;
         }
 
         if ( $request->input('photo') ) {
@@ -74,37 +63,34 @@ class TelegramController extends Controller
 
             $type = explode("/",$response->getHeader('Content-Type')[0]);
 
+            $extension = $type[1];
+
             if ($type[0] == 'image') {
-                storage::disk('local')->put($fileName.'.'.$type[1], $response->getBody());
-
-                $send = Telegram::sendPhoto([
-                    'chat_id' => $request['chat_id'],
-                    'photo' => $imgpath.$fileName.'.'.$type[1],
-                    'disable_notification' => $request->input('disable_notification')
-                    //'caption' => 'Some caption'
-                ]);
-
-                Storage::disk('local')->delete($fileName.'.'.$type[1]);
-
-                return $send;
+                Storage::disk('local')->put($fileName.'.'.$extension, $response->getBody());
+            } else {
+                return response()->json(['massages' => 'Can\'t Get Photo From Url'], 404);
             }
         }
 
-        return $send = Telegram::sendPhoto([
+        $send = Telegram::sendPhoto([
             'chat_id' => $request->input('chat_id', ''),
-            'photo' => $request->input('photo', ''),
-            'disable_notification' => $request->input('disable_notification')
+            'photo' => $imgpath.$fileName.'.'.$extension,
+            'disable_notification' => $request->input('disable_notification', false)
             //'caption' => 'Some caption'
         ]);
+
+        Storage::disk('local')->delete($fileName.'.'.$extension);
+
+        return $send;
     }
 
     public function postSendLocation(Request $request)
     {
         return $send = Telegram::sendLocation([
-            'chat_id' => $request['chat_id'],
-            'latitude' => $request['latitude'],
-            'longitude' => $request['longitude'],
-            'disable_notification' => $request->input('disable_notification')
+            'chat_id' => $request->input('chat_id', ''),
+            'latitude' => $request->input('latitude', ''),
+            'longitude' => $request->input('longitude', ''),
+            'disable_notification' => $request->input('disable_notification', false)
         ]);
     }
 
