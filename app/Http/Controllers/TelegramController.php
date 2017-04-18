@@ -36,16 +36,18 @@ class TelegramController extends Controller
 
     public function postSendPhoto(Request $request)
     {
-        $fileName = rand(11111,99999);
+        $fileName = 'BotAPI'.rand(11111,99999);
+
+        $imgpath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
 
         if ( $request->hasFile('photo') ) {
             $extension = $request['photo']->getClientOriginalExtension();
 
-            storage::disk('local')->put($fileName.'.'.$extension, file_get_contents($request->file('photo')->getRealPath()));
+            Storage::disk('local')->put($fileName.'.'.$extension, file_get_contents($request->file('photo')->getRealPath()));
 
             $send = Telegram::sendPhoto([
                 'chat_id' => $request['chat_id'],
-                'photo' => '../storage/app/'.$fileName.'.'.$extension,
+                'photo' => $imgpath.$fileName.'.'.$extension,
                 'disable_notification' => $request->input('disable_notification')
                 //'caption' => 'Some caption'
             ]);
@@ -77,7 +79,7 @@ class TelegramController extends Controller
 
                 $send = Telegram::sendPhoto([
                     'chat_id' => $request['chat_id'],
-                    'photo' => '../storage/app/'.$fileName.'.'.$type[1],
+                    'photo' => $imgpath.$fileName.'.'.$type[1],
                     'disable_notification' => $request->input('disable_notification')
                     //'caption' => 'Some caption'
                 ]);

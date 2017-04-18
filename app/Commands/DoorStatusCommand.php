@@ -80,15 +80,17 @@ class DoorStatusCommand extends Command
 
             $type = explode("/",$response->getHeader('Content-Type')[0]);
 
+            $imgpath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
+
             if ($type[0] == 'image') {
-                $fileName = rand(11111,99999);
+                $fileName = 'DoorStatusCommand'.rand(11111,99999);
 
                 Storage::disk('local')->put($fileName.'.'.$type[1], $response->getBody());
 
                 $send = Telegram::sendPhoto([
                     'chat_id' => $update->all()['message']['chat']['id'],
                     'reply_to_message_id' => $send->getMessageId(),
-                    'photo' => '../storage/app/'.$fileName.'.'.$type[1],
+                    'photo' => $imgpath.$fileName.'.'.$type[1],
                 ]);
 
                 Storage::disk('local')->delete($fileName.'.'.$type[1]);
