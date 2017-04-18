@@ -38,12 +38,14 @@ class TelegramController extends Controller
     {
         $fileName = 'BotAPI'.rand(11111,99999);
 
+        $extension = '';
+
         $imgpath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
 
         if ( $request->hasFile('photo') ) {
             $extension = $request->photo->extension();
 
-            Storage::disk('local')->put($fileName.'.'.$extension, file_get_contents($request->file('photo')->getRealPath()));
+            $path = $request->photo->storeAs('/', $fileName.'.'.$extension);
         }
 
         if ( $request->input('photo') ) {
@@ -61,7 +63,7 @@ class TelegramController extends Controller
                 return response()->json(['massages' => 'Can\'t Get Photo From Url'], 404);
             }
 
-            $type = explode("/",$response->getHeader('Content-Type')[0]);
+            $type = explode('/', $response->getHeader('Content-Type')[0]);
 
             $extension = $type[1];
 
