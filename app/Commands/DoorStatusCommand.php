@@ -83,7 +83,7 @@ class DoorStatusCommand extends Command
             if ($type[0] == 'image') {
                 $fileName = rand(11111,99999);
 
-                storage::disk('local')->put($fileName.'.'.$type[1], $response->getBody());
+                Storage::disk('local')->put($fileName.'.'.$type[1], $response->getBody());
 
                 $send = Telegram::sendPhoto([
                     'chat_id' => $update->all()['message']['chat']['id'],
