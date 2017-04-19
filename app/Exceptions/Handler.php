@@ -56,8 +56,10 @@ class Handler extends ExceptionHandler
                 return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 200);
             } else {
                 if ($e instanceof TelegramSDKException) {
-                    return response()->json($e->getMessage(), $e);
+                    return response()->json($e->getResponseData(), $e->getHttpStatusCode());
                 }
+
+                return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 400);
             }
         } else {
             if ($e instanceof ModelNotFoundException) {
@@ -65,7 +67,7 @@ class Handler extends ExceptionHandler
             }
 
             if ($e instanceof TelegramSDKException) {
-                return response()->json($e->getMessage(), $e);
+                return response()->json($e->getResponseData(), $e->getHttpStatusCode());
             }
         }
         
