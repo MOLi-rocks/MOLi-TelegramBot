@@ -51,16 +51,21 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         if (env('APP_ENV') == 'production') {
-            Log:info($e);
-            return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 200);
+            if ( $request->is( env('TELEGRAM_BOT_TOKEN') ) ) {
+                Log:info($e);
+                return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 200);
+            } else {
+                if ($e instanceof TelegramSDKException) {
+                    return response()->json($e->getMessage(), $e);
+                }
+            }
         } else {
             if ($e instanceof ModelNotFoundException) {
                 $e = new NotFoundHttpException($e->getMessage(), $e);
             }
 
             if ($e instanceof TelegramSDKException) {
-                Log::info($e);
-                return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 400);
+                return response()->json($e->getMessage(), $e);
             }
         }
         
