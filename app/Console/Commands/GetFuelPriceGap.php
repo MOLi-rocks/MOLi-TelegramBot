@@ -44,8 +44,6 @@ class GetFuelPriceGap extends Command
 
         $result = array();
 
-        $showable = collect(['98無鉛汽油', '95無鉛汽油', '92無鉛汽油', '超級柴油']);
-
         foreach ($datas as $data) {
             if ( FuelPrice::where('name', '=', $data['產品名稱'])->where('start_at', '=', $data['牌價生效時間'])->exists() ) {
                 $result += array($data['產品名稱'] => '不調整 (' . $data['參考牌價'] . ')');
