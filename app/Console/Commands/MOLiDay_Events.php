@@ -21,7 +21,7 @@ class MOLiDay_Events extends Command
      *
      * @var string
      */
-    protected $description = 'Check New MOLiDay Event From KKTIX';
+    protected $description = 'Check New MOLiDay Event From KKTIX（排程用）';
 
     /**
      * Create a new command instance.

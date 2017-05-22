@@ -23,7 +23,7 @@ class NCNU_RSS extends Command
      *
      * @var string
      */
-    protected $description = 'Check New RSS Feed From NCNU';
+    protected $description = 'Check New RSS Feed From NCNU（排程用）';
 
     /**
      * Create a new command instance.
