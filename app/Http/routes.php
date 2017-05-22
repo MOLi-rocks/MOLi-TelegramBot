@@ -17,6 +17,10 @@ Route::get('/ncnu-rss', 'MOLiBotController@getNCNU_RSS');
 
 Route::get('/ncnu-staff-contact/{keyword?}', 'MOLiBotController@getStaffContact');
 
+Route::get('/fuel-price', 'MOLiBotController@getFuelPrice');
+
+Route::get('/history-fuel-price', 'MOLiBotController@getHistoryFuelPrice');
+
 Route::group(['middleware' => 'bot.token'], function () {
     Route::post('messages', 'TelegramController@postSendMessage');
 

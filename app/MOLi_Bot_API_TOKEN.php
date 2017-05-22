@@ -10,7 +10,11 @@ use Carbon\Carbon;
 class MOLi_Bot_API_TOKEN extends Model
 {
     use SoftDeletes;
-    
+
+    public $incrementing = false;
+
+    protected $primaryKey = 'token';
+
     protected $table = 'API_TOKEN';
     
     protected $dateFormat = Carbon::ISO8601;

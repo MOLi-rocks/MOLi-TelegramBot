@@ -261,7 +261,7 @@
                 "Jieba",
                 "php"
             ],
-            "time": "2017-05-06 15:20:05"
+            "time": "2017-05-06T15:20:05+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1334,16 +1334,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.8.3",
+            "version": "v0.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "1dd4bbbc64d71e7ec075ffe82b42d9e096dc8d5e"
+                "reference": "38a9d21406597a0440690eafbcb0222f528c8ac6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/1dd4bbbc64d71e7ec075ffe82b42d9e096dc8d5e",
-                "reference": "1dd4bbbc64d71e7ec075ffe82b42d9e096dc8d5e",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/38a9d21406597a0440690eafbcb0222f528c8ac6",
+                "reference": "38a9d21406597a0440690eafbcb0222f528c8ac6",
                 "shasum": ""
             },
             "require": {
@@ -1403,7 +1403,7 @@
                 "interactive",
                 "shell"
             ],
-            "time": "2017-03-19T21:40:44+00:00"
+            "time": "2017-05-17T06:49:19+00:00"
         },
         {
             "name": "ramsey/uuid",
@@ -2822,16 +2822,16 @@
         },
         {
             "name": "phpspec/phpspec",
-            "version": "2.5.6",
+            "version": "2.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/phpspec.git",
-                "reference": "39ff2d5f82c4fbd42ef2e5661f2461426c436ef8"
+                "reference": "a1dd5db803e75591c0e3cc1a054f7942133b4d05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/phpspec/zipball/39ff2d5f82c4fbd42ef2e5661f2461426c436ef8",
-                "reference": "39ff2d5f82c4fbd42ef2e5661f2461426c436ef8",
+                "url": "https://api.github.com/repos/phpspec/phpspec/zipball/a1dd5db803e75591c0e3cc1a054f7942133b4d05",
+                "reference": "a1dd5db803e75591c0e3cc1a054f7942133b4d05",
                 "shasum": ""
             },
             "require": {
@@ -2841,7 +2841,7 @@
                 "phpspec/php-diff": "~1.0.0",
                 "phpspec/prophecy": "~1.4",
                 "sebastian/exporter": "~1.0|~2.0|^3.0",
-                "symfony/console": "~2.3|~3.0",
+                "symfony/console": "~2.3|~3.0,!=3.2.8",
                 "symfony/event-dispatcher": "~2.1|~3.0",
                 "symfony/finder": "~2.1|~3.0",
                 "symfony/process": "^2.6|~3.0",
@@ -2896,7 +2896,7 @@
                 "testing",
                 "tests"
             ],
-            "time": "2017-04-27T12:15:45+00:00"
+            "time": "2017-05-12T06:09:08+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -3403,23 +3403,23 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "1.4.1",
+            "version": "1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "13edfd8706462032c2f52b4b862974dd46b71c9e"
+                "reference": "7f066a26a962dbe58ddea9f72a4e82874a3975a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/13edfd8706462032c2f52b4b862974dd46b71c9e",
-                "reference": "13edfd8706462032c2f52b4b862974dd46b71c9e",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/7f066a26a962dbe58ddea9f72a4e82874a3975a4",
+                "reference": "7f066a26a962dbe58ddea9f72a4e82874a3975a4",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.3.3 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8"
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0"
             },
             "type": "library",
             "extra": {
@@ -3451,7 +3451,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2015-12-08T07:14:41+00:00"
+            "time": "2017-05-22T07:24:03+00:00"
         },
         {
             "name": "sebastian/environment",
