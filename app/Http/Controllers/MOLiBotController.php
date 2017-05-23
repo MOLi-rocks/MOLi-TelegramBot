@@ -112,12 +112,7 @@ class MOLiBotController extends Controller
      */
     public function getFuelPrice()
     {
-        $input_xml = '<?xml version="1.0" encoding="utf-8"?>
-            <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
-                <soap12:Body>
-                    <getCPCMainProdListPrice xmlns="http://tmtd.cpc.com.tw/" />
-                </soap12:Body>
-            </soap12:Envelope>';
+        $input_xml = '<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope"><soap12:Body><getCPCMainProdListPrice xmlns="http://tmtd.cpc.com.tw/" /></soap12:Body></soap12:Envelope>';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx');
@@ -136,14 +131,18 @@ class MOLiBotController extends Controller
         $fileContents = curl_exec($ch);
         curl_close($ch);
 
-        // SOAP response to regular XML
-        $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
+        if ($fileContents) {
+            // SOAP response to regular XML
+            $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
 
-        $formatter = Formatter::make($xml, Formatter::XML);
+            $formatter = Formatter::make($xml, Formatter::XML);
 
-        $json = $formatter->toArray();
+            $json = $formatter->toArray();
 
-        return $json['soapBody']['getCPCMainProdListPriceResponse']['getCPCMainProdListPriceResult']['diffgrdiffgram']['NewDataSet']['tbTable'];
+            return $json['soapBody']['getCPCMainProdListPriceResponse']['getCPCMainProdListPriceResult']['diffgrdiffgram']['NewDataSet']['tbTable'];
+        } else {
+            $this->getFuelPrice();
+        }
     }
 
     public function getHistoryFuelPrice()
