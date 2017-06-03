@@ -43,6 +43,6 @@ class Kernel extends ConsoleKernel
                  ->everyTenMinutes()->withoutOverlapping();
 
         $schedule->command('fuelprice:checkgap')
-                 ->weekly()->sundays()->at('13:00')->withoutOverlapping();
+                 ->weekly()->sundays()->at('12:05')->withoutOverlapping();
     }
 }

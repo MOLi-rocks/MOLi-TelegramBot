@@ -79,7 +79,7 @@ class GetFuelPriceGap extends Command
 
         //$this->info(print_r($result));
         Telegram::sendMessage([
-            'chat_id' => env('NEWS_CHANNEL'),
+            'chat_id' => env('MOLi_CHANNEL'),
             'text' => '98無鉛汽油: ' . $result['98無鉛汽油'] . PHP_EOL . PHP_EOL .
                 '95無鉛汽油: ' . $result['95無鉛汽油'] . PHP_EOL . PHP_EOL .
                 '92無鉛汽油: ' . $result['92無鉛汽油'] . PHP_EOL . PHP_EOL .
