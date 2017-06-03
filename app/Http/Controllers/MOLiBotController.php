@@ -150,6 +150,9 @@ class MOLiBotController extends Controller
 
     public function getHistoryFuelPrice()
     {
+        // Set unlimit excute time because of slow response from server
+        ini_set('max_execution_time', 0);
+
         $types = array(
             '1' => '92無鉛汽油',
             '2' => '95無鉛汽油',
