@@ -31,24 +31,18 @@ class HydraDVRRemoteControlCommand extends Command
         if ( $update->all()['message']['chat']['type'] == 'private' ) {
             if (empty($arguments)) {
                 $keyboard = [
-                    ['Zoom In', 'Up', 'Zoom Out'],
-                    ['Left', '', 'Right'],
-                    ['', 'Down', 'ESC']
+                    ['Zoom In', 'Zoom Out'],
+                    ['Up'],
+                    ['Left', 'Right'],
+                    ['Down'],
+                    ['ESC']
                 ];
 
-                $reply_markup = Telegram::replyKeyboardMarkup([
+                Telegram::replyKeyboardMarkup([
                     'keyboard' => $keyboard,
                     'resize_keyboard' => true,
-                    'one_time_keyboard' => false
+                    'one_time_keyboard' => true
                 ]);
-
-                $response = Telegram::sendMessage([
-                    'chat_id' => $update->all()['message']['chat']['id'],
-                    'text' => 'Hello World',
-                    'reply_markup' => $reply_markup
-                ]);
-
-                //$messageId = $response->getMessageId();
             }
             /*
             $client = new GuzzleHttpClient();
