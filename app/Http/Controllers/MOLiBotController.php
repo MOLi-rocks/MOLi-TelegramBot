@@ -112,62 +112,13 @@ class MOLiBotController extends Controller
      */
     public function getFuelPrice()
     {
-        $input_xml = '<?xml version="1.0" encoding="utf-8"?>
-            <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
-                <soap12:Body>
-                    <getCPCMainProdListPrice xmlns="http://tmtd.cpc.com.tw/" />
-                </soap12:Body>
-            </soap12:Envelope>';
+        // Set unlimit excute time because of slow response from server
+        ini_set('max_execution_time', 0);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $input_xml);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Accept: text/xml',
-            'cache-control: no-cache',
-            'user-agent: MOLi Bot',
-            'Content-Type: application/soap+xml;charset=utf-8',
-            'Content-length: '.strlen($input_xml),
-        ]);
-        $fileContents = curl_exec($ch);
-        curl_close($ch);
+        $retry_counter = 0;
 
-        // SOAP response to regular XML
-        $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
-
-        $formatter = Formatter::make($xml, Formatter::XML);
-
-        $json = $formatter->toArray();
-
-        return $json['soapBody']['getCPCMainProdListPriceResponse']['getCPCMainProdListPriceResult']['diffgrdiffgram']['NewDataSet']['tbTable'];
-    }
-
-    public function getHistoryFuelPrice()
-    {
-        $types = array(
-            '1' => '92無鉛汽油',
-            '2' => '95無鉛汽油',
-            '3' => '98無鉛汽油',
-            '4' => '超級/高級柴油',
-            '5' => '低硫燃料油(0.5%)',
-            '6' => '甲種低硫燃料油(0.5)'
-        );
-
-        $result = array();
-
-        foreach ($types as $key => $type) {
-            $input_xml = '<?xml version="1.0" encoding="utf-8"?>
-            <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
-                <soap12:Body>
-                    <getCPCMainProdListPrice_Historical xmlns="http://tmtd.cpc.com.tw/">
-                        <prodid>'. (string)$key .'</prodid>
-                    </getCPCMainProdListPrice_Historical>
-                </soap12:Body>
-            </soap12:Envelope>';
+        do {
+            $input_xml = '<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope"><soap12:Body><getCPCMainProdListPrice xmlns="http://tmtd.cpc.com.tw/" /></soap12:Body></soap12:Envelope>';
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx');
@@ -181,10 +132,76 @@ class MOLiBotController extends Controller
                 'cache-control: no-cache',
                 'user-agent: MOLi Bot',
                 'Content-Type: application/soap+xml;charset=utf-8',
-                'Content-length: ' . strlen($input_xml),
+                'Content-length: '.strlen($input_xml),
             ]);
+
             $fileContents = curl_exec($ch);
+
             curl_close($ch);
+
+            $retry_counter++;
+        } while (empty($fileContents) && $retry_counter <= 5);
+
+        // SOAP response to regular XML
+        $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
+
+        $formatter = Formatter::make($xml, Formatter::XML);
+
+        $json = $formatter->toArray();
+
+        return $json['soapBody']['getCPCMainProdListPriceResponse']['getCPCMainProdListPriceResult']['diffgrdiffgram']['NewDataSet']['tbTable'];
+    }
+
+    public function getHistoryFuelPrice()
+    {
+        // Set unlimit excute time because of slow response from server
+        ini_set('max_execution_time', 0);
+
+        $types = array(
+            '1' => '92無鉛汽油',
+            '2' => '95無鉛汽油',
+            '3' => '98無鉛汽油',
+            '4' => '超級/高級柴油',
+            '5' => '低硫燃料油(0.5%)',
+            '6' => '甲種低硫燃料油(0.5)'
+        );
+
+        $result = array();
+
+        $retry_counter = 0;
+
+        foreach ($types as $key => $type) {
+            do {
+                $input_xml = '<?xml version="1.0" encoding="utf-8"?>
+                <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+                    <soap12:Body>
+                        <getCPCMainProdListPrice_Historical xmlns="http://tmtd.cpc.com.tw/">
+                            <prodid>'. (string)$key .'</prodid>
+                        </getCPCMainProdListPrice_Historical>
+                    </soap12:Body>
+                </soap12:Envelope>';
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx');
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $input_xml);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Accept: text/xml',
+                    'cache-control: no-cache',
+                    'user-agent: MOLi Bot',
+                    'Content-Type: application/soap+xml;charset=utf-8',
+                    'Content-length: ' . strlen($input_xml),
+                ]);
+
+                $fileContents = curl_exec($ch);
+
+                curl_close($ch);
+
+                $retry_counter++;
+            } while (empty($fileContents) && $retry_counter <= 5);
 
             // SOAP response to regular XML
             $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
