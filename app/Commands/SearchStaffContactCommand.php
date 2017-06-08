@@ -13,13 +13,13 @@ class SearchStaffContactCommand extends Command
      * @var string Command Name
      */
 
-    protected $name = "staffcontact";
+    protected $name = 'staffcontact';
 
     /**
      * @var string Command Description
      */
 
-    protected $description = "使用關鍵字搜尋暨大教職員聯絡資訊";
+    protected $description = '使用關鍵字搜尋暨大教職員聯絡資訊';
 
     /**
      * @inheritdoc
@@ -37,7 +37,7 @@ class SearchStaffContactCommand extends Command
             return response('OK', 200); // 強制結束 command
         }
 
-        $args = explode(" ", $arguments);
+        $args = explode(' ', $arguments);
 
         $keyword = $args[0];
 
