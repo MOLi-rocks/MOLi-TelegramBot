@@ -34,7 +34,7 @@ class HydraDVRRemoteControlCommand extends Command
                     ['Up'],
                     ['Left', 'Right'],
                     ['Down'],
-                    ['Zoom In', 'text' => '123ESC', 'Zoom Out']
+                    ['Zoom In', 'ESC', 'Zoom Out']
                 ];
 
                 $reply_markup = Telegram::replyKeyboardMarkup([
