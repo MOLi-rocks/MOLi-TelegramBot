@@ -38,11 +38,13 @@ class HydraDVRRemoteControlCommand extends Command
                     ['ESC']
                 ];
 
-                Telegram::replyKeyboardMarkup([
+                $reply_markup = Telegram::replyKeyboardMarkup([
                     'keyboard' => $keyboard,
                     'resize_keyboard' => true,
                     'one_time_keyboard' => true
                 ]);
+
+                $this->replyWithMessage(['text' => '歡迎使用遙控器 XD', 'reply_markup' => $reply_markup]);
 
                 return response('OK', 200); // 強制結束 command
             }
@@ -53,7 +55,8 @@ class HydraDVRRemoteControlCommand extends Command
 
             switch ($doAction) {
                 case 'ESC':
-                    Telegram::replyKeyboardHide();
+                    $reply_markup = Telegram::replyKeyboardHide();
+                    $this->replyWithMessage(['text' => '感謝使用遙控器 XD', 'reply_markup' => $reply_markup]);
                     break;
             }
             /*
