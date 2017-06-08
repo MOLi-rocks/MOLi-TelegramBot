@@ -31,17 +31,16 @@ class HydraDVRRemoteControlCommand extends Command
         if ( $update->all()['message']['chat']['type'] == 'private' ) {
             if (empty($arguments)) {
                 $keyboard = [
-                    ['Zoom In', 'Zoom Out'],
                     ['Up'],
                     ['Left', 'Right'],
                     ['Down'],
-                    ['ESC']
+                    ['Zoom In', 'text' => '123ESC', 'Zoom Out']
                 ];
 
                 $reply_markup = Telegram::replyKeyboardMarkup([
                     'keyboard' => $keyboard,
                     'resize_keyboard' => true,
-                    'one_time_keyboard' => true
+                    'one_time_keyboard' => false
                 ]);
 
                 $this->replyWithMessage(['text' => '歡迎使用遙控器 XD', 'reply_markup' => $reply_markup]);
@@ -57,6 +56,34 @@ class HydraDVRRemoteControlCommand extends Command
                 case 'ESC':
                     $reply_markup = Telegram::replyKeyboardHide();
                     $this->replyWithMessage(['text' => '感謝使用遙控器 XD', 'reply_markup' => $reply_markup]);
+                    break;
+
+                case 'Up':
+                    $this->replyWithMessage(['text' => 'Move Camera Up!']);
+                    break;
+
+                case 'Down':
+                    $this->replyWithMessage(['text' => 'Move Camera Down!']);
+                    break;
+
+                case 'Left':
+                    $this->replyWithMessage(['text' => 'Move Camera Left!']);
+                    break;
+
+                case 'Right':
+                    $this->replyWithMessage(['text' => 'Move Camera Right!']);
+                    break;
+
+                case 'Zoom In':
+                    $this->replyWithMessage(['text' => 'Zoom Camera In!']);
+                    break;
+
+                case 'Zoom Out':
+                    $this->replyWithMessage(['text' => 'Zoom Camera Out!']);
+                    break;
+
+                default:
+                    $this->replyWithMessage(['text' => '不懂 QQ']);
                     break;
             }
             /*
