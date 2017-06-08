@@ -5,7 +5,6 @@ namespace MOLiBot\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
-use SoapBox\Formatter\Formatter;
 use Telegram;
 
 class Kernel extends ConsoleKernel

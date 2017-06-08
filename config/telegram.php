@@ -63,5 +63,6 @@ return [
         MOLiBot\Commands\ActivityCommand::class,
         MOLiBot\Commands\WhoamiCommand::class,
         MOLiBot\Commands\SearchStaffContactCommand::class,
+        MOLiBot\Commands\HydraDVRRemoteControlCommand::class,
     ],
 ];
