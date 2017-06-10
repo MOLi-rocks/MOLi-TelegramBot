@@ -7,11 +7,12 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.3.*",
-        "irazasyed/telegram-bot-sdk": "^2.0",
+        "irazasyed/telegram-bot-sdk": "^2.2",
         "barryvdh/laravel-cors": "^0.8.0",
         "guzzlehttp/guzzle": "^6.2",
         "soapbox/laravel-formatter": "^2.0",
-        "fukuball/jieba-php": "dev-master"
+        "fukuball/jieba-php": "dev-master",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -19,7 +20,8 @@
         "phpunit/phpunit": "~4.0",
         "phpspec/phpspec": "~2.1",
         "symfony/dom-crawler": "3.1.*",
-        "symfony/css-selector": "3.1.*"
+        "symfony/css-selector": "3.1.*",
+        "barryvdh/laravel-ide-helper": "^2.3"
     },
     "autoload": {
         "classmap": [
@@ -47,6 +49,8 @@
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "php artisan ide-helper:generate",
+            "php artisan ide-helper:meta",
             "php artisan optimize"
         ]
     },
