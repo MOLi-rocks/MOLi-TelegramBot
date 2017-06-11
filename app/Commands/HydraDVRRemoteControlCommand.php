@@ -43,7 +43,12 @@ class HydraDVRRemoteControlCommand extends Command
                     'one_time_keyboard' => false
                 ]);
 
-                $this->replyWithMessage(['text' => '歡迎使用遙控器 XD', 'reply_markup' => $reply_markup]);
+                Telegram::sendMessage([
+                    'chat_id' => $update->all()['message']['chat']['id'],
+                    'text' => '歡迎使用遙控器 XD',
+                    'reply_to_message_id' => $update->all()['message']['message_id'],
+                    'reply_markup' => $reply_markup
+                ]);
 
                 return response('OK', 200); // 強制結束 command
             }
@@ -55,35 +60,76 @@ class HydraDVRRemoteControlCommand extends Command
             switch ($doAction) {
                 case 'ESC':
                     $reply_markup = Telegram::replyKeyboardHide();
-                    $this->replyWithMessage(['text' => '感謝使用遙控器 XD', 'reply_markup' => $reply_markup]);
+
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => '感謝使用遙控器 XD',
+                        'reply_markup' => $reply_markup
+                    ]);
+
                     break;
 
                 case 'Up':
-                    $this->replyWithMessage(['text' => 'Move Camera Up!']);
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Move Camera Up!',
+                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                    ]);
+
                     break;
 
                 case 'Down':
-                    $this->replyWithMessage(['text' => 'Move Camera Down!']);
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Move Camera Down!',
+                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                    ]);
+
                     break;
 
                 case 'Left':
-                    $this->replyWithMessage(['text' => 'Move Camera Left!']);
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Move Camera Left!',
+                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                    ]);
+
                     break;
 
                 case 'Right':
-                    $this->replyWithMessage(['text' => 'Move Camera Right!']);
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Move Camera Right!',
+                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                    ]);
+
                     break;
 
                 case 'Zoom In':
-                    $this->replyWithMessage(['text' => 'Zoom Camera In!']);
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Zoom Camera In!',
+                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                    ]);
+
                     break;
 
                 case 'Zoom Out':
-                    $this->replyWithMessage(['text' => 'Zoom Camera Out!']);
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Zoom Camera Out!',
+                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                    ]);
+
                     break;
 
                 default:
-                    $this->replyWithMessage(['text' => '不懂 QQ']);
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => '不懂 QQ',
+                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                    ]);
+
                     break;
             }
             /*
