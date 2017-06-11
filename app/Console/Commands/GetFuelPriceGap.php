@@ -5,6 +5,7 @@ namespace MOLiBot\Console\Commands;
 use Illuminate\Console\Command;
 use Telegram;
 
+use Carbon\Carbon;
 use MOLiBot\FuelPrice;
 
 class GetFuelPriceGap extends Command
@@ -68,22 +69,24 @@ class GetFuelPriceGap extends Command
                 $pricegap = $data['參考牌價'] - $lasttimeprice;
 
                 if ($pricegap > 0) {
-                    $result += array($data['產品名稱'] => '調漲 ' . $pricegap . $data['計價單位'] . '(' . $lasttimeprice . '->' . $data['參考牌價'] . ')');
+                    $result += array($data['產品名稱'] => ' 將 調漲 ' . $pricegap . $data['計價單位'] . '(' . $lasttimeprice . '->' . $data['參考牌價'] . ')');
                 } else if ($pricegap < 0) {
-                    $result += array($data['產品名稱'] => '調降 ' . abs($pricegap) . $data['計價單位'] . '(' . $lasttimeprice . '->' . $data['參考牌價'] . ')');
+                    $result += array($data['產品名稱'] => ' 將 調降 ' . abs($pricegap) . $data['計價單位'] . '(' . $lasttimeprice . '->' . $data['參考牌價'] . ')');
                 } else {
-                    $result += array($data['產品名稱'] => '不調整 (' . $data['參考牌價'] . ')');
+                    $result += array($data['產品名稱'] => ' 將 不調整 (' . $data['參考牌價'] . ')');
                 }
             }
         }
 
         //$this->info(print_r($result));
+        $tomorrow = Carbon::tomorrow();
         Telegram::sendMessage([
             'chat_id' => env('MOLi_CHANNEL'),
-            'text' => '98無鉛汽油: ' . $result['98無鉛汽油'] . PHP_EOL . PHP_EOL .
-                '95無鉛汽油: ' . $result['95無鉛汽油'] . PHP_EOL . PHP_EOL .
-                '92無鉛汽油: ' . $result['92無鉛汽油'] . PHP_EOL . PHP_EOL .
-                '超級柴油: ' . $result['超級柴油']
+            'text' => '中油已公告新油價，' . $tomorrow . ' 起：' . PHP_EOL . PHP_EOL .
+                '98無鉛汽油' . $result['98無鉛汽油'] . PHP_EOL . PHP_EOL .
+                '95無鉛汽油' . $result['95無鉛汽油'] . PHP_EOL . PHP_EOL .
+                '92無鉛汽油' . $result['92無鉛汽油'] . PHP_EOL . PHP_EOL .
+                '超級柴油' . $result['超級柴油']
         ]);
     }
 }
