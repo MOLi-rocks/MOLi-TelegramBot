@@ -47,8 +47,7 @@ class MOLiBotController extends Controller
         $json = $formatter->toArray();
 
         if ($json['status'] == 'Actual') {
-            $channel_to = env('TEST_CHANNEL');
-            //$channel_to = env('MOLi_CHANNEL');
+            $channel_to = env('WEATHER_CHANNEL');
 
             if (!isset($json['info']['description'])) {// info 是個 array
                 foreach ($json['info'] as $info) {
