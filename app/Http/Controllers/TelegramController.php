@@ -159,6 +159,7 @@ class TelegramController extends Controller
                     '- MOLi 聊天群 @MOLi_Rocks' . PHP_EOL .
                     '- MOLi Bot @MOLiRocks_bot' . PHP_EOL .
                     '- MOLi 廣播頻道 @MOLi_Channel' . PHP_EOL .
+                    '- MOLi 天氣廣播台 @MOLi_Weather'  . PHP_EOL .
                     '- MOLi 知識中心 http://hackfoldr.org/MOLi/' . PHP_EOL .
                     '- MOLi 首頁 https://MOLi.Rocks' . PHP_EOL .
                     '- MOLi Blog https://blog.moli.rocks' . PHP_EOL . 
