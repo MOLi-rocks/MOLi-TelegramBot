@@ -170,23 +170,12 @@ class TelegramController extends Controller
                     '/* Telegram 相關 */' . PHP_EOL .
                     '- Telegram 非官方中文站 https://telegram.how'
             ]);
-                //歡迎來到 MOLi（創新自造者開放實驗室），這裡是讓大家一起創造、分享、實踐的開放空間。
-                //
-                //以下是一些資訊連結：
-                //
-                ///* MOLi 相關 */
-                //- MOLi 聊天群 @MOLi_Rocks 
-                //- MOLi Bot @MOLiRocks_bot
-                //- MOLi 廣播頻道 @MOLi_Channel
-                //- MOLi 首頁 https://MOLi.Rocks
-                //- MOLi Blog https://blog.moli.rocks
-                //- MOLi 知識中心 http://hackfoldr.org/MOLi/
-                //
-                ///* NCNU 相關 */
-                //- 暨大最新公告 @NCNU_NEWS
-                //
-                ///* Telegram 相關 */
-                //- Telegram 非官方中文站 https://telegram.how
+        }
+
+        if ($update->all()['message']['chat']['type'] == 'private' &&
+            isset($update->all()['message']['reply_to_message']) &&
+            $update->all()['message']['reply_to_message']['text'] == '/DVRremoteController') {
+            app('MOLiBot\Commands\HydraDVRRemoteControlCommand')->handle($update->all()['message']['text']);
         }
 
         return response('OK', 200);
