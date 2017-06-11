@@ -68,7 +68,7 @@ class MOLiBotController extends Controller
                 }
             }
         }
-        
+
         return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
             ->header('Content-Type', 'text/xml');
     }
