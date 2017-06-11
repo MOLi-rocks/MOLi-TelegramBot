@@ -15,7 +15,7 @@ class MOLiBotController extends Controller
     private $NCDR_to_BOTChannel_list;
 
     public function __construct() {
-        $this->NCDR_to_BOTChannel_list = array('地震', '土石流', '河川高水位', '降雨', '停班停課', '道路封閉', '雷雨', '颱風'); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
+        $this->NCDR_to_BOTChannel_list = collect(['地震', '土石流', '河川高水位', '降雨', '停班停課', '道路封閉', '雷雨', '颱風']); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
     }
 
     /**
@@ -45,39 +45,30 @@ class MOLiBotController extends Controller
         //use $request->getContent() to get raw data
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
-/*
+
         if ($json['status'] == 'Actual') {
-            $channelto = env('TEST_CHANNEL');
+            $channel_to = env('TEST_CHANNEL');
+            //$channel_to = env('MOLi_CHANNEL');
 
-            if (!isset($json['info']['description'])) {
+            if (!isset($json['info']['description'])) {// info 是個 array
                 foreach ($json['info'] as $info) {
-                    foreach ($this->NCDR_to_BOTChannel_list as $to_BOTChannel_item) {
-                        if ($to_BOTChannel_item == $info['event']) {
-                            $channelto = env('MOLi_CHANNEL');
-                            break;
-                        }
+                    if ($this->NCDR_to_BOTChannel_list->contains($info['event'])) {
+                        Telegram::sendMessage([
+                            'chat_id' => $channel_to,
+                            'text' => $info['description'],
+                        ]);
                     }
-
+                }
+            } else {// info 是單個
+                if ($this->NCDR_to_BOTChannel_list->contains($json['info']['event'])) {
                     Telegram::sendMessage([
-                        'chat_id' => $channelto,
-                        'text' => $info['description'],
+                        'chat_id' => $channel_to,
+                        'text' => $json['info']['description'],
                     ]);
                 }
-            } else {
-                foreach ($this->NCDR_to_BOTChannel_list as $to_BOTChannel_item) {
-                    if ($to_BOTChannel_item == $info['event']) {
-                        $channelto = env('MOLi_CHANNEL');
-                        break;
-                    }
-                }
-
-                Telegram::sendMessage([
-                    'chat_id' => $channelto,
-                    'text' => $json['info']['description'],
-                ]);
             }
         }
-*/
+        
         return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
             ->header('Content-Type', 'text/xml');
     }
