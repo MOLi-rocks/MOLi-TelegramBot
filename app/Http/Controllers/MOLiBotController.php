@@ -101,7 +101,7 @@ class MOLiBotController extends Controller
     /**
      * @return mixed
      */
-    public function getFuelPrice()
+    public function getFuelPrice($cmd_mode = false)
     {
         // Set unlimit excute time because of slow response from server
         ini_set('max_execution_time', 0);
@@ -130,8 +130,14 @@ class MOLiBotController extends Controller
 
             curl_close($ch);
 
-            $retry_counter++;
+            if (!$cmd_mode) {
+                $retry_counter++;
+            }
         } while (empty($fileContents) && $retry_counter <= 5);
+
+        if ($retry_counter >= 5) {
+            return response()->json(['messages' => 'request take too long!'], 408);
+        }
 
         // SOAP response to regular XML
         $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
@@ -143,7 +149,7 @@ class MOLiBotController extends Controller
         return $json['soapBody']['getCPCMainProdListPriceResponse']['getCPCMainProdListPriceResult']['diffgrdiffgram']['NewDataSet']['tbTable'];
     }
 
-    public function getHistoryFuelPrice()
+    public function getHistoryFuelPrice($cmd_mode = false)
     {
         // Set unlimit excute time because of slow response from server
         ini_set('max_execution_time', 0);
@@ -159,9 +165,9 @@ class MOLiBotController extends Controller
 
         $result = array();
 
-        $retry_counter = 0;
-
         foreach ($types as $key => $type) {
+            $retry_counter = 0;
+
             do {
                 $input_xml = '<?xml version="1.0" encoding="utf-8"?>
                 <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
@@ -193,6 +199,10 @@ class MOLiBotController extends Controller
 
                 $retry_counter++;
             } while (empty($fileContents) && $retry_counter <= 5);
+
+            if ($retry_counter >= 5) {
+                return response()->json(['messages' => 'request take too long!'], 408);
+            }
 
             // SOAP response to regular XML
             $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);

@@ -41,7 +41,7 @@ class GetFuelPriceGap extends Command
      */
     public function handle()
     {
-        $datas = app('MOLiBot\Http\Controllers\MOLiBotController')->getFuelPrice();
+        $datas = app('MOLiBot\Http\Controllers\MOLiBotController')->getFuelPrice(true);
 
         $result = array();
 
