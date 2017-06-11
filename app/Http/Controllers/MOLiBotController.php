@@ -15,7 +15,7 @@ class MOLiBotController extends Controller
     private $NCDR_to_BOTChannel_list;
 
     public function __construct() {
-        $this->NCDR_to_BOTChannel_list = array('地震'); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
+        $this->NCDR_to_BOTChannel_list = array('地震', '土石流', '河川高水位', '降雨', '停班停課', '道路封閉', '雷雨', '颱風'); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
     }
 
     /**
@@ -45,7 +45,7 @@ class MOLiBotController extends Controller
         //use $request->getContent() to get raw data
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
-
+/*
         if ($json['status'] == 'Actual') {
             $channelto = env('TEST_CHANNEL');
 
@@ -77,7 +77,7 @@ class MOLiBotController extends Controller
                 ]);
             }
         }
-
+*/
         return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
             ->header('Content-Type', 'text/xml');
     }
