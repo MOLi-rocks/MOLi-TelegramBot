@@ -10,7 +10,7 @@ trait HelpList
     public function helptext()
     {
         //修改此檔案將同步修改 help 及 start 指令所顯示的內容
-        $commands = $this->telegram->getCommands();
+        $commands = $this->getTelegram()->getCommands();
 
         $text = '';
 

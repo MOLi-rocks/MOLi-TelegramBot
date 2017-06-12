@@ -16,7 +16,6 @@ use Log;
 
 class TelegramController extends Controller
 {
-
     protected $telegram;
 
     public function __construct( Telegram $telegram )
@@ -169,14 +168,11 @@ class TelegramController extends Controller
                     '/* Telegram 相關 */' . PHP_EOL .
                     '- Telegram 非官方中文站 https://telegram.how'
             ]);
+        } else if ($update->all()['message']['chat']['type'] == 'private') {
+            //app('MOLiBot\Commands\HydraDVRRemoteControlCommand')->handle($update->all()['message']['text']);
+            Log::info(var_dump($this->telegram->getCommands()));
         }
 
-        if ($update->all()['message']['chat']['type'] == 'private' &&
-            isset($update->all()['message']['reply_to_message']) &&
-            $update->all()['message']['reply_to_message']['text'] == '/DVRremoteController') {
-            app('MOLiBot\Commands\HydraDVRRemoteControlCommand')->handle($update->all()['message']['text']);
-        }
-
-        return response('OK', 200);
+        return response('Controller OK', 200);
     }
 }
