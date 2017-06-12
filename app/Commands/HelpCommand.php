@@ -15,7 +15,7 @@ class HelpCommand extends Command
     /**
      * @var array Command Aliases
      */
-    protected $aliases = ['listcommands'];
+    protected $aliases = ['list-commands'];
 
     /**
      * @var string Command Description
