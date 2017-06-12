@@ -81,8 +81,7 @@ class HydraDVRRemoteControlCommand extends Command
                 case 'Up':
                     Telegram::sendMessage([
                         'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Move Camera Up!',
-                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                        'text' => 'Move Camera Up!'
                     ]);
 
                     break;
@@ -90,8 +89,7 @@ class HydraDVRRemoteControlCommand extends Command
                 case 'Down':
                     Telegram::sendMessage([
                         'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Move Camera Down!',
-                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                        'text' => 'Move Camera Down!'
                     ]);
 
                     break;
@@ -99,8 +97,7 @@ class HydraDVRRemoteControlCommand extends Command
                 case 'Left':
                     Telegram::sendMessage([
                         'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Move Camera Left!',
-                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                        'text' => 'Move Camera Left!'
                     ]);
 
                     break;
@@ -108,8 +105,7 @@ class HydraDVRRemoteControlCommand extends Command
                 case 'Right':
                     Telegram::sendMessage([
                         'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Move Camera Right!',
-                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                        'text' => 'Move Camera Right!'
                     ]);
 
                     break;
@@ -117,8 +113,7 @@ class HydraDVRRemoteControlCommand extends Command
                 case 'Zoom In':
                     Telegram::sendMessage([
                         'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Zoom Camera In!',
-                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                        'text' => 'Zoom Camera In!'
                     ]);
 
                     break;
@@ -126,8 +121,7 @@ class HydraDVRRemoteControlCommand extends Command
                 case 'Zoom Out':
                     Telegram::sendMessage([
                         'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Zoom Camera Out!',
-                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                        'text' => 'Zoom Camera Out!'
                     ]);
 
                     break;
@@ -135,8 +129,7 @@ class HydraDVRRemoteControlCommand extends Command
                 default:
                     Telegram::sendMessage([
                         'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => '不懂 QQ',
-                        'reply_to_message_id' => $update->all()['message']['reply_to_message']['message_id']
+                        'text' => '不懂 QQ'
                     ]);
 
                     break;
