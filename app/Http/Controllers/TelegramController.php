@@ -8,7 +8,6 @@ use MOLiBot\Http\Requests;
 use MOLiBot\Http\Controllers\Controller;
 
 use Telegram;
-use Validator;
 use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\RequestException as GuzzleHttpRequestException;

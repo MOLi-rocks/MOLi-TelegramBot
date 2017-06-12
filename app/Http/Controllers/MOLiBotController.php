@@ -48,14 +48,19 @@ class MOLiBotController extends Controller
 
         if ($json['status'] == 'Actual') {
             $channel_to = env('WEATHER_CHANNEL');
+            $posted = collect([]);
 
             if (!isset($json['info']['description'])) {// info 是個 array
                 foreach ($json['info'] as $info) {
                     if ($this->NCDR_to_BOTChannel_list->contains($info['event'])) {
-                        Telegram::sendMessage([
-                            'chat_id' => $channel_to,
-                            'text' => $info['description'],
-                        ]);
+                        if (!$posted->contains($info['description'])) {// 如果沒發過的話發一下
+                            Telegram::sendMessage([
+                                'chat_id' => $channel_to,
+                                'text' => $info['description'],
+                            ]);
+
+                            $posted->push($info['description']);// 發完加入已發布清單
+                        }
                     }
                 }
             } else {// info 是單個
