@@ -52,7 +52,10 @@ class HydraDVRRemoteControlCommand extends Command
                     'reply_markup' => $reply_markup
                 ]);
 
-                //WhoUseWhatCommand::create()
+                WhoUseWhatCommand::create([
+                    'user-id' => $update->all()['message']['from']['id'],
+                    'command' => $this->name
+                ]);
 
                 return response('OK', 200); // 強制結束 command
             }
@@ -70,6 +73,8 @@ class HydraDVRRemoteControlCommand extends Command
                         'text' => '感謝使用遙控器 XD',
                         'reply_markup' => $reply_markup
                     ]);
+
+                    WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
                     break;
 

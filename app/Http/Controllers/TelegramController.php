@@ -169,11 +169,10 @@ class TelegramController extends Controller
                     '/* Telegram 相關 */' . PHP_EOL .
                     '- Telegram 非官方中文站 https://telegram.how'
             ]);
-        } else if ($update->all()['message']['chat']['type'] == 'private') {
-            //app('MOLiBot\Commands\HydraDVRRemoteControlCommand')->handle($update->all()['message']['text']);
+        } else if ($update->all()['message']['chat']['type'] == 'private' && WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->exists()) {
             $commands = Telegram::getCommands();
             foreach ($commands as $name => $handler) {
-                Log::info($name .'=>'. $handler);
+                Log::info($name .'=>'. $handler->getDescription());
             }
         }
 
