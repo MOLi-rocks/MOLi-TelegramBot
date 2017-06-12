@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use MOLiBot\Http\Requests;
 use MOLiBot\Http\Controllers\Controller;
 
+use DB;
 use Telegram;
 use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
@@ -170,10 +171,22 @@ class TelegramController extends Controller
                     '- Telegram 非官方中文站 https://telegram.how'
             ]);
         } else if ($update->all()['message']['chat']['type'] == 'private' && WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->exists()) {
+            $exec = Telegram::getCommandBus();
+
+            $cmd_name = DB::table('who_use_what_command')
+                ->where('user-id', '=', $update->all()['message']['from']['id'])
+                ->pluck('command');
+
+            $arguments = $update->all()['message']['text'];
+
+            $exec->execute($cmd_name, $arguments);
+
+            /*
             $commands = Telegram::getCommands();
             foreach ($commands as $name => $handler) {
                 Log::info($name .'=>'. $handler->getDescription());
             }
+            */
         }
 
         return response('Controller OK', 200);
