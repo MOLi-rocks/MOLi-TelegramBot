@@ -173,13 +173,11 @@ class TelegramController extends Controller
         } else if ($update->all()['message']['chat']['type'] == 'private' && WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->exists()) {
             $exec = Telegram::getCommandBus();
 
-            $cmd_name = DB::table('who_use_what_command')
-                ->where('user-id', '=', $update->all()['message']['from']['id'])
-                ->pluck('command');
+            $cmd_name = WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->first();
 
             $arguments = $update->all()['message']['text'];
 
-            $exec->execute($cmd_name, $arguments);
+            $exec->execute($cmd_name->command, $arguments, 'GoGo');
 
             /*
             $commands = Telegram::getCommands();
