@@ -29,13 +29,6 @@ trait HelpList
 
         return $text;
     }
-
-    public function commands()
-    {
-        $commands = $this->getTelegram()->getCommands();
-
-        return $commands;
-    }
 }
 
 class HelpCommand extends Command
