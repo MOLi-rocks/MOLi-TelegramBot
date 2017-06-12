@@ -169,7 +169,9 @@ class TelegramController extends Controller
                     '/* Telegram 相關 */' . PHP_EOL .
                     '- Telegram 非官方中文站 https://telegram.how'
             ]);
-        } else if ($update->all()['message']['chat']['type'] == 'private' && WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->exists()) {
+        } else if ($update->all()['message']['chat']['type'] == 'private' &&
+            !isset($update->all()['message']['entities']) &&
+            WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->exists()) {
             $exec = Telegram::getCommandBus();
 
             $cmd_name = WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->first();
@@ -179,7 +181,7 @@ class TelegramController extends Controller
             } else {
                 $arguments = $update->all()['message']['text'];
             }
-            
+
             $exec->execute($cmd_name->command, $arguments, 'GoGo');
 
             /*
