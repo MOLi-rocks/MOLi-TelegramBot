@@ -170,7 +170,10 @@ class TelegramController extends Controller
             ]);
         } else if ($update->all()['message']['chat']['type'] == 'private') {
             //app('MOLiBot\Commands\HydraDVRRemoteControlCommand')->handle($update->all()['message']['text']);
-            Log::info(var_dump(Telegram::getCommands()));
+            $commands = Telegram::getCommands();
+            foreach ($commands as $name => $handler) {
+                Log::info($name .'=>'. $handler);
+            }
         }
 
         return response('Controller OK', 200);
