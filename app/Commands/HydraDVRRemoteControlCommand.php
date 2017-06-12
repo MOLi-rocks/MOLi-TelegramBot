@@ -62,11 +62,6 @@ class HydraDVRRemoteControlCommand extends Command
                     ]);
                 });
 
-                WhoUseWhatCommand::create([
-                    'user-id' => $update->all()['message']['from']['id'],
-                    'command' => $this->name
-                ]);
-
                 return response('OK', 200); // 強制結束 command
             } else {
                 switch ($arguments) {
