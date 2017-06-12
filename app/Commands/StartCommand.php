@@ -4,17 +4,9 @@ namespace MOLiBot\Commands;
 
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
-use MOLiBot\Commands\HelpCommand;
 
 class StartCommand extends Command
 {
-    protected $commands;
-
-    public function __construct(HelpCommand $commands)
-    {
-        $this->commands = $commands;
-    }
-
     /**
      * @var string Command Name
      */
@@ -40,7 +32,9 @@ class StartCommand extends Command
         // This will update the chat status to typing...
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $text = $this->commands->helptext();//call function in app/Commands/HelpCommand.php
+        $helper = new \MOLiBot\Commands\HelpCommand();
+
+        $text = $helper->helptext();//call function in app/Commands/HelpCommand.php
 
         // This will prepare a list of available commands and send the user.
         // First, Get an array of all registered commands
