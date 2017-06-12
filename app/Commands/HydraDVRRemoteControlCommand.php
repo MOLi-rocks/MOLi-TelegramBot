@@ -60,11 +60,7 @@ class HydraDVRRemoteControlCommand extends Command
                 return response('OK', 200); // 強制結束 command
             }
 
-            $args = explode(' ', $arguments);
-
-            $doAction = $args[0];
-
-            switch ($doAction) {
+            switch ($arguments) {
                 case 'ESC':
                     $reply_markup = Telegram::replyKeyboardHide();
 
