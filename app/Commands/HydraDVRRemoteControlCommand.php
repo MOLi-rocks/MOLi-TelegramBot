@@ -5,6 +5,7 @@ namespace MOLiBot\Commands;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
+use DB;
 use Telegram;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
@@ -51,6 +52,15 @@ class HydraDVRRemoteControlCommand extends Command
                     'reply_to_message_id' => $update->all()['message']['message_id'],
                     'reply_markup' => $reply_markup
                 ]);
+
+                DB::transaction(function () use ($update) {
+                    WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
+
+                    WhoUseWhatCommand::create([
+                        'user-id' => $update->all()['message']['from']['id'],
+                        'command' => $this->name
+                    ]);
+                });
 
                 WhoUseWhatCommand::create([
                     'user-id' => $update->all()['message']['from']['id'],

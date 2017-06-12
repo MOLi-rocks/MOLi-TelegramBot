@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use MOLiBot\Http\Requests;
 use MOLiBot\Http\Controllers\Controller;
 
-use DB;
 use Telegram;
 use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
