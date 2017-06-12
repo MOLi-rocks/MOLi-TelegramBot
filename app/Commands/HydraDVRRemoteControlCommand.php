@@ -9,6 +9,8 @@ use Telegram;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 
+use MOLiBot\WhoUseWhatCommand;
+
 class HydraDVRRemoteControlCommand extends Command
 {
     /**
@@ -49,6 +51,8 @@ class HydraDVRRemoteControlCommand extends Command
                     'reply_to_message_id' => $update->all()['message']['message_id'],
                     'reply_markup' => $reply_markup
                 ]);
+
+                //WhoUseWhatCommand::create()
 
                 return response('OK', 200); // 強制結束 command
             }

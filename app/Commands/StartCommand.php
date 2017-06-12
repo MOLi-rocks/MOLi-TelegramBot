@@ -4,10 +4,11 @@ namespace MOLiBot\Commands;
 
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
+use MOLiBot\Traits\GetHelpTrait;
 
 class StartCommand extends Command
 {
-    use HelpList;//use HelpList trait in app/Commands/HelpCommand.php
+    use GetHelpTrait;
 
     /**
      * @var string Command Name
