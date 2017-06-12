@@ -4,6 +4,7 @@ namespace MOLiBot\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use MOLiBot\Commands\HelpList;
 use MOLiBot\Http\Requests;
 use MOLiBot\Http\Controllers\Controller;
 
@@ -16,6 +17,8 @@ use Log;
 
 class TelegramController extends Controller
 {
+    use HelpList;
+
     protected $telegram;
 
     public function __construct( Telegram $telegram )
@@ -170,7 +173,7 @@ class TelegramController extends Controller
             ]);
         } else if ($update->all()['message']['chat']['type'] == 'private') {
             //app('MOLiBot\Commands\HydraDVRRemoteControlCommand')->handle($update->all()['message']['text']);
-            Log::info(var_dump($this->telegram->getCommands()));
+            Log::info(var_dump($this->commands()));
         }
 
         return response('Controller OK', 200);
