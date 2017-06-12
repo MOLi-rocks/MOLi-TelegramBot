@@ -174,8 +174,12 @@ class TelegramController extends Controller
 
             $cmd_name = WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->first();
 
-            $arguments = $update->all()['message']['text'];
-
+            if ($update->all()['message']['text'] == '/'.$cmd_name->command) {
+                $arguments = '';
+            } else {
+                $arguments = $update->all()['message']['text'];
+            }
+            
             $exec->execute($cmd_name->command, $arguments, 'GoGo');
 
             /*
