@@ -65,6 +65,16 @@ class HydraDVRRemoteControlCommand extends Command
                 return response('OK', 200); // 強制結束 command
             }
 
+            if (WhoUseWhatCommand::where('command', '=', $this->name)->exists()) {
+                Telegram::sendMessage([
+                    'chat_id' => $update->all()['message']['chat']['id'],
+                    'text' => '有其他人正在使用遙控器，請稍後再試（？',
+                    'reply_to_message_id' => $update->all()['message']['message_id']
+                ]);
+
+                return response('OK', 200); // 強制結束 command
+            }
+
             switch ($arguments) {
                 case 'ESC':
                     $reply_markup = Telegram::replyKeyboardHide();
@@ -75,106 +85,107 @@ class HydraDVRRemoteControlCommand extends Command
                         'reply_markup' => $reply_markup
                     ]);
 
+                    $this->control('door');
+
                     WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
                     break;
 
                 case 'Up':
-                    Telegram::sendMessage([
-                        'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Move Camera Up!'
-                    ]);
+                    $pic = $this->control('up');
+
+                    if ($pic == env('DVR_SHOT')) {
+                        Telegram::sendPhoto([
+                            'chat_id' => $update->all()['message']['chat']['id'],
+                            'photo' => env('DVR_SHOT'),
+                            'reply_to_message_id' => $update->all()['message']['message_id'],
+                            'disable_notification' => true
+                        ]);
+                    }
 
                     break;
 
                 case 'Down':
-                    Telegram::sendMessage([
-                        'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Move Camera Down!'
-                    ]);
+                    $pic = $this->control('down');
+
+                    if ($pic == env('DVR_SHOT')) {
+                        Telegram::sendPhoto([
+                            'chat_id' => $update->all()['message']['chat']['id'],
+                            'photo' => env('DVR_SHOT'),
+                            'reply_to_message_id' => $update->all()['message']['message_id'],
+                            'disable_notification' => true
+                        ]);
+                    }
 
                     break;
 
                 case 'Left':
-                    Telegram::sendMessage([
-                        'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Move Camera Left!'
-                    ]);
+                    $pic = $this->control('left');
+
+                    if ($pic == env('DVR_SHOT')) {
+                        Telegram::sendPhoto([
+                            'chat_id' => $update->all()['message']['chat']['id'],
+                            'photo' => env('DVR_SHOT'),
+                            'reply_to_message_id' => $update->all()['message']['message_id'],
+                            'disable_notification' => true
+                        ]);
+                    }
 
                     break;
 
                 case 'Right':
-                    Telegram::sendMessage([
-                        'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Move Camera Right!'
-                    ]);
+                    $pic = $this->control('right');
+
+                    if ($pic == env('DVR_SHOT')) {
+                        Telegram::sendPhoto([
+                            'chat_id' => $update->all()['message']['chat']['id'],
+                            'photo' => env('DVR_SHOT'),
+                            'reply_to_message_id' => $update->all()['message']['message_id'],
+                            'disable_notification' => true
+                        ]);
+                    }
 
                     break;
 
+                /*
                 case 'Zoom In':
-                    Telegram::sendMessage([
-                        'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Zoom Camera In!'
-                    ]);
+                    $pic = $this->control('zoomin');
+
+                    if ($pic == env('DVR_SHOT')) {
+                        Telegram::sendPhoto([
+                            'chat_id' => $update->all()['message']['chat']['id'],
+                            'photo' => env('DVR_SHOT'),
+                            'reply_to_message_id' => $update->all()['message']['message_id'],
+                            'disable_notification' => true
+                        ]);
+                    }
 
                     break;
 
                 case 'Zoom Out':
-                    Telegram::sendMessage([
-                        'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => 'Zoom Camera Out!'
-                    ]);
+                    $pic = $this->control('zoomout');
+
+                    if ($pic == env('DVR_SHOT')) {
+                        Telegram::sendPhoto([
+                            'chat_id' => $update->all()['message']['chat']['id'],
+                            'photo' => env('DVR_SHOT'),
+                            'reply_to_message_id' => $update->all()['message']['message_id'],
+                            'disable_notification' => true
+                        ]);
+                    }
 
                     break;
+                */
 
                 default:
                     Telegram::sendMessage([
                         'chat_id' => $update->all()['message']['chat']['id'],
-                        'text' => '不懂 QQ'
+                        'text' => '不懂 QQ',
+                        'reply_to_message_id' => $update->all()['message']['message_id']
                     ]);
 
                     break;
             }
-            /*
-            $client = new GuzzleHttpClient();
-
-            try {
-                $response = $client->request('GET', 'https://moli.kktix.cc/events.json', [
-                    'headers' => [
-                        'User-Agent' => 'MOLi Bot',
-                        'Accept'     => 'application/json'
-                    ],
-                    'timeout' => 10
-                ]);
-            } catch (\GuzzleHttp\Exception\TransferException $e) {
-                $this->replyWithChatAction(['action' => Actions::TYPING]);
-                $this->replyWithMessage(['text' => '網路連線異常 QAQ']);
-                return response('OK', 200); // 強制結束 command
-            }
-
-            $body = $response->getBody();
-            $json = json_decode($body, true);
-            $activity = 0;
-
-            foreach ($json['entry'] as $num => $detail) {
-                if ( strtotime($detail['published']) > strtotime('now') ) {
-                    $this->replyWithChatAction(['action' => Actions::TYPING]);
-
-                    $this->replyWithMessage([
-                        'text' => $detail['title'] . PHP_EOL . '' . PHP_EOL . $detail['content'] . PHP_EOL . '' . PHP_EOL . $detail['url']
-                    ]);
-
-                    $activity++;
-                } else break;
-            }
-
-            if ($activity == 0) {
-                $this->replyWithChatAction(['action' => Actions::TYPING]);
-                $this->replyWithMessage(['text' => '最近無排定活動，歡迎在群組挖坑' . PHP_EOL . 'https://www.facebook.com/groups/MOLi.rocks']);
-            }
-
-            return response('OK', 200);
-            */
         } else {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 
@@ -188,5 +199,27 @@ class HydraDVRRemoteControlCommand extends Command
         }
 
         return response('OK', 200);
+    }
+
+    private function control($position) {
+        $client = new GuzzleHttpClient();
+
+        try {
+            $client->request('GET', env('DVR_BASE_URL').$position, [
+                'headers' => [
+                    'User-Agent' => 'MOLi Bot',
+                    'Accept'     => 'application/json'
+                ],
+                'timeout' => 10
+            ]);
+
+            return env('DVR_SHOT');
+        } catch (\GuzzleHttp\Exception\TransferException $e) {
+            $this->replyWithChatAction(['action' => Actions::TYPING]);
+
+            $this->replyWithMessage(['text' => '網路連線異常 QAQ']);
+
+            return 'QQ';
+        }
     }
 }
