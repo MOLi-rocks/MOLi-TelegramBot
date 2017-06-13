@@ -37,6 +37,10 @@ class CheckForMaintenanceMode
      */
     public function handle($request, Closure $next)
     {
+        if ($request->is( env('NCDR_URL') )) { // 讓 NCDR 資料不受 Maintenance Mode 影響
+            return $next($request);
+        }
+
         if ($this->app->isDownForMaintenance()) {
             if ($request->is( env('TELEGRAM_BOT_TOKEN') )) {
                 $msgfrom = $request->all()['message']['chat']['id'];
