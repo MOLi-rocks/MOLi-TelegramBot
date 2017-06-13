@@ -183,7 +183,7 @@ class TelegramController extends Controller
                 $arguments = $update->all()['message']['text'];
             }
 
-            $exec->execute($cmd_name->command, $arguments, 'GoGo');
+            $exec->execute($cmd_name->command, $arguments, $update);
         }
 
         return response('Controller OK', 200);

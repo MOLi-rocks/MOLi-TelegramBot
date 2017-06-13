@@ -35,7 +35,11 @@ class SearchStaffContactCommand extends Command
             if (empty($arguments)) {
                 $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-                $this->replyWithMessage(['text' => '請回覆想查詢的關鍵字(不支援多條件搜尋)', 'reply_to_message_id' => $update->all()['message']['message_id']]);
+                Telegram::sendMessage([
+                    'chat_id' => $update->all()['message']['chat']['id'],
+                    'text' => '請回覆想查詢的關鍵字(不支援多條件搜尋)',
+                    'reply_to_message_id' => $update->all()['message']['message_id']
+                ]);
 
                 DB::transaction(function () use ($update) {
                     WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
@@ -56,12 +60,13 @@ class SearchStaffContactCommand extends Command
             $count = 0;
 
             if (count($json) <= 1) {
-                //$this->replyWithMessage(['text' => '查無資料 QQ', 'reply_to_message_id' => $update->all()['message']['message_id']]);
                 Telegram::sendMessage([
                     'chat_id' => $update->all()['message']['chat']['id'],
                     'text' => '查無資料 QQ',
                     'reply_to_message_id' => $update->all()['message']['message_id']
                 ]);
+
+                WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
                 return response('OK', 200);
             }
@@ -83,8 +88,6 @@ class SearchStaffContactCommand extends Command
 
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-            //$this->replyWithMessage(['text' => $text, 'reply_to_message_id' => $update->all()['message']['message_id']]);
-
             Telegram::sendMessage([
                 'chat_id' => $update->all()['message']['chat']['id'],
                 'text' => $text,
@@ -95,7 +98,11 @@ class SearchStaffContactCommand extends Command
         } else {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-            $this->replyWithMessage(['text' => '此功能限一對一對話', 'reply_to_message_id' => $update->all()['message']['message_id']]);
+            Telegram::sendMessage([
+                'chat_id' => $update->all()['message']['chat']['id'],
+                'text' => '此功能限一對一對話',
+                'reply_to_message_id' => $update->all()['message']['message_id']
+            ]);
 
             return response('OK', 200); // 強制結束 command
         }

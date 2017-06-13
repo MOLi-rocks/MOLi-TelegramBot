@@ -178,7 +178,11 @@ class HydraDVRRemoteControlCommand extends Command
         } else {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-            $this->replyWithMessage(['text' => '此功能限一對一對話', 'reply_to_message_id' => $update->all()['message']['message_id']]);
+            Telegram::sendMessage([
+                'chat_id' => $update->all()['message']['chat']['id'],
+                'text' => '此功能限一對一對話',
+                'reply_to_message_id' => $update->all()['message']['message_id']
+            ]);
 
             return response('OK', 200); // 強制結束 command
         }
