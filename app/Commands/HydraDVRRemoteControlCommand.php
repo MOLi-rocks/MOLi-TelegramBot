@@ -65,7 +65,9 @@ class HydraDVRRemoteControlCommand extends Command
                 return response('OK', 200); // 強制結束 command
             }
 
-            if (WhoUseWhatCommand::where('command', '=', $this->name)->exists()) {
+            if (WhoUseWhatCommand::where('command', '=', $this->name)
+                ->where('user-id', '!=', $update->all()['message']['from']['id'])
+                ->exists()) {
                 Telegram::sendMessage([
                     'chat_id' => $update->all()['message']['chat']['id'],
                     'text' => '有其他人正在使用遙控器，請稍後再試（？',
