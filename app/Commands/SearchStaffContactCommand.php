@@ -60,6 +60,8 @@ class SearchStaffContactCommand extends Command
             $count = 0;
 
             if (count($json) <= 1) {
+                $this->replyWithChatAction(['action' => Actions::TYPING]);
+
                 Telegram::sendMessage([
                     'chat_id' => $update->all()['message']['chat']['id'],
                     'text' => '查無資料 QQ',
