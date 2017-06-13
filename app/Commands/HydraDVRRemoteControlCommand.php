@@ -63,77 +63,77 @@ class HydraDVRRemoteControlCommand extends Command
                 });
 
                 return response('OK', 200); // 強制結束 command
-            } else {
-                switch ($arguments) {
-                    case 'ESC':
-                        $reply_markup = Telegram::replyKeyboardHide();
+            }
 
-                        Telegram::sendMessage([
-                            'chat_id' => $update->all()['message']['chat']['id'],
-                            'text' => '感謝使用遙控器 XD',
-                            'reply_markup' => $reply_markup
-                        ]);
+            switch ($arguments) {
+                case 'ESC':
+                    $reply_markup = Telegram::replyKeyboardHide();
 
-                        WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => '感謝使用遙控器 XD',
+                        'reply_markup' => $reply_markup
+                    ]);
 
-                        break;
+                    WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
-                    case 'Up':
-                        Telegram::sendMessage([
-                            'chat_id' => $update->all()['message']['chat']['id'],
-                            'text' => 'Move Camera Up!'
-                        ]);
+                    break;
 
-                        break;
+                case 'Up':
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Move Camera Up!'
+                    ]);
 
-                    case 'Down':
-                        Telegram::sendMessage([
-                            'chat_id' => $update->all()['message']['chat']['id'],
-                            'text' => 'Move Camera Down!'
-                        ]);
+                    break;
 
-                        break;
+                case 'Down':
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Move Camera Down!'
+                    ]);
 
-                    case 'Left':
-                        Telegram::sendMessage([
-                            'chat_id' => $update->all()['message']['chat']['id'],
-                            'text' => 'Move Camera Left!'
-                        ]);
+                    break;
 
-                        break;
+                case 'Left':
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Move Camera Left!'
+                    ]);
 
-                    case 'Right':
-                        Telegram::sendMessage([
-                            'chat_id' => $update->all()['message']['chat']['id'],
-                            'text' => 'Move Camera Right!'
-                        ]);
+                    break;
 
-                        break;
+                case 'Right':
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Move Camera Right!'
+                    ]);
 
-                    case 'Zoom In':
-                        Telegram::sendMessage([
-                            'chat_id' => $update->all()['message']['chat']['id'],
-                            'text' => 'Zoom Camera In!'
-                        ]);
+                    break;
 
-                        break;
+                case 'Zoom In':
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Zoom Camera In!'
+                    ]);
 
-                    case 'Zoom Out':
-                        Telegram::sendMessage([
-                            'chat_id' => $update->all()['message']['chat']['id'],
-                            'text' => 'Zoom Camera Out!'
-                        ]);
+                    break;
 
-                        break;
+                case 'Zoom Out':
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => 'Zoom Camera Out!'
+                    ]);
 
-                    default:
-                        Telegram::sendMessage([
-                            'chat_id' => $update->all()['message']['chat']['id'],
-                            'text' => '不懂 QQ'
-                        ]);
+                    break;
 
-                        break;
-                }
+                default:
+                    Telegram::sendMessage([
+                        'chat_id' => $update->all()['message']['chat']['id'],
+                        'text' => '不懂 QQ'
+                    ]);
+
+                    break;
             }
             /*
             $client = new GuzzleHttpClient();

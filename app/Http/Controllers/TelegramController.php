@@ -171,6 +171,7 @@ class TelegramController extends Controller
             ]);
         } else if ($update->all()['message']['chat']['type'] == 'private' &&
             !isset($update->all()['message']['entities']) &&
+            isset($update->all()['message']['text']) &&
             WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->exists()) {
             $exec = Telegram::getCommandBus();
 
@@ -183,13 +184,6 @@ class TelegramController extends Controller
             }
 
             $exec->execute($cmd_name->command, $arguments, 'GoGo');
-
-            /*
-            $commands = Telegram::getCommands();
-            foreach ($commands as $name => $handler) {
-                Log::info($name .'=>'. $handler->getDescription());
-            }
-            */
         }
 
         return response('Controller OK', 200);

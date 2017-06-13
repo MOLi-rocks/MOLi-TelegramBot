@@ -5,7 +5,9 @@ namespace MOLiBot\Commands;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
+use DB;
 use Telegram;
+use MOLiBot\WhoUseWhatCommand;
 
 class SearchStaffContactCommand extends Command
 {
@@ -32,7 +34,16 @@ class SearchStaffContactCommand extends Command
         if (empty($arguments)) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-            $this->replyWithMessage(['text' => '請直接在指令後方加上關鍵字以便查詢', 'reply_to_message_id' => $update->all()['message']['message_id']]);
+            $this->replyWithMessage(['text' => '請回覆想查詢的關鍵字', 'reply_to_message_id' => $update->all()['message']['message_id']]);
+
+            DB::transaction(function () use ($update) {
+                WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
+
+                WhoUseWhatCommand::create([
+                    'user-id' => $update->all()['message']['from']['id'],
+                    'command' => $this->name
+                ]);
+            });
 
             return response('OK', 200); // 強制結束 command
         }
@@ -74,6 +85,8 @@ class SearchStaffContactCommand extends Command
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $this->replyWithMessage(['text' => $text, 'reply_to_message_id' => $update->all()['message']['message_id']]);
+
+        WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
         return response('OK', 200);
     }
