@@ -50,13 +50,19 @@ class SearchStaffContactCommand extends Command
             }
 
             $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContact($arguments);
-            
+
             $text = '';
 
             $count = 0;
 
             if (count($json) <= 1) {
-                $this->replyWithMessage(['text' => '查無資料 QQ', 'reply_to_message_id' => $update->all()['message']['message_id']]);
+                //$this->replyWithMessage(['text' => '查無資料 QQ', 'reply_to_message_id' => $update->all()['message']['message_id']]);
+                Telegram::sendMessage([
+                    'chat_id' => $update->all()['message']['chat']['id'],
+                    'text' => '查無資料 QQ',
+                    'reply_to_message_id' => $update->all()['message']['message_id']
+                ]);
+
                 return response('OK', 200);
             }
 
@@ -77,7 +83,13 @@ class SearchStaffContactCommand extends Command
 
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-            $this->replyWithMessage(['text' => $text, 'reply_to_message_id' => $update->all()['message']['message_id']]);
+            //$this->replyWithMessage(['text' => $text, 'reply_to_message_id' => $update->all()['message']['message_id']]);
+
+            Telegram::sendMessage([
+                'chat_id' => $update->all()['message']['chat']['id'],
+                'text' => $text,
+                'reply_to_message_id' => $update->all()['message']['message_id']
+            ]);
 
             WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
         } else {
