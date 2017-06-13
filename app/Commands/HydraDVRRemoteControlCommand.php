@@ -66,6 +66,7 @@ class HydraDVRRemoteControlCommand extends Command
                 return response('OK', 200); // 強制結束 command
             }
 
+            /*
             if (WhoUseWhatCommand::where('command', '=', $this->name)
                 ->where('user-id', '!=', $update->all()['message']['from']['id'])
                 ->exists()) {
@@ -77,6 +78,7 @@ class HydraDVRRemoteControlCommand extends Command
 
                 return response('OK', 200); // 強制結束 command
             }
+            */
 
             switch ($arguments) {
                 case 'ESC':
@@ -110,7 +112,6 @@ class HydraDVRRemoteControlCommand extends Command
                     $this->control('right', $update);
                     break;
 
-                /*
                 case 'Zoom In':
                     $this->control('zoomin', $update);
                     break;
@@ -118,7 +119,6 @@ class HydraDVRRemoteControlCommand extends Command
                 case 'Zoom Out':
                     $pic = $this->control('zoomout', $update);
                     break;
-                */
 
                 default:
                     Telegram::sendMessage([
