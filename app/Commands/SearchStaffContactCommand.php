@@ -34,7 +34,7 @@ class SearchStaffContactCommand extends Command
         if (empty($arguments)) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-            $this->replyWithMessage(['text' => '請回覆想查詢的關鍵字', 'reply_to_message_id' => $update->all()['message']['message_id']]);
+            $this->replyWithMessage(['text' => '請回覆想查詢的關鍵字(不支援多條件搜尋)', 'reply_to_message_id' => $update->all()['message']['message_id']]);
 
             DB::transaction(function () use ($update) {
                 WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
@@ -48,14 +48,10 @@ class SearchStaffContactCommand extends Command
             return response('OK', 200); // 強制結束 command
         }
 
-        $args = explode(' ', $arguments);
-
-        $keyword = $args[0];
-
-        if ( ends_with($keyword, '大帥哥') ) {
+        if ( ends_with($arguments, '大帥哥') ) {
             $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContact('張世杰');
         } else {
-            $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContact($keyword);
+            $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContact($arguments);
         }
 
         $text = '';
