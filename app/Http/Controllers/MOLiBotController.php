@@ -48,11 +48,11 @@ class MOLiBotController extends Controller
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
 
+        Log::info(json_encode($json));
+
         if ($json['status'] == 'Actual') {
             $channel_to = env('WEATHER_CHANNEL');
             $posted = collect([]);
-
-            Log::info(json_encode($json));
 
             if (!isset($json['info']['description'])) {// info 是個 array
                 foreach ($json['info'] as $info) {
