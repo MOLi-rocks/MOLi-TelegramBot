@@ -48,7 +48,7 @@ class MOLiBotController extends Controller
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
 
-        Log::info(json_encode($json));
+        Log::info(json_encode($json, JSON_UNESCAPED_UNICODE));
 
         if ($json['status'] == 'Actual') {
             $channel_to = env('WEATHER_CHANNEL');
