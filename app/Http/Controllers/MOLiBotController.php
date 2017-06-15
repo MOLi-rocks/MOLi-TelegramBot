@@ -56,7 +56,7 @@ class MOLiBotController extends Controller
                         if (!$posted->contains($info['description'])) {// 如果沒發過的話發一下
                             Telegram::sendMessage([
                                 'chat_id' => $channel_to,
-                                'text' => $info['description'],
+                                'text' => $info['senderName'].'：'.$info['headline'].PHP_EOL.$info['description'],
                             ]);
 
                             $posted->push($info['description']);// 發完加入已發布清單
@@ -67,7 +67,7 @@ class MOLiBotController extends Controller
                 if ($this->NCDR_to_BOTChannel_list->contains($json['info']['event'])) {
                     Telegram::sendMessage([
                         'chat_id' => $channel_to,
-                        'text' => $json['info']['description'],
+                        'text' => $json['info']['senderName'].'：'.$json['info']['headline'].PHP_EOL.$json['info']['description'],
                     ]);
                 }
             }
@@ -219,5 +219,9 @@ class MOLiBotController extends Controller
         }
 
         return response()->json($result);
+    }
+
+    private function ncdr_publish($info) {
+
     }
 }
