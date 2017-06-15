@@ -51,8 +51,13 @@ class MOLiDay_Events extends Command
         }
         curl_close($ch);
 
-        $json = json_decode($fileContents);
-        $events = $json->entry;
+        if (!empty($fileContents)) {
+            $json = json_decode($fileContents);
+            $events = $json->entry;
+        } else {
+            $this->error('Can\'t Get Data!');
+            return;
+        }
 
         if ($this->option('dry-run')) {
             $headers = ['活動標題', '活動簡介', '活動地點', '報名網址'];
