@@ -10,6 +10,8 @@ use MOLiBot\Http\Controllers\Controller;
 use SoapBox\Formatter\Formatter;
 use Telegram;
 
+use Log;
+
 class MOLiBotController extends Controller
 {
     private $NCDR_to_BOTChannel_list;
@@ -45,6 +47,8 @@ class MOLiBotController extends Controller
         //use $request->getContent() to get raw data
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
+
+        Log::info(json_encode($json));
 
         if ($json['status'] == 'Actual') {
             $channel_to = env('WEATHER_CHANNEL');
