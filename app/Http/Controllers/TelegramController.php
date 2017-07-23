@@ -29,7 +29,8 @@ class TelegramController extends Controller
         return $send = Telegram::sendMessage([
             'chat_id' => $request->input('chat_id', ''),
             'text' => $request->input('text', ''),
-            'disable_notification' => $request->input('disable_notification', false)
+            'disable_notification' => $request->input('disable_notification', false),
+            'reply_to_message_id' => $request->input('reply_to_message_id', NULL),
         ]);
     }
 
@@ -76,8 +77,9 @@ class TelegramController extends Controller
         $send = Telegram::sendPhoto([
             'chat_id' => $request->input('chat_id', ''),
             'photo' => $imgpath.$fileName.'.'.$extension,
-            'disable_notification' => $request->input('disable_notification', false)
-            //'caption' => 'Some caption'
+            'disable_notification' => $request->input('disable_notification', false),
+            'reply_to_message_id' => $request->input('reply_to_message_id', NULL),
+            'caption' => $request->input('caption', ''),
         ]);
 
         Storage::disk('local')->delete($fileName.'.'.$extension);
@@ -91,7 +93,8 @@ class TelegramController extends Controller
             'chat_id' => $request->input('chat_id', ''),
             'latitude' => $request->input('latitude', ''),
             'longitude' => $request->input('longitude', ''),
-            'disable_notification' => $request->input('disable_notification', false)
+            'disable_notification' => $request->input('disable_notification', false),
+            'reply_to_message_id' => $request->input('reply_to_message_id', NULL),
         ]);
     }
 
