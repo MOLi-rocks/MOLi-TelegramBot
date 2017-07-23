@@ -13,7 +13,7 @@ trait GetHelpTrait
 
         $text = '';
 
-        $hidden = ['start', 'whoami', 'DVRremoteController'];//不想顯示在 help 及 start 的指令請填在這個陣列
+        $hidden = ['start', 'whoami', 'DVRremoteController', 'MagneticLockStatus'];//不想顯示在 help 及 start 的指令請填在這個陣列
 
         $commands = array_except($commands, $hidden);
 

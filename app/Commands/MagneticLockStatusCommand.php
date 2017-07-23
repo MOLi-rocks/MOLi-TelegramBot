@@ -15,7 +15,7 @@ class MagneticLockStatusCommand extends Command
    /**
      * @var string Command Name
      */
-    protected $name = "MagneticLockstatus";
+    protected $name = "MagneticLockStatus";
 
     /**
      * @var string Command Description
