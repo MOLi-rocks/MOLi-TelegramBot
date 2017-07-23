@@ -64,5 +64,6 @@ return [
         MOLiBot\Commands\WhoamiCommand::class,
         MOLiBot\Commands\SearchStaffContactCommand::class,
         MOLiBot\Commands\HydraDVRRemoteControlCommand::class,
+        MOLiBot\Commands\MagneticLockStatusCommand::class,
     ],
 ];
