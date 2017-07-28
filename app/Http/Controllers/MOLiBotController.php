@@ -58,9 +58,21 @@ class MOLiBotController extends Controller
                 foreach ($json['info'] as $info) {
                     if ($this->NCDR_to_BOTChannel_list->contains($info['event']) && isset($info['description'])) {
                         if (!$posted->contains($info['description'])) {// 如果沒發過的話發一下
+                            if (is_array($info['description'])) {
+                                $des = '';
+
+                                if ($info['event'] == '颱風') {
+                                    foreach ($info['description']['section'] as $typhoon_warning) {
+                                        $des .= $typhoon_warning;
+                                    }
+                                }
+                            } else {
+                                $des = $info['description'];
+                            }
+
                             Telegram::sendMessage([
                                 'chat_id' => $channel_to,
-                                'text' => $info['senderName'].'：'.$info['headline'].PHP_EOL.$info['description'],
+                                'text' => $info['senderName'] . '：' . $info['headline'] . PHP_EOL . $des,
                             ]);
 
                             $posted->push($info['description']);// 發完加入已發布清單
@@ -69,9 +81,21 @@ class MOLiBotController extends Controller
                 }
             } else {// info 是單個
                 if ($this->NCDR_to_BOTChannel_list->contains($json['info']['event']) && isset($json['info']['description'])) {
+                    if (is_array($json['info']['description'])) {
+                        $des = '';
+
+                        if ($json['info']['event'] == '颱風') {
+                            foreach ($json['info']['description']['section'] as $typhoon_warning) {
+                                $des .= $typhoon_warning;
+                            }
+                        }
+                    } else {
+                        $des = $json['info']['description'];
+                    }
+
                     Telegram::sendMessage([
                         'chat_id' => $channel_to,
-                        'text' => $json['info']['senderName'].'：'.$json['info']['headline'].PHP_EOL.$json['info']['description'],
+                        'text' => $json['info']['senderName'] . '：' . $json['info']['headline'] . PHP_EOL . $des,
                     ]);
                 }
             }
