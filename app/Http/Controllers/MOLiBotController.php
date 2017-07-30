@@ -16,8 +16,12 @@ class MOLiBotController extends Controller
 {
     private $NCDR_to_BOTChannel_list;
 
+    private $NCDR_should_mute;
+
     public function __construct() {
         $this->NCDR_to_BOTChannel_list = collect(['地震', '土石流', '河川高水位', '降雨', '停班停課', '道路封閉', '雷雨', '颱風']); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
+
+        $this->NCDR_should_mute = collect(['土石流']); // 哪些類別的 NCDR 訊息要靜音
     }
 
     /**
@@ -70,10 +74,20 @@ class MOLiBotController extends Controller
                                 $des = $info['description'];
                             }
 
-                            Telegram::sendMessage([
-                                'chat_id' => $channel_to,
-                                'text' => $info['senderName'] . '：' . $info['headline'] . PHP_EOL . $des,
-                            ]);
+                            if ($this->NCDR_should_mute->contains($info['event'])) {
+                                $send_msg = [
+                                    'chat_id' => $channel_to,
+                                    'text' => $info['senderName'] . '：' . $info['headline'] . PHP_EOL . $des,
+                                    'disable_notification' => true
+                                ];
+                            } else {
+                                $send_msg = [
+                                    'chat_id' => $channel_to,
+                                    'text' => $info['senderName'] . '：' . $info['headline'] . PHP_EOL . $des
+                                ];
+                            }
+
+                            Telegram::sendMessage($send_msg);
 
                             $posted->push($info['description']);// 發完加入已發布清單
                         }
@@ -93,10 +107,20 @@ class MOLiBotController extends Controller
                         $des = $json['info']['description'];
                     }
 
-                    Telegram::sendMessage([
-                        'chat_id' => $channel_to,
-                        'text' => $json['info']['senderName'] . '：' . $json['info']['headline'] . PHP_EOL . $des,
-                    ]);
+                    if ($this->NCDR_should_mute->contains($json['info']['event'])) {
+                        $send_msg = [
+                            'chat_id' => $channel_to,
+                            'text' => $json['info']['senderName'] . '：' . $json['info']['headline'] . PHP_EOL . $des,
+                            'disable_notification' => true
+                        ];
+                    } else {
+                        $send_msg = [
+                            'chat_id' => $channel_to,
+                            'text' => $json['info']['senderName'] . '：' . $json['info']['headline'] . PHP_EOL . $des
+                        ];
+                    }
+
+                    Telegram::sendMessage($send_msg);
                 }
             }
         }
