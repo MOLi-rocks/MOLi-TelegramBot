@@ -8,10 +8,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Foundation\Validation\ValidationException;
-
 use Telegram\Bot\Exceptions\TelegramSDKException;
-use Log;
 
 class Handler extends ExceptionHandler
 {
@@ -24,7 +21,6 @@ class Handler extends ExceptionHandler
         AuthorizationException::class,
         HttpException::class,
         ModelNotFoundException::class,
-        ValidationException::class,
         TelegramSDKException::class,
     ];
 
