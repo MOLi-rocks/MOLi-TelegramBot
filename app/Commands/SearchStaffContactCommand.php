@@ -24,6 +24,23 @@ class SearchStaffContactCommand extends Command
     protected $description = '使用關鍵字搜尋暨大教職員聯絡資訊(限私訊使用)';
 
     /**
+     * @var WhoUseWhatCommand
+     */
+    protected $WhoUseWhatCommandModel;
+
+    /**
+     * Create a new command instance.
+     *
+     * @param WhoUseWhatCommand $WhoUseWhatCommandModel
+     *
+     * @return void
+     */
+    public function __construct(WhoUseWhatCommand $WhoUseWhatCommandModel)
+    {
+        $this->WhoUseWhatCommandModel = $WhoUseWhatCommandModel;
+    }
+    
+    /**
      * @inheritdoc
      */
 
@@ -42,9 +59,9 @@ class SearchStaffContactCommand extends Command
                 ]);
 
                 DB::transaction(function () use ($update) {
-                    WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
+                    $this->WhoUseWhatCommandModel->where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
-                    WhoUseWhatCommand::create([
+                    $this->WhoUseWhatCommandModel->create([
                         'user-id' => $update->all()['message']['from']['id'],
                         'command' => $this->name
                     ]);
@@ -68,7 +85,7 @@ class SearchStaffContactCommand extends Command
                     'reply_to_message_id' => $update->all()['message']['message_id']
                 ]);
 
-                WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
+                $this->WhoUseWhatCommandModel->where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
                 return response('OK', 200);
             }
@@ -96,7 +113,7 @@ class SearchStaffContactCommand extends Command
                 'reply_to_message_id' => $update->all()['message']['message_id']
             ]);
 
-            WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
+            $this->WhoUseWhatCommandModel->where('user-id', '=', $update->all()['message']['from']['id'])->delete();
         } else {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
 

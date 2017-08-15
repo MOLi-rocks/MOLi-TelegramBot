@@ -17,11 +17,19 @@ use Log;
 
 class TelegramController extends Controller
 {
-    protected $telegram;
+    /** @var WhoUseWhatCommand */
+    protected $WhoUseWhatCommandModel;
 
-    public function __construct( Telegram $telegram )
+    /**
+     * TelegramController constructor.
+     *
+     * @param WhoUseWhatCommand $WhoUseWhatCommandModel
+     *
+     * @return void
+     */
+    public function __construct(WhoUseWhatCommand $WhoUseWhatCommandModel)
     {
-        $this->telegram = $telegram;
+        $this->WhoUseWhatCommandModel = $WhoUseWhatCommandModel;
     }
 
     public function postSendMessage(Request $request)
@@ -175,10 +183,10 @@ class TelegramController extends Controller
         } else if ($update->all()['message']['chat']['type'] == 'private' &&
             !isset($update->all()['message']['entities']) &&
             isset($update->all()['message']['text']) &&
-            WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->exists()) {
+            $this->WhoUseWhatCommandModel->where('user-id', '=', $update->all()['message']['from']['id'])->exists()) {
             $exec = Telegram::getCommandBus();
 
-            $cmd_name = WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->first();
+            $cmd_name = $this->WhoUseWhatCommandModel->where('user-id', '=', $update->all()['message']['from']['id'])->first();
 
             if ($update->all()['message']['text'] == '/'.$cmd_name->command) {
                 $arguments = '';

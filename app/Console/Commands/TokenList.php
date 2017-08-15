@@ -23,13 +23,22 @@ class TokenList extends Command
     protected $description = 'List All Token for MOLi Bot API';
 
     /**
+     * @var MOLi_Bot_API_TOKEN
+     */
+    protected $MOLi_Bot_API_TOKENModel;
+
+    /**
      * Create a new command instance.
+     * 
+     * @param MOLi_Bot_API_TOKEN $MOLi_Bot_API_TOKENModel
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(MOLi_Bot_API_TOKEN $MOLi_Bot_API_TOKENModel)
     {
         parent::__construct();
+
+        $this->MOLi_Bot_API_TOKENModel = $MOLi_Bot_API_TOKENModel;
     }
 
     /**
@@ -39,7 +48,7 @@ class TokenList extends Command
      */
     public function handle()
     {
-        $tokens = MOLi_Bot_API_TOKEN::all(['user', 'token', 'created_at'])->toArray();
+        $tokens = $this->MOLi_Bot_API_TOKENModel->all(['user', 'token', 'created_at'])->toArray();
         $headers = ['User', 'Token', 'created_at'];
         $this->table($headers, $tokens);
     }

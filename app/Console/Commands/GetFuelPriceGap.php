@@ -25,13 +25,22 @@ class GetFuelPriceGap extends Command
     protected $description = '計算每週油價價差（排程用）';
 
     /**
+     * @var FuelPrice
+     */
+    protected $FuelPriceModel;
+
+    /**
      * Create a new command instance.
+     *
+     * @param FuelPrice $FuelPriceModel
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(FuelPrice $FuelPriceModel)
     {
         parent::__construct();
+
+        $this->FuelPriceModel = $FuelPriceModel;
     }
 
     /**
@@ -46,10 +55,10 @@ class GetFuelPriceGap extends Command
         $result = array();
 
         foreach ($datas as $data) {
-            if ( FuelPrice::where('name', '=', $data['產品名稱'])->where('start_at', '=', $data['牌價生效時間'])->exists() ) {
+            if ( $this->FuelPriceModel->where('name', '=', $data['產品名稱'])->where('start_at', '=', $data['牌價生效時間'])->exists() ) {
                 $result += array($data['產品名稱'] => '不調整 (' . $data['參考牌價'] . ')');
             } else {
-                $lasttime = FuelPrice::where('name', '=', $data['產品名稱'])
+                $lasttime = $this->FuelPriceModel->where('name', '=', $data['產品名稱'])
                     ->orderBy('start_at', 'desc')
                     ->first();
 
@@ -59,7 +68,7 @@ class GetFuelPriceGap extends Command
                     $lasttimeprice = 0;
                 }
 
-                FuelPrice::create([
+                $this->FuelPriceModel->create([
                     'name' => $data['產品名稱'],
                     'unit' => $data['計價單位'],
                     'price' => $data['參考牌價'],

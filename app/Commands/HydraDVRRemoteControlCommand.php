@@ -26,6 +26,23 @@ class HydraDVRRemoteControlCommand extends Command
     protected $description = 'MOLi DVR 遙控器';
 
     /**
+     * @var WhoUseWhatCommand
+     */
+    protected $WhoUseWhatCommandModel;
+
+    /**
+     * Create a new command instance.
+     *
+     * @param WhoUseWhatCommand $WhoUseWhatCommandModel
+     * 
+     * @return void
+     */
+    public function __construct(WhoUseWhatCommand $WhoUseWhatCommandModel)
+    {
+        $this->WhoUseWhatCommandModel = $WhoUseWhatCommandModel;
+    }
+    
+    /**
      * @inheritdoc
      */
     public function handle($arguments)
@@ -55,9 +72,9 @@ class HydraDVRRemoteControlCommand extends Command
                 ]);
 
                 DB::transaction(function () use ($update) {
-                    WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
+                    $this->WhoUseWhatCommandModel->where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
-                    WhoUseWhatCommand::create([
+                    $this->WhoUseWhatCommandModel->create([
                         'user-id' => $update->all()['message']['from']['id'],
                         'command' => $this->name
                     ]);
@@ -92,7 +109,7 @@ class HydraDVRRemoteControlCommand extends Command
 
                     $this->control('door', $update);
 
-                    WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
+                    $this->WhoUseWhatCommandModel->where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
                     break;
 

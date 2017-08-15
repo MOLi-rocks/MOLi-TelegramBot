@@ -26,13 +26,22 @@ class NCNU_RSS extends Command
     protected $description = 'Check New RSS Feed From NCNU（排程用）';
 
     /**
+     * @var Published_NCNU_RSS
+     */
+    protected $Published_NCNU_RSSModel;
+    
+    /**
      * Create a new command instance.
      *
+     * @param Published_NCNU_RSS $Published_NCNU_RSSModel
+     * 
      * @return void
      */
-    public function __construct()
+    public function __construct(Published_NCNU_RSS $Published_NCNU_RSSModel)
     {
         parent::__construct();
+        
+        $this->Published_NCNU_RSSModel = $Published_NCNU_RSSModel;
     }
 
     /**
@@ -55,7 +64,7 @@ class NCNU_RSS extends Command
         foreach ($items as $item) {
             $hashtag = '';
 
-            if ( !Published_NCNU_RSS::where('guid', $item['guid'])->exists() ) {
+            if ( !$this->Published_NCNU_RSSModel->where('guid', $item['guid'])->exists() ) {
                 $seg_list = Jieba::cut($item['title']);
 
                 foreach($seg_list as $seg_list_item) {
@@ -67,7 +76,7 @@ class NCNU_RSS extends Command
                     'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'] . PHP_EOL . PHP_EOL . $hashtag
                 ]);
 
-                Published_NCNU_RSS::create(['guid' => $item['guid'], 'title' => $item['title']]);
+                $this->Published_NCNU_RSSModel->create(['guid' => $item['guid'], 'title' => $item['title']]);
 
                 sleep(5);
             }

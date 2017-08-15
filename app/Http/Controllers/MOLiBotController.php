@@ -14,10 +14,15 @@ use Log;
 
 class MOLiBotController extends Controller
 {
+    /** @var \Illuminate\Support\Collection NCDR_to_BOTChannel_list */
     private $NCDR_to_BOTChannel_list;
 
+    /** @var \Illuminate\Support\Collection NCDR_should_mute */
     private $NCDR_should_mute;
 
+    /**
+     * MOLiBotController constructor.
+     */
     public function __construct() {
         $this->NCDR_to_BOTChannel_list = collect(['地震', '土石流', '河川高水位', '降雨', '停班停課', '道路封閉', '雷雨', '颱風']); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
 
@@ -271,9 +276,5 @@ class MOLiBotController extends Controller
         }
 
         return response()->json($result);
-    }
-
-    private function ncdr_publish($info) {
-
     }
 }

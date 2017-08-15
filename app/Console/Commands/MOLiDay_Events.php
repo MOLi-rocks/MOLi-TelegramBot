@@ -24,13 +24,22 @@ class MOLiDay_Events extends Command
     protected $description = 'Check New MOLiDay Event From KKTIX（add --dry-run for testing mode）';
 
     /**
+     * @var Published_KKTIX
+     */
+    protected $Published_KKTIXModel;
+    
+    /**
      * Create a new command instance.
      *
+     * @param Published_KKTIX $Published_KKTIXModel
+     * 
      * @return void
      */
-    public function __construct()
+    public function __construct(Published_KKTIX $Published_KKTIXModel)
     {
         parent::__construct();
+        
+        $this->Published_KKTIXModel = $Published_KKTIXModel;
     }
 
     /**
@@ -65,7 +74,7 @@ class MOLiDay_Events extends Command
             $datas = [];
             
             foreach ($events as $event) {
-                if ( !Published_KKTIX::where('url', $event->url)->exists() ) {
+                if ( !$this->Published_KKTIXModel->where('url', $event->url)->exists() ) {
                     $datas += ['活動標題' => $event->title,
                                '活動簡介' => $event->summary,
                                '活動地點' => $event->content,
@@ -76,7 +85,7 @@ class MOLiDay_Events extends Command
             $this->table($headers, $datas);
         } else {
             foreach ($events as $event) {
-                if ( !Published_KKTIX::where('url', $event->url)->exists() ) {
+                if ( !$this->Published_KKTIXModel->where('url', $event->url)->exists() ) {
                     Telegram::sendMessage([
                         'chat_id' => env('MOLi_CHANNEL'),
                         'text' => 'MOLiDay 新活動：' . PHP_EOL . $event->title . PHP_EOL . PHP_EOL .
@@ -85,7 +94,7 @@ class MOLiDay_Events extends Command
                             '報名網址：' . PHP_EOL . $event->url . PHP_EOL . PHP_EOL
                     ]);
 
-                    Published_KKTIX::create(['url' => $event->url, 'title' => $event->title]);
+                    $this->Published_KKTIXModel->create(['url' => $event->url, 'title' => $event->title]);
 
                     sleep(5);
                 }

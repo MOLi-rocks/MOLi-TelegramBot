@@ -25,13 +25,22 @@ class TokenGenerator extends Command
     protected $description = 'Generate New Token for MOLi Bot API';
 
     /**
+     * @var MOLi_Bot_API_TOKEN
+     */
+    protected $MOLi_Bot_API_TOKENModel;
+
+    /**
      * Create a new command instance.
+     *
+     * @param MOLi_Bot_API_TOKEN $MOLi_Bot_API_TOKENModel
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(MOLi_Bot_API_TOKEN $MOLi_Bot_API_TOKENModel)
     {
         parent::__construct();
+
+        $this->MOLi_Bot_API_TOKENModel = $MOLi_Bot_API_TOKENModel;
     }
 
     /**
@@ -43,7 +52,7 @@ class TokenGenerator extends Command
     {
         $who = $this->ask('who will use this token?');
         $fp = md5(((float) date ( "YmdHis" ) + rand(100,999)).rand(1000,9999));
-        MOLi_Bot_API_TOKEN::create(['token' => $fp, 'user' => $who]);
+        $this->MOLi_Bot_API_TOKENModel->create(['token' => $fp, 'user' => $who]);
         $this->info('Token for ' . $who . ' is ' . $fp);
     }
 }
