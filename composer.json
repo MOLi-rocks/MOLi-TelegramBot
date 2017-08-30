@@ -5,7 +5,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=7.0.0",
         "laravel/framework": "5.5.*",
         "irazasyed/telegram-bot-sdk": "^2.2",
         "barryvdh/laravel-cors": "^0.9.0",
@@ -13,7 +13,7 @@
         "soapbox/laravel-formatter": "^2.0",
         "fukuball/jieba-php": "dev-master",
         "doctrine/dbal": "^2.5",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -37,6 +37,12 @@
             "tests/TestCase.php"
         ]
     },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+            ]
+        }
+    },
     "scripts": {
         "post-root-package-install": [
             "php -r \"copy('.env.example', '.env');\""
@@ -44,18 +50,24 @@
         "post-create-project-cmd": [
             "php artisan key:generate"
         ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover"
+        ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan optimize"
+            "@php artisan package:discover"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan ide-helper:generate",
             "php artisan ide-helper:meta",
-            "php artisan optimize"
+            "@php artisan package:discover"
         ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
     }
 }
