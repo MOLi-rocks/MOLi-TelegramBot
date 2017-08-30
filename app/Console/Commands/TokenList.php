@@ -25,7 +25,7 @@ class TokenList extends Command
     /**
      * @var MOLi_Bot_API_TOKEN
      */
-    protected $MOLi_Bot_API_TOKENModel;
+    private $MOLi_Bot_API_TOKENModel;
 
     /**
      * Create a new command instance.

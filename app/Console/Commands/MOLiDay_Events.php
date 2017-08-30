@@ -26,7 +26,7 @@ class MOLiDay_Events extends Command
     /**
      * @var Published_KKTIX
      */
-    protected $Published_KKTIXModel;
+    private $Published_KKTIXModel;
     
     /**
      * Create a new command instance.

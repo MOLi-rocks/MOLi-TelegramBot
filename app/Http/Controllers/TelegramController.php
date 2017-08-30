@@ -18,7 +18,7 @@ use Log;
 class TelegramController extends Controller
 {
     /** @var WhoUseWhatCommand */
-    protected $WhoUseWhatCommandModel;
+    private $WhoUseWhatCommandModel;
 
     /**
      * TelegramController constructor.

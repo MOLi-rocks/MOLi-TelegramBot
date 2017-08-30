@@ -28,18 +28,16 @@ class HydraDVRRemoteControlCommand extends Command
     /**
      * @var WhoUseWhatCommand
      */
-    protected $WhoUseWhatCommandModel;
+    private $WhoUseWhatCommandModel;
 
     /**
      * Create a new command instance.
-     *
-     * @param WhoUseWhatCommand $WhoUseWhatCommandModel
      * 
      * @return void
      */
-    public function __construct(WhoUseWhatCommand $WhoUseWhatCommandModel)
+    public function __construct()
     {
-        $this->WhoUseWhatCommandModel = $WhoUseWhatCommandModel;
+        $this->WhoUseWhatCommandModel = WhoUseWhatCommand::class;
     }
     
     /**

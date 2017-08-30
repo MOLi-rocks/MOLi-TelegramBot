@@ -28,7 +28,7 @@ class NCNU_RSS extends Command
     /**
      * @var Published_NCNU_RSS
      */
-    protected $Published_NCNU_RSSModel;
+    private $Published_NCNU_RSSModel;
     
     /**
      * Create a new command instance.

@@ -27,7 +27,7 @@ class GetFuelPriceGap extends Command
     /**
      * @var FuelPrice
      */
-    protected $FuelPriceModel;
+    private $FuelPriceModel;
 
     /**
      * Create a new command instance.

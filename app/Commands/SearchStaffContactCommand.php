@@ -11,6 +11,9 @@ use MOLiBot\WhoUseWhatCommand;
 
 class SearchStaffContactCommand extends Command
 {
+    /** @var WhoUseWhatCommand  */
+    private $WhoUseWhatCommandModel;
+
     /**
      * @var string Command Name
      */
@@ -24,20 +27,13 @@ class SearchStaffContactCommand extends Command
     protected $description = '使用關鍵字搜尋暨大教職員聯絡資訊(限私訊使用)';
 
     /**
-     * @var WhoUseWhatCommand
-     */
-    protected $WhoUseWhatCommandModel;
-
-    /**
      * Create a new command instance.
-     *
-     * @param WhoUseWhatCommand $WhoUseWhatCommandModel
      *
      * @return void
      */
-    public function __construct(WhoUseWhatCommand $WhoUseWhatCommandModel)
+    public function __construct()
     {
-        $this->WhoUseWhatCommandModel = $WhoUseWhatCommandModel;
+        $this->WhoUseWhatCommandModel = WhoUseWhatCommand::class;
     }
     
     /**

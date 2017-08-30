@@ -6,9 +6,9 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.4.*",
+        "laravel/framework": "5.5.*",
         "irazasyed/telegram-bot-sdk": "^2.2",
-        "barryvdh/laravel-cors": "^0.8.0",
+        "barryvdh/laravel-cors": "^0.9.0",
         "guzzlehttp/guzzle": "^6.2",
         "soapbox/laravel-formatter": "^2.0",
         "fukuball/jieba-php": "dev-master",
@@ -18,7 +18,7 @@
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.7",
+        "phpunit/phpunit": "~6.0",
         "phpspec/phpspec": "~2.1",
         "symfony/dom-crawler": "3.1.*",
         "symfony/css-selector": "3.1.*",
