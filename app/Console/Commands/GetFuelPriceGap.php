@@ -63,9 +63,9 @@ class GetFuelPriceGap extends Command
                     ->first();
 
                 if ($lasttime) {
-                    $lasttimeprice = $lasttime->price - 0;
+                    $lasttimeprice = $lasttime->price;
                 } else {
-                    $lasttimeprice = 0;
+                    $lasttimeprice = '0';
                 }
 
                 $this->FuelPriceModel->create([
@@ -75,7 +75,9 @@ class GetFuelPriceGap extends Command
                     'start_at' => $data['牌價生效時間']
                 ]);
 
-                $pricegap = $data['參考牌價'] - $lasttimeprice;
+                $pricegap_cal = bcsub($data['參考牌價'], $lasttimeprice, 1);
+
+                $pricegap = floatval($pricegap_cal);
 
                 if ($pricegap > 0) {
                     $result += array($data['產品名稱'] => ' 將 調漲 ' . $pricegap . $data['計價單位'] . '(' . $lasttimeprice . '->' . $data['參考牌價'] . ')');
