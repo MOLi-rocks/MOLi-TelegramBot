@@ -86,8 +86,8 @@ class MOLi_Blog_Article extends Command
                 if ( !$this->Published_MOLi_Blog_ArticleModel->where('id', $post->id)->exists() ) {
                     $datas += [
                         'id' => $post->id,
-                        'uuid' => $post->id,
-                        '文章標題' => $post->meta_title
+                        'uuid' => $post->uuid,
+                        '文章標題' => $post->title
                     ];
                 }
             }
@@ -105,7 +105,7 @@ class MOLi_Blog_Article extends Command
                     Telegram::sendMessage([
                         'chat_id' => env('MOLi_CHANNEL'),
                         'text' => 'MOLi Blog 新文快報：' . PHP_EOL .
-                                  $post->meta_title . 'By' . $post->author->name . PHP_EOL .
+                                  $post->title . ' By ' . $post->author->name . PHP_EOL .
                                   env('MOLi_BLOG_URL') . '/2017/08/17/journey-of-becoming-a-graduate-student' . PHP_EOL . PHP_EOL .
                                   $tags
                     ]);
@@ -113,7 +113,7 @@ class MOLi_Blog_Article extends Command
                     $this->Published_MOLi_Blog_ArticleModel->create([
                         'id' => $post->id,
                         'uuid' => $post->uuid,
-                        'title' => $post->meta_title
+                        'title' => $post->title
                     ]);
 
                     sleep(5);
