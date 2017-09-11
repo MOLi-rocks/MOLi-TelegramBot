@@ -106,7 +106,7 @@ class MOLi_Blog_Article extends Command
                         'chat_id' => env('MOLi_CHANNEL'),
                         'text' => 'MOLi Blog 新文快報：' . PHP_EOL .
                                   $post->title . ' By ' . $post->author->name . PHP_EOL .
-                                  env('MOLi_BLOG_URL') . '/2017/08/17/journey-of-becoming-a-graduate-student' . PHP_EOL . PHP_EOL .
+                                  env('MOLi_BLOG_URL') . $post->url . PHP_EOL . PHP_EOL .
                                   $tags
                     ]);
 
