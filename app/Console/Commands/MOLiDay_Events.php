@@ -76,7 +76,7 @@ class MOLiDay_Events extends Command
             
             foreach ($events as $event) {
                 if ( !$this->Published_KKTIXModel->where('url', $event->url)->exists() ) {
-                    $datas += [
+                    $datas[] = [
                         '活動標題' => $event->title,
                         '活動簡介' => $event->summary,
                         '活動地點' => $event->content,

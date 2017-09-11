@@ -84,7 +84,7 @@ class MOLi_Blog_Article extends Command
 
             foreach ($posts as $post) {
                 if ( !$this->Published_MOLi_Blog_ArticleModel->where('id', $post->id)->exists() ) {
-                    $datas += [
+                    $datas[] = [
                         'id' => $post->id,
                         'uuid' => $post->uuid,
                         '文章標題' => $post->title
