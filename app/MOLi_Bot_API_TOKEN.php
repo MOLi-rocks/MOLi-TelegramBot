@@ -21,6 +21,11 @@ use Carbon\Carbon;
  * @method static \Illuminate\Database\Query\Builder|\MOLiBot\MOLi_Bot_API_TOKEN whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\MOLiBot\MOLi_Bot_API_TOKEN whereUser($value)
  * @mixin \Eloquent
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\MOLiBot\MOLi_Bot_API_TOKEN onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|\MOLiBot\MOLi_Bot_API_TOKEN withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\MOLiBot\MOLi_Bot_API_TOKEN withoutTrashed()
  */
 class MOLi_Bot_API_TOKEN extends Model
 {

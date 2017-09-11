@@ -14,7 +14,7 @@ class MOLi_Blog_Article extends Command
      *
      * @var string
      */
-    protected $signature = 'blog:check {--dry-run}';
+    protected $signature = 'blog:check {--dry-run} {--init}';
 
     /**
      * The console command description.
@@ -102,8 +102,14 @@ class MOLi_Blog_Article extends Command
                         $tags .= '#' . $tag->name . ' ';
                     }
 
+                    if ($this->option('init')) {
+                        $chat_id = env('TEST_CHANNEL');
+                    } else {
+                        $chat_id = env('MOLi_CHANNEL');
+                    }
+
                     Telegram::sendMessage([
-                        'chat_id' => env('MOLi_CHANNEL'),
+                        'chat_id' => $chat_id,
                         'text' => 'MOLi Blog 新文快報：' . PHP_EOL .
                                   $post->title . ' By ' . $post->author->name . PHP_EOL .
                                   env('MOLi_BLOG_URL') . $post->url . PHP_EOL . PHP_EOL .

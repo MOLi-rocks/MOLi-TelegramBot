@@ -16,14 +16,14 @@ class NCNU_RSS extends Command
      *
      * @var string
      */
-    protected $signature = 'rss:check';
+    protected $signature = 'rss:check {--init}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Check New RSS Feed From NCNU（排程用）';
+    protected $description = 'Check New RSS Feed From NCNU';
 
     /**
      * @var Published_NCNU_RSS
@@ -71,8 +71,14 @@ class NCNU_RSS extends Command
                     $hashtag .= '#' . $seg_list_item . ' ';
                 }
 
+                if ($this->option('init')) {
+                    $chat_id = env('TEST_CHANNEL');
+                } else {
+                    $chat_id = env('NEWS_CHANNEL');
+                }
+
                 Telegram::sendMessage([
-                    'chat_id' => env('NEWS_CHANNEL'),
+                    'chat_id' => $chat_id,
                     'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'] . PHP_EOL . PHP_EOL . $hashtag
                 ]);
 

@@ -14,7 +14,7 @@ class MOLiDay_Events extends Command
      *
      * @var string
      */
-    protected $signature = 'kktix:check {--dry-run}';
+    protected $signature = 'kktix:check {--dry-run} {--init}';
 
     /**
      * The console command description.
@@ -89,8 +89,14 @@ class MOLiDay_Events extends Command
         } else {
             foreach ($events as $event) {
                 if ( !$this->Published_KKTIXModel->where('url', $event->url)->exists() ) {
+                    if ($this->option('init')) {
+                        $chat_id = env('TEST_CHANNEL');
+                    } else {
+                        $chat_id = env('MOLi_CHANNEL');
+                    }
+
                     Telegram::sendMessage([
-                        'chat_id' => env('MOLi_CHANNEL'),
+                        'chat_id' => $chat_id,
                         'text' => 'MOLiDay 新活動：' . PHP_EOL . $event->title . PHP_EOL . PHP_EOL .
                             '活動簡介：' . PHP_EOL . $event->summary . PHP_EOL . PHP_EOL .
                             '活動地點：' . PHP_EOL . $event->content . PHP_EOL . PHP_EOL .

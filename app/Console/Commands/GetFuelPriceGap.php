@@ -15,7 +15,7 @@ class GetFuelPriceGap extends Command
      *
      * @var string
      */
-    protected $signature = 'fuelprice:checkgap';
+    protected $signature = 'fuelprice:checkgap {--init}';
 
     /**
      * The console command description.
@@ -89,10 +89,16 @@ class GetFuelPriceGap extends Command
             }
         }
 
-        //$this->info(print_r($result));
         $tomorrow = Carbon::tomorrow();
+
+        if ($this->option('init')) {
+            $chat_id = env('TEST_CHANNEL');
+        } else {
+            $chat_id = env('MOLi_CHANNEL');
+        }
+
         Telegram::sendMessage([
-            'chat_id' => env('MOLi_CHANNEL'),
+            'chat_id' => $chat_id,
             'text' => '中油已公告新油價，' . $tomorrow . ' 起：' . PHP_EOL . PHP_EOL .
                 '98無鉛汽油' . $result['98無鉛汽油'] . PHP_EOL . PHP_EOL .
                 '95無鉛汽油' . $result['95無鉛汽油'] . PHP_EOL . PHP_EOL .
