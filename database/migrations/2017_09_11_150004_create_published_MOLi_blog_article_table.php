@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class PublishedKKTIXTable extends Migration
+class CreatePublishedMOLiBlogArticleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class PublishedKKTIXTable extends Migration
      */
     public function up()
     {
-        Schema::create('Published_KKTIX', function (Blueprint $table) {
-            $table->string('url')->primary();
+        Schema::create('Published_MOLi_blog_article', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->string('uuid');
             $table->string('title');
         });
     }
@@ -26,6 +27,6 @@ class PublishedKKTIXTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Published_KKTIX');
+        Schema::dropIfExists('Published_MOLi_blog_article');
     }
 }

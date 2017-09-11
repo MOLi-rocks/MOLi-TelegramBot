@@ -29,6 +29,6 @@ class MOLiBotAPITOKENTable extends Migration
      */
     public function down()
     {
-        Schema::drop('API_TOKEN');
+        Schema::dropIfExists('API_TOKEN');
     }
 }
