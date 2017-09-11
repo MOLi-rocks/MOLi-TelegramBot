@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         Commands\NCNU_RSS::class,
         Commands\MOLiDay_Events::class,
         Commands\GetFuelPriceGap::class,
+        Commands\MOLi_Blog_Article::class,
     ];
 
     /**
@@ -39,6 +40,9 @@ class Kernel extends ConsoleKernel
                  ->everyTenMinutes()->withoutOverlapping();
         
         $schedule->command('kktix:check')
+                 ->everyTenMinutes()->withoutOverlapping();
+
+        $schedule->command('blog:check')
                  ->everyTenMinutes()->withoutOverlapping();
 
         $schedule->command('fuelprice:checkgap')

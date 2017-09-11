@@ -55,6 +55,7 @@ class MOLiDay_Events extends Command
         curl_setopt($ch, CURLOPT_TIMEOUT, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
         $fileContents = curl_exec($ch);
+
         if (curl_errno($ch) == 28) {
             //Log CURL Timeout message
         }
@@ -75,10 +76,12 @@ class MOLiDay_Events extends Command
             
             foreach ($events as $event) {
                 if ( !$this->Published_KKTIXModel->where('url', $event->url)->exists() ) {
-                    $datas += ['活動標題' => $event->title,
-                               '活動簡介' => $event->summary,
-                               '活動地點' => $event->content,
-                               '報名網址' => $event->url];
+                    $datas += [
+                        '活動標題' => $event->title,
+                        '活動簡介' => $event->summary,
+                        '活動地點' => $event->content,
+                        '報名網址' => $event->url
+                    ];
                 }
             }
             
