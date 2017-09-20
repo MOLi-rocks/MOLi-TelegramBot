@@ -87,7 +87,7 @@ class EnableNCDRCommand extends Command
             } else {
                 WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
-                $response = $client->request('POST', 'https://alerts.ncdr.nat.gov.tw/memberSignIn.aspx', [
+                $client->request('POST', 'https://alerts.ncdr.nat.gov.tw/memberSignIn.aspx', [
                     'cookies' => $cookieJar,
                     'form_params' => [
                         'ctl00$ContentPlaceHolder1$textfield2' => env('NCDR_USERNAME'),
@@ -96,9 +96,30 @@ class EnableNCDRCommand extends Command
                     ]
                 ]);
 
+                $logedinpageContents = $client->request('GET', 'https://alerts.ncdr.nat.gov.tw/MemberArea.aspx', [
+                    'headers' => [
+                        'User-Agent' => 'MOLi Bot'
+                    ],
+                    'cookies' => $cookieJar,
+                    'timeout' => 10
+                ]);
+
+                $pageContents = $client->request('GET', 'https://alerts.ncdr.nat.gov.tw/', [
+                    'headers' => [
+                        'User-Agent' => 'MOLi Bot'
+                    ],
+                    'timeout' => 10
+                ]);
+
+                if ($logedinpageContents == $pageContents) {
+                    $result = '登入失敗';
+                } else {
+                    $result = '登入成功';
+                }
+
                 Telegram::sendMessage([
                     'chat_id' => $update->all()['message']['chat']['id'],
-                    'text' => $response->getStatusCode()
+                    'text' => $result
                 ]);
             }
         } else {
