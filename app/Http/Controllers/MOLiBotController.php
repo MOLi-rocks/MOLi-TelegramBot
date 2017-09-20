@@ -84,13 +84,13 @@ class MOLiBotController extends Controller
                             if ($this->NCDR_should_mute->contains($info['event'])) {
                                 $send_msg = [
                                     'chat_id' => $channel_to,
-                                    'text' => $info['senderName'] . '：' . $info['headline'] . PHP_EOL . $des,
+                                    'text' => '#' . $info['event'] . PHP_EOL . $info['senderName'] . '：' . $info['headline'] . PHP_EOL . $des,
                                     'disable_notification' => true
                                 ];
                             } else {
                                 $send_msg = [
                                     'chat_id' => $channel_to,
-                                    'text' => $info['senderName'] . '：' . $info['headline'] . PHP_EOL . $des
+                                    'text' => '#' . $info['event'] . PHP_EOL . $info['senderName'] . '：' . $info['headline'] . PHP_EOL . $des
                                 ];
                             }
 
@@ -117,13 +117,13 @@ class MOLiBotController extends Controller
                     if ($this->NCDR_should_mute->contains($json['info']['event'])) {
                         $send_msg = [
                             'chat_id' => $channel_to,
-                            'text' => $json['info']['senderName'] . '：' . $json['info']['headline'] . PHP_EOL . $des,
+                            'text' => '#' . $json['info']['event'] . PHP_EOL . $json['info']['senderName'] . '：' . $json['info']['headline'] . PHP_EOL . $des,
                             'disable_notification' => true
                         ];
                     } else {
                         $send_msg = [
                             'chat_id' => $channel_to,
-                            'text' => $json['info']['senderName'] . '：' . $json['info']['headline'] . PHP_EOL . $des
+                            'text' => '#' . $json['info']['event'] . PHP_EOL . $json['info']['senderName'] . '：' . $json['info']['headline'] . PHP_EOL . $des
                         ];
                     }
 
