@@ -35,12 +35,12 @@ class EnableNCDRCommand extends Command
         $update = Telegram::getWebhookUpdates();
 
         if ( $update->all()['message']['chat']['type'] == 'private' ) {
+            $cookieJar = new SessionCookieJar('SESSION_STORAGE', true);
+
+            $client = new GuzzleHttpClient();
+
             if (empty($arguments)) {
-                $client = new GuzzleHttpClient();
-
                 try {
-                    $cookieJar = new SessionCookieJar('SESSION_STORAGE', true);
-
                     $pageContents = $client->request('GET', 'https://alerts.ncdr.nat.gov.tw/Captcha.aspx', [
                         'headers' => [
                             'User-Agent' => 'MOLi Bot'
@@ -71,7 +71,7 @@ class EnableNCDRCommand extends Command
                             Telegram::sendPhoto([
                                 'chat_id' => $update->all()['message']['chat']['id'],
                                 'photo' => $imgpath.$fileName.'.'.$type[1],
-                                'caption' => '請回傳圖中驗證碼'
+                                'caption' => '請回傳圖中驗證碼（分大小寫）'
                             ]);
 
                             Storage::disk('local')->delete($fileName.'.'.$type[1]);
@@ -87,9 +87,18 @@ class EnableNCDRCommand extends Command
             } else {
                 WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
 
+                $response = $client->request('POST', 'https://alerts.ncdr.nat.gov.tw/memberSignIn.aspx', [
+                    'cookies' => $cookieJar,
+                    'form_params' => [
+                        'ctl00$ContentPlaceHolder1$textfield2' => env('NCDR_USERNAME'),
+                        'ctl00$ContentPlaceHolder1$textfield' => env('NCDR_PASSWORD'),
+                        'ctl00$ContentPlaceHolder1$txtValidate' => $arguments
+                    ]
+                ]);
+
                 Telegram::sendMessage([
                     'chat_id' => $update->all()['message']['chat']['id'],
-                    'text' => '$arguments'
+                    'text' => $response
                 ]);
             }
         } else {
