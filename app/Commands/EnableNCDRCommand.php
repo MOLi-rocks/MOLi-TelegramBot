@@ -117,9 +117,16 @@ class EnableNCDRCommand extends Command
                     $result = '登入成功';
                 }
 
+                $qq = $client->request('POST', 'https://alerts.ncdr.nat.gov.tw/MemberArea.aspx', [
+                    'cookies' => $cookieJar,
+                    'form_params' => [
+                        'ctl00$ContentPlaceHolder1$TextBox1' => '1',
+                    ]
+                ]);
+
                 Telegram::sendMessage([
                     'chat_id' => $update->all()['message']['chat']['id'],
-                    'text' => $result
+                    'text' => $qq
                 ]);
             }
         } else {
