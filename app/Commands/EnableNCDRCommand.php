@@ -98,7 +98,7 @@ class EnableNCDRCommand extends Command
 
                 Telegram::sendMessage([
                     'chat_id' => $update->all()['message']['chat']['id'],
-                    'text' => $response
+                    'text' => $response->getStatusCode()
                 ]);
             }
         } else {
