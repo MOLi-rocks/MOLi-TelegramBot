@@ -87,7 +87,7 @@ class DoorStatusCommand extends Command
 
                 Storage::disk('local')->put($fileName.'.'.$type[1], $response->getBody());
 
-                $send = Telegram::sendPhoto([
+                Telegram::sendPhoto([
                     'chat_id' => $update->all()['message']['chat']['id'],
                     'reply_to_message_id' => $send->getMessageId(),
                     'photo' => $imgpath.$fileName.'.'.$type[1],
