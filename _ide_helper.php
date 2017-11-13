@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.5.3 on 2017-09-11.
+ * Generated for Laravel 5.5.20 on 2017-11-13.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -3116,7 +3116,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Get the cookies which have been queued for the next request.
          *
-         * @return array 
+         * @return \Symfony\Component\HttpFoundation\Cookie[] 
          * @static 
          */ 
         public static function getQueuedCookies()
@@ -4646,7 +4646,7 @@ namespace Illuminate\Support\Facades {
          *
          * @param string $directory
          * @param bool $hidden
-         * @return array 
+         * @return \Symfony\Component\Finder\SplFileInfo[] 
          * @static 
          */ 
         public static function files($directory, $hidden = false)
@@ -4659,7 +4659,7 @@ namespace Illuminate\Support\Facades {
          *
          * @param string $directory
          * @param bool $hidden
-         * @return array 
+         * @return \Symfony\Component\Finder\SplFileInfo[] 
          * @static 
          */ 
         public static function allFiles($directory, $hidden = false)
@@ -5142,7 +5142,7 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
-         * Get the current encoded path info for the request.
+         * Get the current decoded path info for the request.
          *
          * @return string 
          * @static 
@@ -5768,8 +5768,8 @@ namespace Illuminate\Support\Facades {
          * 
          * Order of precedence: PATH (routing placeholders or custom attributes), GET, BODY
          *
-         * @param string $key the key
-         * @param mixed $default the default value if the parameter key does not exist
+         * @param string $key The key
+         * @param mixed $default The default value if the parameter key does not exist
          * @return mixed 
          * @static 
          */ 
@@ -7054,7 +7054,7 @@ namespace Illuminate\Support\Facades {
          * @param string $key
          * @param array $replace
          * @param string $locale
-         * @return string 
+         * @return string|array|null 
          * @static 
          */ 
         public static function getFromJson($key, $replace = array(), $locale = null)
@@ -8364,6 +8364,43 @@ namespace Illuminate\Support\Facades {
         {
             \Illuminate\Routing\Redirector::setSession($session);
         }
+        
+        /**
+         * Register a custom macro.
+         *
+         * @param string $name
+         * @param object|callable $macro
+         * @return void 
+         * @static 
+         */ 
+        public static function macro($name, $macro)
+        {
+            \Illuminate\Routing\Redirector::macro($name, $macro);
+        }
+        
+        /**
+         * Mix another object into the class.
+         *
+         * @param object $mixin
+         * @return void 
+         * @static 
+         */ 
+        public static function mixin($mixin)
+        {
+            \Illuminate\Routing\Redirector::mixin($mixin);
+        }
+        
+        /**
+         * Checks if macro is registered.
+         *
+         * @param string $name
+         * @return bool 
+         * @static 
+         */ 
+        public static function hasMacro($name)
+        {
+            return \Illuminate\Routing\Redirector::hasMacro($name);
+        }
          
     }
 
@@ -8459,7 +8496,7 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
-         * Get the current encoded path info for the request.
+         * Get the current decoded path info for the request.
          *
          * @return string 
          * @static 
@@ -9085,8 +9122,8 @@ namespace Illuminate\Support\Facades {
          * 
          * Order of precedence: PATH (routing placeholders or custom attributes), GET, BODY
          *
-         * @param string $key the key
-         * @param mixed $default the default value if the parameter key does not exist
+         * @param string $key The key
+         * @param mixed $default The default value if the parameter key does not exist
          * @return mixed 
          * @static 
          */ 
@@ -10619,6 +10656,18 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Register a new Fallback route with the router.
+         *
+         * @param \Closure|array|string|null $action
+         * @return \Illuminate\Routing\Route 
+         * @static 
+         */ 
+        public static function fallback($action)
+        {
+            return \Illuminate\Routing\Router::fallback($action);
+        }
+        
+        /**
          * Create a redirect from one URI to another.
          *
          * @param string $uri
@@ -10687,7 +10736,19 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
-         * Route an api resource to a controller.
+         * Register an array of API resource controllers.
+         *
+         * @param array $resources
+         * @return void 
+         * @static 
+         */ 
+        public static function apiResources($resources)
+        {
+            \Illuminate\Routing\Router::apiResources($resources);
+        }
+        
+        /**
+         * Route an API resource to a controller.
          *
          * @param string $name
          * @param string $controller
@@ -10737,6 +10798,18 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Return the response returned by the given route.
+         *
+         * @param string $name
+         * @return mixed 
+         * @static 
+         */ 
+        public static function respondWithRoute($name)
+        {
+            return \Illuminate\Routing\Router::respondWithRoute($name);
+        }
+        
+        /**
          * Dispatch the request to the application.
          *
          * @param \Illuminate\Http\Request $request
@@ -10783,6 +10856,19 @@ namespace Illuminate\Support\Facades {
         public static function prepareResponse($request, $response)
         {
             return \Illuminate\Routing\Router::prepareResponse($request, $response);
+        }
+        
+        /**
+         * Static version of prepareResponse.
+         *
+         * @param \Symfony\Component\HttpFoundation\Request $request
+         * @param mixed $response
+         * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse 
+         * @static 
+         */ 
+        public static function toResponse($request, $response)
+        {
+            return \Illuminate\Routing\Router::toResponse($request, $response);
         }
         
         /**
@@ -12436,6 +12522,36 @@ namespace Illuminate\Support\Facades {
         public static function temporaryUrl($path, $expiration, $options = array())
         {
             return \Illuminate\Filesystem\FilesystemAdapter::temporaryUrl($path, $expiration, $options);
+        }
+        
+        /**
+         * Get a temporary URL for the file at the given path.
+         *
+         * @param \League\Flysystem\AwsS3v3\AwsS3Adapter $adapter
+         * @param string $path
+         * @param \DateTimeInterface $expiration
+         * @param array $options
+         * @return string 
+         * @static 
+         */ 
+        public static function getAwsTemporaryUrl($adapter, $path, $expiration, $options)
+        {
+            return \Illuminate\Filesystem\FilesystemAdapter::getAwsTemporaryUrl($adapter, $path, $expiration, $options);
+        }
+        
+        /**
+         * Get a temporary URL for the file at the given path.
+         *
+         * @param \League\Flysystem\Rackspace\RackspaceAdapter $adapter
+         * @param string $path
+         * @param \DateTimeInterface $expiration
+         * @param $options
+         * @return string 
+         * @static 
+         */ 
+        public static function getRackspaceTemporaryUrl($adapter, $path, $expiration, $options)
+        {
+            return \Illuminate\Filesystem\FilesystemAdapter::getRackspaceTemporaryUrl($adapter, $path, $expiration, $options);
         }
         
         /**
@@ -16527,13 +16643,13 @@ namespace  {
             /**
              * Clone the query without the given properties.
              *
-             * @param array $except
+             * @param array $properties
              * @return static 
              * @static 
              */ 
-            public static function cloneWithout($except)
+            public static function cloneWithout($properties)
             {    
-                return \Illuminate\Database\Query\Builder::cloneWithout($except);
+                return \Illuminate\Database\Query\Builder::cloneWithout($properties);
             }
          
             /**
@@ -16736,7 +16852,7 @@ if (! function_exists('array_dot')) {
 
 if (! function_exists('array_except')) {
     /**
-     * Get all of the given array except for a specified array of items.
+     * Get all of the given array except for a specified array of keys.
      *
      * @param  array  $array
      * @param  array|string  $keys
@@ -16930,10 +17046,10 @@ if (! function_exists('array_sort')) {
      * Sort the array by the given callback or attribute name.
      *
      * @param  array  $array
-     * @param  callable|string  $callback
+     * @param  callable|string|null  $callback
      * @return array
      */
-    function array_sort($array, $callback)
+    function array_sort($array, $callback = null)
     {
         return Arr::sort($array, $callback);
     }
@@ -17694,6 +17810,7 @@ if (! function_exists('throw_if')) {
      * @param  \Throwable|string  $exception
      * @param  array  ...$parameters
      * @return void
+     * @throws \Throwable
      */
     function throw_if($boolean, $exception, ...$parameters)
     {
@@ -17711,6 +17828,7 @@ if (! function_exists('throw_unless')) {
      * @param  \Throwable|string  $exception
      * @param  array  ...$parameters
      * @return void
+     * @throws \Throwable
      */
     function throw_unless($boolean, $exception, ...$parameters)
     {
@@ -17802,14 +17920,15 @@ if (! function_exists('windows_os')) {
 
 if (! function_exists('with')) {
     /**
-     * Return the given object. Useful for chaining.
+     * Return the given value, optionally passed through the given callback.
      *
-     * @param  mixed  $object
+     * @param  mixed  $value
+     * @param  callable|null  $callback
      * @return mixed
      */
-    function with($object)
+    function with($value, callable $callback = null)
     {
-        return $object;
+        return is_null($callback) ? $value : $callback($value);
     }
 }
  

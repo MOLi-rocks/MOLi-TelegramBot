@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2017-09-11.
+    * Generated on 2017-11-13.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -91,6 +91,7 @@ namespace PHPSTORM_META {
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
         'command.event.generate' => \Illuminate\Foundation\Console\EventGenerateCommand::class,
         'command.event.make' => \Illuminate\Foundation\Console\EventMakeCommand::class,
+        'command.exception.make' => \Illuminate\Foundation\Console\ExceptionMakeCommand::class,
         'command.factory.make' => \Illuminate\Database\Console\Factories\FactoryMakeCommand::class,
         'command.job.make' => \Illuminate\Foundation\Console\JobMakeCommand::class,
         'command.listener.make' => \Illuminate\Foundation\Console\ListenerMakeCommand::class,
@@ -219,6 +220,7 @@ namespace PHPSTORM_META {
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
         'command.event.generate' => \Illuminate\Foundation\Console\EventGenerateCommand::class,
         'command.event.make' => \Illuminate\Foundation\Console\EventMakeCommand::class,
+        'command.exception.make' => \Illuminate\Foundation\Console\ExceptionMakeCommand::class,
         'command.factory.make' => \Illuminate\Database\Console\Factories\FactoryMakeCommand::class,
         'command.job.make' => \Illuminate\Foundation\Console\JobMakeCommand::class,
         'command.listener.make' => \Illuminate\Foundation\Console\ListenerMakeCommand::class,
@@ -347,6 +349,7 @@ namespace PHPSTORM_META {
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
         'command.event.generate' => \Illuminate\Foundation\Console\EventGenerateCommand::class,
         'command.event.make' => \Illuminate\Foundation\Console\EventMakeCommand::class,
+        'command.exception.make' => \Illuminate\Foundation\Console\ExceptionMakeCommand::class,
         'command.factory.make' => \Illuminate\Database\Console\Factories\FactoryMakeCommand::class,
         'command.job.make' => \Illuminate\Foundation\Console\JobMakeCommand::class,
         'command.listener.make' => \Illuminate\Foundation\Console\ListenerMakeCommand::class,
@@ -475,6 +478,7 @@ namespace PHPSTORM_META {
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
         'command.event.generate' => \Illuminate\Foundation\Console\EventGenerateCommand::class,
         'command.event.make' => \Illuminate\Foundation\Console\EventMakeCommand::class,
+        'command.exception.make' => \Illuminate\Foundation\Console\ExceptionMakeCommand::class,
         'command.factory.make' => \Illuminate\Database\Console\Factories\FactoryMakeCommand::class,
         'command.job.make' => \Illuminate\Foundation\Console\JobMakeCommand::class,
         'command.listener.make' => \Illuminate\Foundation\Console\ListenerMakeCommand::class,
@@ -603,6 +607,7 @@ namespace PHPSTORM_META {
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
         'command.event.generate' => \Illuminate\Foundation\Console\EventGenerateCommand::class,
         'command.event.make' => \Illuminate\Foundation\Console\EventMakeCommand::class,
+        'command.exception.make' => \Illuminate\Foundation\Console\ExceptionMakeCommand::class,
         'command.factory.make' => \Illuminate\Database\Console\Factories\FactoryMakeCommand::class,
         'command.job.make' => \Illuminate\Foundation\Console\JobMakeCommand::class,
         'command.listener.make' => \Illuminate\Foundation\Console\ListenerMakeCommand::class,
@@ -731,6 +736,7 @@ namespace PHPSTORM_META {
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
         'command.event.generate' => \Illuminate\Foundation\Console\EventGenerateCommand::class,
         'command.event.make' => \Illuminate\Foundation\Console\EventMakeCommand::class,
+        'command.exception.make' => \Illuminate\Foundation\Console\ExceptionMakeCommand::class,
         'command.factory.make' => \Illuminate\Database\Console\Factories\FactoryMakeCommand::class,
         'command.job.make' => \Illuminate\Foundation\Console\JobMakeCommand::class,
         'command.listener.make' => \Illuminate\Foundation\Console\ListenerMakeCommand::class,
@@ -859,6 +865,7 @@ namespace PHPSTORM_META {
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
         'command.event.generate' => \Illuminate\Foundation\Console\EventGenerateCommand::class,
         'command.event.make' => \Illuminate\Foundation\Console\EventMakeCommand::class,
+        'command.exception.make' => \Illuminate\Foundation\Console\ExceptionMakeCommand::class,
         'command.factory.make' => \Illuminate\Database\Console\Factories\FactoryMakeCommand::class,
         'command.job.make' => \Illuminate\Foundation\Console\JobMakeCommand::class,
         'command.listener.make' => \Illuminate\Foundation\Console\ListenerMakeCommand::class,
