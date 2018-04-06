@@ -66,5 +66,6 @@ return [
         MOLiBot\Commands\HydraDVRRemoteControlCommand::class,
         MOLiBot\Commands\MagneticLockStatusCommand::class,
         MOLiBot\Commands\EnableNCDRCommand::class,
+        MOLiBot\Commands\StopWorkingInfoCommand::class,
     ],
 ];
