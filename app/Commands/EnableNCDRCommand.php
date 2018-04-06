@@ -20,12 +20,12 @@ class EnableNCDRCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = "ncdrstart";
+    protected $name = 'ncdrstart';
 
     /**
      * @var string Command Description
      */
-    protected $description = "重新啟動 NCDR 資料推送";
+    protected $description = '重新啟動 NCDR 資料推送';
 
     /**
      * @inheritdoc

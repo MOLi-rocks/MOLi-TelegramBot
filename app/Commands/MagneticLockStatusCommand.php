@@ -15,12 +15,12 @@ class MagneticLockStatusCommand extends Command
    /**
      * @var string Command Name
      */
-    protected $name = "MagneticLockStatus";
+    protected $name = 'MagneticLockStatus';
 
     /**
      * @var string Command Description
      */
-    protected $description = "MOLi 磁力鎖狀態（測試中）";
+    protected $description = 'MOLi 磁力鎖狀態（測試中）';
 
     /**
      * @inheritdoc

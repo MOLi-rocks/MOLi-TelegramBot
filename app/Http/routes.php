@@ -13,6 +13,8 @@
 
 Route::get('/', 'MOLiBotController@getIndex');
 
+Route::any('/connect-test', 'MOLiBotController@connectTester');
+
 Route::get('/ncnu-rss', 'MOLiBotController@getNCNU_RSS');
 
 Route::get('/ncnu-staff-contact/{keyword?}', 'MOLiBotController@getStaffContact');

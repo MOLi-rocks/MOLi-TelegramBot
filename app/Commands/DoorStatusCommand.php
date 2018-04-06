@@ -15,12 +15,12 @@ class DoorStatusCommand extends Command
    /**
      * @var string Command Name
      */
-    protected $name = "status";
+    protected $name = 'status';
 
     /**
      * @var string Command Description
      */
-    protected $description = "現在 MOLi 是開的還是關的呢？";
+    protected $description = '現在 MOLi 是開的還是關的呢？';
 
     /**
      * @inheritdoc

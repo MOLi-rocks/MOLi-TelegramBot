@@ -37,6 +37,19 @@ class MOLiBotController extends Controller
         return redirect('https://moli.rocks');
     }
 
+    public function connectTester(Request $request)
+    {
+        // what format to return (json or XML, default to json)
+        $format = $request->input('format', 'json');
+
+        if ($format == 'xml') {
+            return response('<?xml version="1.0" encoding="UTF-8" ?><Data><Status>true</Status></Data>')
+                ->header('Content-Type', 'text/xml');
+        } else {
+            return response()->json(['Status' => true]);
+        }
+    }
+
     public function getNCNU_RSS()
     {
         $ch = curl_init();

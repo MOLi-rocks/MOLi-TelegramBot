@@ -12,12 +12,12 @@ class WhoamiCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = "whoami";
+    protected $name = 'whoami';
 
     /**
      * @var string Command Description
      */
-    protected $description = "取得 Telegram 使用者詳細資料";
+    protected $description = '取得 Telegram 使用者詳細資料';
 
     /**
      * @inheritdoc

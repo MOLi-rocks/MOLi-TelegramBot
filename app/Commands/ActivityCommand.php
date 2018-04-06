@@ -14,12 +14,12 @@ class ActivityCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = "activity";
+    protected $name = 'activity';
 
     /**
      * @var string Command Description
      */
-    protected $description = "顯示 MOLi 未來公開活動";
+    protected $description = '顯示 MOLi 未來公開活動';
 
     /**
      * @inheritdoc

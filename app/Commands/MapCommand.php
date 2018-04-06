@@ -10,12 +10,12 @@ class MapCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = "map";
+    protected $name = 'map';
 
     /**
      * @var string Command Description
      */
-    protected $description = "用地圖告訴你 MOLi 在哪裡";
+    protected $description = '用地圖告訴你 MOLi 在哪裡';
 
     /**
      * @inheritdoc
