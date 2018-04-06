@@ -57,7 +57,7 @@ class StopWorkingInfoCommand extends Command
             $output_str = '';
 
             foreach ($info_data->{'result'} as $result) {
-                $output_str .= trim($result['description']) . PHP_EOL;
+                $output_str .= trim($result->{'description'}) . PHP_EOL;
             }
 
             $this->replyWithMessage(['text' => $output_str]);
