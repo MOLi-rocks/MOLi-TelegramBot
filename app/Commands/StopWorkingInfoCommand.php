@@ -51,12 +51,12 @@ class StopWorkingInfoCommand extends Command
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        if ($info_data['success'] === false || count($info_data['result']) < 1) {
+        if ($info_data->{'success'} === false || count($info_data->{'result'}) < 1) {
             $this->replyWithMessage(['text' => '暫無停班停課資訊']);
         } else {
             $output_str = '';
 
-            foreach ($info_data['result'] as $result) {
+            foreach ($info_data->{'result'} as $result) {
                 $output_str .= trim($result['description']) . PHP_EOL;
             }
 
