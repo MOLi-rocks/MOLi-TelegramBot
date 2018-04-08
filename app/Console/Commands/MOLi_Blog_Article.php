@@ -4,6 +4,8 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use \GuzzleHttp\Client as GuzzleHttpClient;
+use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use Telegram;
 use MOLiBot\Published_MOLi_Blog_Article;
 
@@ -49,59 +51,50 @@ class MOLi_Blog_Article extends Command
      */
     public function handle()
     {
-        $MOLi_blog_api = env('MOLi_BLOG_URL') . '/ghost/api/v0.1/posts/?client_id=' . env('MOLi_BLOG_CLIENT_ID') . '&client_secret=' . env('MOLi_BLOG_CLIENT_SECRET') . '&include=author,tags&limit=all';
-
-        if ( !filter_var($MOLi_blog_api, FILTER_VALIDATE_URL) ) {
-            $this->error('MOLi_BLOG_API Data is not valid!');
+        if ( !filter_var(env('MOLi_BLOG_URL'), FILTER_VALIDATE_URL) ) {
+            $this->error('MOLi_BLOG_API URL is not valid!');
             return;
         }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $MOLi_blog_api);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
-        $fileContents = curl_exec($ch);
-
-        if (curl_errno($ch) == 28) {
-            //Log CURL Timeout message
-        }
-
-        curl_close($ch);
-
-        if (!empty($fileContents)) {
-            $json = json_decode($fileContents);
-
-            if (!empty($json->posts)) {
-                $posts = $json->posts;
-            } else {
-                $this->error('No post!');
-                return;
-            }
-        } else {
-            $this->error('Can\'t Get Data!');
-            return;
-        }
+        $limit = 1;
 
         if ($this->option('dry-run')) {
             $headers = ['id', 'uuid', '文章標題'];
 
             $datas = [];
+        }
 
-            foreach ($posts as $post) {
-                if ( !$this->Published_MOLi_Blog_ArticleModel->where('id', $post->id)->exists() ) {
+        while(true) {
+            $fileContents = $this->getData($limit);
+
+            if (!empty($fileContents)) {
+                $json = json_decode($fileContents);
+
+                if (!empty($json->posts)) {
+                    $posts = $json->posts;
+                } else {
+                    $this->error('No post!');
+                    break;
+                }
+            } else {
+                $this->error('Can\'t Get Data!');
+                break;
+            }
+
+            $use_post = $limit - 1; // 拿第幾篇 post 來比對
+
+            $post = $posts[$use_post];
+
+            if ($this->Published_MOLi_Blog_ArticleModel->where('id', $post->id)->exists()) {
+                break;
+            } else {
+                if ($this->option('dry-run')) {
                     $datas[] = [
                         'id' => $post->id,
                         'uuid' => $post->uuid,
                         '文章標題' => $post->title
                     ];
-                }
-            }
-
-            $this->table($headers, $datas);
-        } else {
-            foreach ($posts as $post) {
-                if ( !$this->Published_MOLi_Blog_ArticleModel->where('id', $post->id)->exists() ) {
+                } else {
                     $tags = '';
 
                     foreach ($post->tags as $tag) {
@@ -117,9 +110,9 @@ class MOLi_Blog_Article extends Command
                     Telegram::sendMessage([
                         'chat_id' => $chat_id,
                         'text' => 'MOLi Blog 新文快報：' . PHP_EOL .
-                                  $post->title . ' By ' . $post->author->name . PHP_EOL .
-                                  env('MOLi_BLOG_URL') . $post->url . PHP_EOL . PHP_EOL .
-                                  $tags
+                            $post->title . ' By ' . $post->author->name . PHP_EOL .
+                            env('MOLi_BLOG_URL') . $post->url . PHP_EOL . PHP_EOL .
+                            $tags
                     ]);
 
                     $this->Published_MOLi_Blog_ArticleModel->create([
@@ -127,12 +120,41 @@ class MOLi_Blog_Article extends Command
                         'uuid' => $post->uuid,
                         'title' => $post->title
                     ]);
-
-                    sleep(5);
                 }
-            }
 
+                sleep(5);
+
+                $limit++;
+            }
+        }
+
+        if ($this->option('dry-run')) {
+            $this->table($headers, $datas);
+        } else {
             $this->info('Mission Complete!');
         }
+
+        return;
+    }
+
+    private function getData($limit = 1)
+    {
+        $MOLi_blog_api = env('MOLi_BLOG_URL') . '/ghost/api/v0.1/posts/?client_id=' . env('MOLi_BLOG_CLIENT_ID') . '&client_secret=' . env('MOLi_BLOG_CLIENT_SECRET') . '&include=author,tags&limit=' . $limit;
+
+        $client = new GuzzleHttpClient();
+
+        try {
+            $fileContents = $client->request('GET', $MOLi_blog_api, [
+                'headers' => [
+                    'User-Agent' => 'MOLi Bot',
+                    'Accept' => 'application/json'
+                ],
+                'timeout' => 10
+            ]);
+        } catch (GuzzleHttpTransferException $e) {
+            $fileContents = '';
+        }
+
+        return $fileContents;
     }
 }
