@@ -36,7 +36,7 @@ class ActivityCommand extends Command
                 ],
                 'timeout' => 10
             ]);
-        } catch (\GuzzleHttp\Exception\TransferException $e) {
+        } catch (GuzzleHttpTransferException $e) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
             $this->replyWithMessage(['text' => '網路連線異常 QAQ']);
             return response('OK', 200); // 強制結束 command

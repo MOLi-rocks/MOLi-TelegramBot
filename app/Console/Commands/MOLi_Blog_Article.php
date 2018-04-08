@@ -68,8 +68,8 @@ class MOLi_Blog_Article extends Command
             $fileContents = $this->getData($limit);
 
             if (!empty($fileContents)) {
-                if (!empty($fileContents['posts'])) {
-                    $posts = $fileContents['posts'];
+                if (!empty(json_decode($fileContents->getBody())->{'posts'})) {
+                    $posts = json_decode($fileContents->getBody())->{'posts'};
                 } else {
                     $this->error('No post!');
                     break;
