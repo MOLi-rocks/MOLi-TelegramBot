@@ -49,7 +49,7 @@ class MOLi_Blog_Article extends Command
      */
     public function handle()
     {
-        $MOLi_blog_api = env('MOLi_BLOG_URL') . '/' . 'ghost/api/v0.1/posts/?client_id=' . env('MOLi_BLOG_CLIENT_ID') . '&client_secret=' . env('MOLi_BLOG_CLIENT_SECRET') . '&include=author,tags&limit=all';
+        $MOLi_blog_api = env('MOLi_BLOG_URL') . '/ghost/api/v0.1/posts/?client_id=' . env('MOLi_BLOG_CLIENT_ID') . '&client_secret=' . env('MOLi_BLOG_CLIENT_SECRET') . '&include=author,tags&limit=all';
 
         if ( !filter_var($MOLi_blog_api, FILTER_VALIDATE_URL) ) {
             $this->error('MOLi_BLOG_API Data is not valid!');
@@ -71,7 +71,13 @@ class MOLi_Blog_Article extends Command
 
         if (!empty($fileContents)) {
             $json = json_decode($fileContents);
-            $posts = $json->posts;
+
+            if (!empty($json->posts)) {
+                $posts = $json->posts;
+            } else {
+                $this->error('No post!');
+                return;
+            }
         } else {
             $this->error('Can\'t Get Data!');
             return;
