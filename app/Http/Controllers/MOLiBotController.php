@@ -10,6 +10,9 @@ use MOLiBot\Http\Controllers\Controller;
 use SoapBox\Formatter\Formatter;
 use Telegram;
 
+use \GuzzleHttp\Client as GuzzleHttpClient;
+use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
+
 use Log;
 
 class MOLiBotController extends Controller
@@ -52,12 +55,21 @@ class MOLiBotController extends Controller
 
     public function getNCNU_RSS()
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
-        $fileContents = curl_exec($ch);
-        curl_close($ch);
+        $client = new GuzzleHttpClient();
+
+        try {
+            $response = $client->request('GET', 'http://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx', [
+                'headers' => [
+                    'User-Agent' => 'MOLi Bot',
+                    'cache-control' => 'no-cache'
+                ],
+                'timeout' => 10
+            ]);
+        } catch (GuzzleHttpTransferException $e) {
+            return $e->getCode();
+        }
+
+        $fileContents = $response->getBody()->getContents();
 
         $formatter = Formatter::make($fileContents, Formatter::XML);
         $json = $formatter->toArray();
@@ -151,12 +163,21 @@ class MOLiBotController extends Controller
 
     public function getStaffContact($keyword = NULL)
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://ccweb1.ncnu.edu.tw/telquery/csvstaff2query.asp?name=' . urlencode($keyword) . '?1482238246');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
-        $fileContents = curl_exec($ch);
-        curl_close($ch);
+        $client = new GuzzleHttpClient();
+
+        try {
+            $response = $client->request('GET', 'http://ccweb1.ncnu.edu.tw/telquery/csvstaff2query.asp?name=' . urlencode($keyword) . '?1482238246', [
+                'headers' => [
+                    'User-Agent' => 'MOLi Bot',
+                    'cache-control' => 'no-cache'
+                ],
+                'timeout' => 10
+            ]);
+        } catch (GuzzleHttpTransferException $e) {
+            return $e->getCode();
+        }
+
+        $fileContents = $response->getBody()->getContents();
 
         $array = array();
 
