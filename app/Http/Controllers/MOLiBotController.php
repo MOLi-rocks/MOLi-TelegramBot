@@ -12,6 +12,7 @@ use Telegram;
 
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
+use \GuzzleHttp\Psr7;
 
 use Log;
 
@@ -72,7 +73,9 @@ class MOLiBotController extends Controller
         $fileContents = $response->getBody()->getContents();
 
         $formatter = Formatter::make($fileContents, Formatter::XML);
+
         $json = $formatter->toArray();
+
         return $json;
     }
 
@@ -200,41 +203,21 @@ class MOLiBotController extends Controller
      */
     public function getFuelPrice($cmd_mode = false)
     {
-        // Set unlimit excute time because of slow response from server
-        ini_set('max_execution_time', 0);
+        $client = new GuzzleHttpClient();
 
-        $retry_counter = 0;
-
-        do {
-            $input_xml = '<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope"><soap12:Body><getCPCMainProdListPrice xmlns="http://tmtd.cpc.com.tw/" /></soap12:Body></soap12:Envelope>';
-
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx');
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $input_xml);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Accept: text/xml',
-                'cache-control: no-cache',
-                'user-agent: MOLi Bot',
-                'Content-Type: application/soap+xml;charset=utf-8',
-                'Content-length: '.strlen($input_xml),
+        try {
+            $response = $client->request('GET', 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx/getCPCMainProdListPrice', [
+                'headers' => [
+                    'User-Agent' => 'MOLi Bot',
+                    'cache-control' => 'no-cache'
+                ],
+                'timeout' => 10
             ]);
-
-            $fileContents = curl_exec($ch);
-
-            curl_close($ch);
-
-            if (!$cmd_mode) {
-                $retry_counter++;
-            }
-        } while (empty($fileContents) && $retry_counter <= 5);
-
-        if ($retry_counter >= 5) {
-            return response()->json(['messages' => 'request take too long!'], 408);
+        } catch (GuzzleHttpTransferException $e) {
+            return $e->getCode();
         }
+
+        $fileContents = $response->getBody()->getContents();
 
         // SOAP response to regular XML
         $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
@@ -243,7 +226,7 @@ class MOLiBotController extends Controller
 
         $json = $formatter->toArray();
 
-        return $json['soapBody']['getCPCMainProdListPriceResponse']['getCPCMainProdListPriceResult']['diffgrdiffgram']['NewDataSet']['tbTable'];
+        return $json['diffgrdiffgram']['NewDataSet']['tbTable'];
     }
 
     public function getHistoryFuelPrice($cmd_mode = false)
@@ -256,8 +239,8 @@ class MOLiBotController extends Controller
             '2' => '95無鉛汽油',
             '3' => '98無鉛汽油',
             '4' => '超級/高級柴油',
-            '5' => '低硫燃料油(0.5%)',
-            '6' => '甲種低硫燃料油(0.5)'
+            // '5' => '低硫燃料油(0.5%)',
+            // '6' => '甲種低硫燃料油(0.5)'
         );
 
         $result = array();
@@ -266,33 +249,21 @@ class MOLiBotController extends Controller
             $retry_counter = 0;
 
             do {
-                $input_xml = '<?xml version="1.0" encoding="utf-8"?>
-                <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
-                    <soap12:Body>
-                        <getCPCMainProdListPrice_Historical xmlns="http://tmtd.cpc.com.tw/">
-                            <prodid>'. (string)$key .'</prodid>
-                        </getCPCMainProdListPrice_Historical>
-                    </soap12:Body>
-                </soap12:Envelope>';
+                $client = new GuzzleHttpClient();
 
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx');
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $input_xml);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                    'Accept: text/xml',
-                    'cache-control: no-cache',
-                    'user-agent: MOLi Bot',
-                    'Content-Type: application/soap+xml;charset=utf-8',
-                    'Content-length: ' . strlen($input_xml),
-                ]);
+                try {
+                    $response = $client->request('GET', 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx//getCPCMainProdListPrice_Historical?prodid=' . $key, [
+                        'headers' => [
+                            'User-Agent' => 'MOLi Bot',
+                            'cache-control' => 'no-cache'
+                        ],
+                        'timeout' => 10
+                    ]);
+                } catch (GuzzleHttpTransferException $e) {
+                    return $e->getCode();
+                }
 
-                $fileContents = curl_exec($ch);
-
-                curl_close($ch);
+                $fileContents = $response->getBody()->getContents();
 
                 $retry_counter++;
             } while (empty($fileContents) && $retry_counter <= 5);
@@ -308,7 +279,7 @@ class MOLiBotController extends Controller
 
             $json = $formatter->toArray();
 
-            $result += array($type => $json['soapBody']['getCPCMainProdListPrice_HistoricalResponse']['getCPCMainProdListPrice_HistoricalResult']['diffgrdiffgram']['NewDataSet']['tbTable']);
+            $result += array($type => $json['diffgrdiffgram']['NewDataSet']['tbTable']);
         }
 
         return response()->json($result);
