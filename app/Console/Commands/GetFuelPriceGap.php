@@ -80,9 +80,9 @@ class GetFuelPriceGap extends Command
                 $pricegap = floatval($pricegap_cal);
 
                 if ($pricegap > 0) {
-                    $result += array($data['產品名稱'] => ' 將 調漲 ' . $pricegap . $data['計價單位'] . '(' . (float)$lasttimeprice . '->' . $data['參考牌價'] . ')');
+                    $result += array($data['產品名稱'] => ' 將 調漲 ' . $pricegap . ' ' . $data['計價單位'] . ' (' . (float)$lasttimeprice . ' &rarr; ' . $data['參考牌價'] . ')');
                 } else if ($pricegap < 0) {
-                    $result += array($data['產品名稱'] => ' 將 調降 ' . abs($pricegap) . $data['計價單位'] . '(' . (float)$lasttimeprice . '->' . $data['參考牌價'] . ')');
+                    $result += array($data['產品名稱'] => ' 將 調降 ' . abs($pricegap) . ' ' . $data['計價單位'] . ' (' . (float)$lasttimeprice . ' &rarr; ' . $data['參考牌價'] . ')');
                 } else {
                     $result += array($data['產品名稱'] => ' 將 不調整 (' . $data['參考牌價'] . ')');
                 }
@@ -99,6 +99,7 @@ class GetFuelPriceGap extends Command
 
         Telegram::sendMessage([
             'chat_id' => $chat_id,
+            'parse_mode' => 'HTML',
             'text' => '中油已公告新油價，' . $tomorrow . ' 起：' . PHP_EOL . PHP_EOL .
                 '98無鉛汽油' . $result['98無鉛汽油'] . PHP_EOL . PHP_EOL .
                 '95無鉛汽油' . $result['95無鉛汽油'] . PHP_EOL . PHP_EOL .
