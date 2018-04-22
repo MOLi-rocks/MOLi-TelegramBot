@@ -80,9 +80,9 @@ class GetFuelPriceGap extends Command
                 $pricegap = floatval($pricegap_cal);
 
                 if ($pricegap > 0) {
-                    $result += array($data['產品名稱'] => ' 將 調漲 ' . $pricegap . ' ' . $data['計價單位'] . ' (' . (float)$lasttimeprice . ' &rarr; ' . $data['參考牌價'] . ')');
+                    $result += array($data['產品名稱'] => ' 將 調漲 ' . $pricegap . ' ' . $data['計價單位'] . ' (' . (float)$lasttimeprice . ' &#8594; ' . $data['參考牌價'] . ')');
                 } else if ($pricegap < 0) {
-                    $result += array($data['產品名稱'] => ' 將 調降 ' . abs($pricegap) . ' ' . $data['計價單位'] . ' (' . (float)$lasttimeprice . ' &rarr; ' . $data['參考牌價'] . ')');
+                    $result += array($data['產品名稱'] => ' 將 調降 ' . abs($pricegap) . ' ' . $data['計價單位'] . ' (' . (float)$lasttimeprice . ' &#8594; ' . $data['參考牌價'] . ')');
                 } else {
                     $result += array($data['產品名稱'] => ' 將 不調整 (' . $data['參考牌價'] . ')');
                 }
