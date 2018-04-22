@@ -4,6 +4,9 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use \GuzzleHttp\Client as GuzzleHttpClient;
+use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
+
 use Telegram;
 use MOLiBot\Published_KKTIX;
 
@@ -49,17 +52,23 @@ class MOLiDay_Events extends Command
      */
     public function handle()
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://moli.kktix.cc/events.json');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ["cache-control: no-cache", "user-agent: MOLi Bot"]);
-        $fileContents = curl_exec($ch);
+        $client = new GuzzleHttpClient();
 
-        if (curl_errno($ch) == 28) {
-            //Log CURL Timeout message
+        try {
+            $response = $client->request('GET', 'https://moli.kktix.cc/events.json', [
+                'headers' => [
+                    'User-Agent' => 'MOLi Bot',
+                    'Accept' => 'application/json',
+                    'cache-control' => 'no-cache'
+                ],
+                'timeout' => 10
+            ]);
+        } catch (GuzzleHttpTransferException $e) {
+            $this->error('Can\'t Get Data!');
+            return;
         }
-        curl_close($ch);
+
+        $fileContents = $response->getBody()->getContents();
 
         if (!empty($fileContents)) {
             $json = json_decode($fileContents);
