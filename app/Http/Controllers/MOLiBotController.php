@@ -4,15 +4,13 @@ namespace MOLiBot\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use MOLiBot\Http\Requests;
-use MOLiBot\Http\Controllers\Controller;
+use Validator;
 
 use SoapBox\Formatter\Formatter;
 use Telegram;
 
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
-use \GuzzleHttp\Psr7;
 
 use Log;
 
@@ -201,7 +199,7 @@ class MOLiBotController extends Controller
     /**
      * @return mixed
      */
-    public function getFuelPrice($cmd_mode = false)
+    public function getFuelPrice()
     {
         $client = new GuzzleHttpClient();
 
@@ -229,59 +227,51 @@ class MOLiBotController extends Controller
         return $json['diffgrdiffgram']['NewDataSet']['tbTable'];
     }
 
-    public function getHistoryFuelPrice($cmd_mode = false)
+    public function getHistoryFuelPrice(Request $request)
     {
-        // Set unlimit excute time because of slow response from server
-        ini_set('max_execution_time', 0);
-
-        $types = array(
+        /*
+        $prodid = array(
             '1' => '92無鉛汽油',
             '2' => '95無鉛汽油',
             '3' => '98無鉛汽油',
             '4' => '超級/高級柴油',
-            // '5' => '低硫燃料油(0.5%)',
-            // '6' => '甲種低硫燃料油(0.5)'
+            '5' => '低硫燃料油(0.5%)',
+            '6' => '甲種低硫燃料油(0.5)'
         );
+        */
 
-        $result = array();
+        $validator = Validator::make($request->all(), [
+            'prodid' => 'required|integer|min:1|max:6',
+        ]);
 
-        foreach ($types as $key => $type) {
-            $retry_counter = 0;
-
-            do {
-                $client = new GuzzleHttpClient();
-
-                try {
-                    $response = $client->request('GET', 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx//getCPCMainProdListPrice_Historical?prodid=' . $key, [
-                        'headers' => [
-                            'User-Agent' => 'MOLi Bot',
-                            'cache-control' => 'no-cache'
-                        ],
-                        'timeout' => 10
-                    ]);
-                } catch (GuzzleHttpTransferException $e) {
-                    return $e->getCode();
-                }
-
-                $fileContents = $response->getBody()->getContents();
-
-                $retry_counter++;
-            } while (empty($fileContents) && $retry_counter <= 5);
-
-            if ($retry_counter >= 5) {
-                return response()->json(['messages' => 'request take too long!'], 408);
-            }
-
-            // SOAP response to regular XML
-            $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
-
-            $formatter = Formatter::make($xml, Formatter::XML);
-
-            $json = $formatter->toArray();
-
-            $result += array($type => $json['diffgrdiffgram']['NewDataSet']['tbTable']);
+        if ($validator->fails()) {
+            $messages = $validator->errors()->all();
+            return response()->json(compact('messages'), 400);
         }
 
-        return response()->json($result);
+        $client = new GuzzleHttpClient();
+
+        try {
+            $response = $client->request('GET', 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx/getCPCMainProdListPrice_Historical?prodid=' . $request->input('prodid'), [
+                'headers' => [
+                    'User-Agent' => 'MOLi Bot',
+                    'cache-control' => 'no-cache'
+                ],
+                'timeout' => 10
+            ]);
+        } catch (GuzzleHttpTransferException $e) {
+            return $e->getCode();
+        }
+
+        $fileContents = $response->getBody()->getContents();
+
+        // SOAP response to regular XML
+        $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
+
+        $formatter = Formatter::make($xml, Formatter::XML);
+
+        $json = $formatter->toArray();
+
+        return $json['diffgrdiffgram']['NewDataSet']['tbTable'];
     }
 }
