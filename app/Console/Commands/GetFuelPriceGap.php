@@ -50,13 +50,13 @@ class GetFuelPriceGap extends Command
      */
     public function handle()
     {
-        $datas = app('MOLiBot\Http\Controllers\MOLiBotController')->getFuelPrice(true);
+        $datas = app('MOLiBot\Http\Controllers\MOLiBotController')->getFuelPrice();
 
         $result = array();
 
         foreach ($datas as $data) {
             if ( $this->FuelPriceModel->where('name', '=', $data['產品名稱'])->where('start_at', '=', $data['牌價生效時間'])->exists() ) {
-                $result += array($data['產品名稱'] => '不調整 (' . $data['參考牌價'] . ')');
+                $result += array($data['產品名稱'] => ' 將 不調整 (' . $data['參考牌價'] . ')');
             } else {
                 $lasttime = $this->FuelPriceModel->where('name', '=', $data['產品名稱'])
                     ->orderBy('start_at', 'desc')
