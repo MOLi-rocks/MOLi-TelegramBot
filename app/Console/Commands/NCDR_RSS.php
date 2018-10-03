@@ -72,7 +72,7 @@ class NCDR_RSS extends Command
                 if ($this->option('init')) {
                     $chat_id = env('TEST_CHANNEL');
                 } else {
-                    $chat_id = env('NEWS_CHANNEL');
+                    $chat_id = env('WEATHER_CHANNEL');
                 }
 
                 if ($this->NCDR_to_BOTChannel_list->contains($category)) {
