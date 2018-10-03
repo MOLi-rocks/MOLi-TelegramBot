@@ -5,6 +5,7 @@ namespace MOLiBot\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use Psy\Command\Command;
 use Telegram;
 
 class Kernel extends ConsoleKernel
@@ -23,6 +24,7 @@ class Kernel extends ConsoleKernel
         Commands\MOLiDay_Events::class,
         Commands\GetFuelPriceGap::class,
         Commands\MOLi_Blog_Article::class,
+        Commands\NCDR_RSS::class
     ];
 
     /**
@@ -47,5 +49,8 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('fuelprice:checkgap')
                  ->weekly()->sundays()->at('12:05')->withoutOverlapping();
+
+        $schedule->command('ncdr:check')
+            ->everyTenMinutes()->withoutOverlapping();
     }
 }

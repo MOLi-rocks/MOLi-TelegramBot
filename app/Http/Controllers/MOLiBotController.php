@@ -57,7 +57,32 @@ class MOLiBotController extends Controller
         $client = new GuzzleHttpClient();
 
         try {
-            $response = $client->request('GET', 'http://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx', [
+            $response = $client->request('GET', 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx', [
+                'headers' => [
+                    'User-Agent' => 'MOLi Bot',
+                    'cache-control' => 'no-cache'
+                ],
+                'timeout' => 10
+            ]);
+        } catch (GuzzleHttpTransferException $e) {
+            return $e->getCode();
+        }
+
+        $fileContents = $response->getBody()->getContents();
+
+        $formatter = Formatter::make($fileContents, Formatter::XML);
+
+        $json = $formatter->toArray();
+
+        return $json;
+    }
+
+    public function getNCDR_RSS()
+    {
+        $client = new GuzzleHttpClient();
+
+        try {
+            $response = $client->request('GET', 'https://alerts.ncdr.nat.gov.tw/RssAtomFeeds.ashx', [
                 'headers' => [
                     'User-Agent' => 'MOLi Bot',
                     'cache-control' => 'no-cache'
