@@ -30,20 +30,21 @@ class FuckCommand extends Command
         $client = new GuzzleHttpClient();
 
         try {
-            $response = $client->request(
-                'GET',
-                $baseUrl,
-                ['timeout' => 20]
-            );
+            $response = $client->request('GET', $baseUrl, [
+                'headers' => [
+                    'User-Agent' => 'MOLi Bot'
+                ],
+                'timeout' => 20
+            ]);
+
+            $this->replyWithChatAction(['action' => Actions::TYPING]);
+
+            $this->replyWithMessage(['text' => $response->getBody()]);
         } catch (GuzzleHttpTransferException $e) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
             $this->replyWithMessage(['text' => '呵呵！']);
             return response('OK', 200); // 強制結束 command
         }
-
-        $this->replyWithChatAction(['action' => Actions::TYPING]);
-
-        $this->replyWithMessage(['text' => $response->getBody()]);
 
         return response('OK', 200);
     }
