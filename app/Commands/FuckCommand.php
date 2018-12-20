@@ -31,6 +31,7 @@ class FuckCommand extends Command
 
         try {
             $response = $client->request('GET', $baseUrl, [
+                'verify' => false,
                 'headers' => [
                     'User-Agent' => 'MOLi Bot'
                 ],
@@ -38,8 +39,7 @@ class FuckCommand extends Command
             ]);
 
             $this->replyWithChatAction(['action' => Actions::TYPING]);
-
-            $this->replyWithMessage(['text' => $response->getBody()]);
+            $this->replyWithMessage(['text' => $response->getBody()->getContents()]);
         } catch (GuzzleHttpTransferException $e) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
             $this->replyWithMessage(['text' => '呵呵！']);
