@@ -4,10 +4,12 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use MOLiBot\LINE_Notify_User;
 use Telegram;
 use MOLiBot\Published_NCNU_RSS;
 use Fukuball\Jieba\Jieba;
 use Fukuball\Jieba\Finalseg;
+use MOLiBot\Http\Controllers\LINENotifyController;
 
 class NCNU_RSS extends Command
 {
@@ -77,13 +79,26 @@ class NCNU_RSS extends Command
                     $chat_id = env('NEWS_CHANNEL');
                 }
 
+                // send to Telegram Channel
                 Telegram::sendMessage([
                     'chat_id' => $chat_id,
                     'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'] . PHP_EOL . PHP_EOL . $hashtag
                 ]);
 
+                // send to LINE Notify
+                $LNU = LINE_Notify_User::getAllToken(); // LINE Notify Users
+                $msg = PHP_EOL .$item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'];
+                foreach ($LNU as $key => $at){
+                    LINENotifyController::sendMsg($at, $msg);
+                    // LINE 限制一分鐘上限 1000 次，做一些保留次數
+                    if( ($key+1) % 950 == 0) {
+                        sleep(62);
+                    }
+                }
+
                 $this->Published_NCNU_RSSModel->create(['guid' => $item['guid'], 'title' => $item['title']]);
 
+                // 避免太過頻繁發送
                 sleep(5);
             }
         }

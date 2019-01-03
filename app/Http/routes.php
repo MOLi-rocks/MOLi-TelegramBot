@@ -13,6 +13,8 @@
 
 Route::get('/', 'MOLiBotController@getIndex');
 
+Route::get('/line-notify-auth', 'LINENotifyController@auth')->name('line_notify_auth');
+
 Route::any('/connect-test', 'MOLiBotController@connectTester');
 
 Route::get('/ncnu-rss', 'MOLiBotController@getNCNU_RSS');
