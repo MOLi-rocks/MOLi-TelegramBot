@@ -49,7 +49,6 @@
             bottom: 0;
             width: 100%;
             height: 150px; /* Set the fixed height of the footer here */
-            background-color: #f5f5f5;
         }
 
         .button {
@@ -147,14 +146,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-7 padding-top">
+                <div class="col-12 col-md-7 padding-top">
                     <P>服務供應商：MOLi 實驗室</P>
                     <P>地址：南投縣埔里鎮大學路 470 號管理學院 237 室</P>
                 </div>
-                <div class="col-2 center-text">
+                <div class="col-12 col-md-2 center-text">
                     <a href="https://telegram.me/MOLi_rocks" target="_blank"><i class="fab fa-telegram fa-4x"></i></a><br />Telegram
                 </div>
-                <div class="col center-text">
+                <div class="col-12 col-md-3 center-text">
                     <a href="https://www.facebook.com/MOLi.rocks" target="_blank"><i class="fab fa-facebook-square fa-4x"></i></a><br />Facebook
                 </div>
             </div>
