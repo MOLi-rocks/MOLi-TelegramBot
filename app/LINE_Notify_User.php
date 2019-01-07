@@ -15,4 +15,13 @@ class LINE_Notify_User extends Model
     {
         return static::all()->pluck('access_token')->toArray();
     }
+
+    public static function getStats()
+    {
+        return [
+            "total" => static::all()->count(),
+            "USER" => static::all()->where("targetType", "USER")->count(),
+            "GROUP" => static::all()->where("targetType", "GROUP")->count(),
+        ];
+    }
 }

@@ -136,6 +136,18 @@
                     <button class="button button1" onclick="oAuth2();">點此申請暨大最新公告 LINE Notify</button>
                 </div>
             </div>
+            <div class="row padding-top">
+                <div class="col center-text">
+                    <a href="https://notify-bot.line.me/my/">
+                        <button class="btn btn-outline-danger">點此取消連動通知</button>
+                    </a>
+                </div>
+            </div>
+            <div class="row padding-top">
+                <div class="col center-text">
+                    <img width="50%" src="{{ asset('img/LINE_Notify_Sample.jpg') }}">
+                </div>
+            </div>
         @endif
     </div>
     <footer class="footer">
@@ -148,7 +160,7 @@
             <div class="row">
                 <div class="col-12 col-md-7 padding-top">
                     <P>服務供應商：MOLi 實驗室</P>
-                    <P>地址：南投縣埔里鎮大學路 470 號管理學院 237 室</P>
+                    <P>南投縣埔里鎮大學路 470 號管理學院 237 室</P>
                 </div>
                 <div class="col-12 col-md-2 center-text">
                     <a href="https://telegram.me/MOLi_rocks" target="_blank"><i class="fab fa-telegram fa-4x"></i></a><br />Telegram

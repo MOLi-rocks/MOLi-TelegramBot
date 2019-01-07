@@ -76,6 +76,7 @@ class LINENotifyController extends Controller
     {
         $code = $request->query('code', false);
         $state = $request->query('state', false);
+        $stats = $request->exists('stats');
         if ($code) {
             $client = new GuzzleHttpClient();
             // get access_token
@@ -136,6 +137,9 @@ class LINENotifyController extends Controller
 
             return view('LINE/notify_auth', compact('success'));
 
+        } elseif ($stats) {
+            // 回報 JSON 數據
+            return response()->json(LINE_Notify_User::getStats());
         } else {
             // 歡迎畫面
             $client_id = $this->client_id;
