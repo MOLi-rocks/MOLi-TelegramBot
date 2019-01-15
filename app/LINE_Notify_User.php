@@ -3,6 +3,7 @@
 namespace MOLiBot;
 
 use Illuminate\Database\Eloquent\Model;
+use MOLiBot\Http\Controllers\LINENotifyController;
 
 
 class LINE_Notify_User extends Model
@@ -13,7 +14,10 @@ class LINE_Notify_User extends Model
 
     public static function getAllToken()
     {
-        return static::all()->pluck('access_token')->toArray();
+        return static::all()
+            ->where('status', '!=', '401')
+            ->pluck('access_token')
+            ->toArray();
     }
 
     public static function getStats()
@@ -23,5 +27,25 @@ class LINE_Notify_User extends Model
             "USER" => static::all()->where("targetType", "USER")->count(),
             "GROUP" => static::all()->where("targetType", "GROUP")->count(),
         ];
+    }
+
+    public static function updateStatus($token)
+    {
+        $result = LINENotifyController::getStatus($token);
+        if (is_array($result)) {
+            LINE_Notify_User::where('access_token', $token)
+                ->update([
+                    'targetType' => $result['targetType'],
+                    'target' => $result['target'],
+                    'status' => $result['status']
+                ]);
+        } else {
+            LINE_Notify_User::where('access_token', $token)
+                ->update([
+                    'status' => $result
+                ]);
+        }
+
+        return True;
     }
 }

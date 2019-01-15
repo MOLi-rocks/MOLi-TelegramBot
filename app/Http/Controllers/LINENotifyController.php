@@ -51,7 +51,7 @@ class LINENotifyController extends Controller
         return $response;
     }
 
-    public function getStatus($access_token)
+    public static function getStatus($access_token)
     {
         $client = new GuzzleHttpClient();
         try {
@@ -67,7 +67,7 @@ class LINENotifyController extends Controller
 
             return $json;
         } catch (GuzzleHttpTransferException $e) {
-            return $e;
+            return $e->getCode();
         }
 
     }
@@ -124,16 +124,7 @@ class LINENotifyController extends Controller
             }
 
             // get status
-            try {
-                $json = $this->getStatus($access_token);
-                LINE_Notify_User::where('access_token', $access_token)
-                    ->update([
-                        'targetType' => $json['targetType'],
-                        'target' => $json['target']
-                    ]);
-            } catch (\Exception $e) {
-                return $e->getCode();
-            }
+            LINE_Notify_User::updateStatus($access_token);
 
             return view('LINE/notify_auth', compact('success'));
 

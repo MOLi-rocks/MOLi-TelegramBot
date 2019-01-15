@@ -88,8 +88,13 @@ class NCNU_RSS extends Command
                 // send to LINE Notify
                 $LNU = LINE_Notify_User::getAllToken(); // LINE Notify Users
                 $msg = PHP_EOL .$item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'];
-                foreach ($LNU as $key => $at){
-                    LINENotifyController::sendMsg($at, $msg);
+                foreach ($LNU as $key => $token){
+                    try {
+                        LINENotifyController::sendMsg($token, $msg);
+                    } catch (\Exception $e) {
+                        LINE_Notify_User::updateStatus($token);
+                    }
+
                     // LINE 限制一分鐘上限 1000 次，做一些保留次數
                     if( ($key+1) % 950 == 0) {
                         sleep(62);
