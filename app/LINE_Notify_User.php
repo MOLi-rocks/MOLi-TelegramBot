@@ -23,9 +23,19 @@ class LINE_Notify_User extends Model
     public static function getStats()
     {
         return [
-            "total" => static::all()->count(),
-            "USER" => static::all()->where("targetType", "USER")->count(),
-            "GROUP" => static::all()->where("targetType", "GROUP")->count(),
+            "Total" => [
+                "Total" => static::all()->count(),
+                "Active" => static::all()->where("status", "200")->count(),
+                "Inactive" => static::all()->where("status", "401")->count(),
+            ],
+            "USER" => [
+                "Active" => static::all()->where("targetType", "USER")->where("status", "200")->count(),
+                "Inactive" => static::all()->where("targetType", "USER")->where("status", "401")->count(),
+            ],
+            "GROUP" => [
+                "Active" => static::all()->where("targetType", "GROUP")->where("status", "200")->count(),
+                "Inactive" => static::all()->where("targetType", "GROUP")->where("status", "401")->count(),
+            ],
         ];
     }
 
