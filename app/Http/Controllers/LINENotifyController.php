@@ -106,10 +106,10 @@ class LINENotifyController extends Controller
                 $status = $e->getCode();
                 if ($status == 400) {
                     $error = '400 - Unauthorized request';
-                    return view('LINE/notify_auth', compact('error'));
+                    return view('LINE.notify_auth', compact('error'));
                 } else {
                     $error = 'Other - Processed over time or stopped';
-                    return view('LINE/notify_auth', compact('error'));
+                    return view('LINE.notify_auth', compact('error'));
                 }
             }
 
