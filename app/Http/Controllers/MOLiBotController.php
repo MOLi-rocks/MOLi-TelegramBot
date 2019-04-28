@@ -299,4 +299,9 @@ class MOLiBotController extends Controller
 
         return $json['diffgrdiffgram']['NewDataSet']['tbTable'];
     }
+
+    public function anyRoute()
+    {
+        return redirect('https://moli.rocks');
+    }
 }
