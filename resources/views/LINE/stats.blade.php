@@ -107,17 +107,17 @@
         </div>
         <div class="row padding-top">
             <div class="col center-text">
-                <div id="total-piechart" style="width: 900px; height: 500px;"></div>
+                <div id="total-piechart" style="width: 100%;"></div>
             </div>
         </div>
         <div class="row padding-top">
             <div class="col center-text">
-                <div id="user-piechart" style="width: 900px; height: 500px;"></div>
+                <div id="user-piechart" style="width: 100%;"></div>
             </div>
         </div>
         <div class="row padding-top">
             <div class="col center-text">
-                <div id="group-piechart" style="width: 900px; height: 500px;"></div>
+                <div id="group-piechart" style="width: 100%;"></div>
             </div>
         </div>
     </div>
