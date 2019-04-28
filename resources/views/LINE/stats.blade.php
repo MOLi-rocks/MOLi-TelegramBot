@@ -36,15 +36,18 @@
             ]);
 
             var total_options = {
-                title: 'Total Stats'
+                title: 'Total Stats',
+                sliceVisibilityThreshold: 0
             };
 
             var user_options = {
-                title: 'User Stats'
+                title: 'User Stats',
+                sliceVisibilityThreshold: 0
             };
 
             var group_options = {
-                title: 'Group Stats'
+                title: 'Group Stats',
+                sliceVisibilityThreshold: 0
             };
 
             var total_chart = new google.visualization.PieChart(document.getElementById('total-piechart'));
