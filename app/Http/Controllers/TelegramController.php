@@ -174,10 +174,11 @@ class TelegramController extends Controller
                     '- MOLi 天氣廣播台 @MOLi_Weather'  . PHP_EOL .
                     '- MOLi 知識中心 http://hackfoldr.org/MOLi/' . PHP_EOL .
                     '- MOLi 首頁 https://MOLi.Rocks' . PHP_EOL .
-                    '- MOLi Blog https://blog.moli.rocks' . PHP_EOL . 
+                    '- MOLi Blog https://blog.moli.rocks' . PHP_EOL .
                     PHP_EOL .
                     '/* NCNU 相關 */' . PHP_EOL .
                     '- 暨大最新公告 @NCNU_NEWS'  . PHP_EOL .
+                    '- 暨大最新公告 Line 通知申請 https://bot.moli.rocks/line-notify-auth'  . PHP_EOL .
                     PHP_EOL .
                     '/* Telegram 相關 */' . PHP_EOL .
                     '- Telegram 非官方中文站 https://telegram.how'
