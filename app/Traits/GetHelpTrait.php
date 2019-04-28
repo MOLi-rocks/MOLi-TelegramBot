@@ -25,6 +25,7 @@ trait GetHelpTrait
         $text .= sprintf('1. 加入 MOLi 廣播頻道 ( @MOLi_Channel ) 以獲得即時開關門資訊' . PHP_EOL);
         $text .= sprintf('2. 加入"非官方"暨大最新公告 ( @NCNU_NEWS ) 以快速獲得校內最新公告資訊' . PHP_EOL);
         $text .= sprintf('3. MOLi 天氣廣播 ( @MOLi_Weather ) 已開台' . PHP_EOL);
+        $text .= sprintf('4. 暨大最新公告 Line 通知申請 https://bot.moli.rocks/line-notify-auth' . PHP_EOL);
 
         return $text;
     }
