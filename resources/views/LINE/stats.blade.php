@@ -105,9 +105,21 @@
                 Total: {{ $stats['Total']['Total'] }}
             </div>
         </div>
-        <div id="total-piechart" style="width: 900px; height: 500px;"></div>
-        <div id="user-piechart" style="width: 900px; height: 500px;"></div>
-        <div id="group-piechart" style="width: 900px; height: 500px;"></div>
+        <div class="row padding-top">
+            <div class="col center-text">
+                <div id="total-piechart" style="width: 900px; height: 500px;"></div>
+            </div>
+        </div>
+        <div class="row padding-top">
+            <div class="col center-text">
+                <div id="user-piechart" style="width: 900px; height: 500px;"></div>
+            </div>
+        </div>
+        <div class="row padding-top">
+            <div class="col center-text">
+                <div id="group-piechart" style="width: 900px; height: 500px;"></div>
+            </div>
+        </div>
     </div>
     <footer class="footer">
         <div class="container padding-top">
