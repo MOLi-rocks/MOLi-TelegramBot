@@ -8,7 +8,6 @@ use SoapBox\Formatter\Formatter;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 
-
 class LINENotifyController extends Controller
 {
 
@@ -18,9 +17,9 @@ class LINENotifyController extends Controller
 
     public function __construct()
     {
-        $this->redirect_uri = \Config::get('line.line_notify_redirect_uri');
-        $this->client_id = \Config::get('line.line_notify_client_id');
-        $this->client_secret = \Config::get('line.line_notify_client_secret');
+        $this->redirect_uri = config('line.line_notify_redirect_uri');
+        $this->client_id = config('line.line_notify_client_id');
+        $this->client_secret = config('line.line_notify_client_secret');
     }
 
     public static function sendMsg($access_token, $msg)
@@ -75,25 +74,24 @@ class LINENotifyController extends Controller
     public function auth(Request $request)
     {
         $code = $request->query('code', false);
-        $state = $request->query('state', false);
-        $stats = $request->exists('stats');
+
         if ($code) {
             $client = new GuzzleHttpClient();
             // get access_token
             try {
                 $response = $client->request('POST', 'https://notify-bot.line.me/oauth/token', [
-                    'headers' => [
-                        'User-Agent' => 'MOLi Bot',
+                    'headers'     => [
+                        'User-Agent'    => 'MOLi Bot',
                         'cache-control' => 'no-cache'
                     ],
                     'form_params' => [
-                        'grant_type' => 'authorization_code',
-                        'code' => $code,
-                        'redirect_uri' => $this->redirect_uri,
-                        'client_id' => $this->client_id,
+                        'grant_type'    => 'authorization_code',
+                        'code'          => $code,
+                        'redirect_uri'  => $this->redirect_uri,
+                        'client_id'     => $this->client_id,
                         'client_secret' => $this->client_secret
                     ],
-                    'timeout' => 10
+                    'timeout'     => 10
                 ]);
 
                 $response = $response->getBody()->getContents();
@@ -103,7 +101,7 @@ class LINENotifyController extends Controller
                 $success = true;
                 LINE_Notify_User::create([
                     'access_token' => $access_token
-                    ]);
+                ]);
             } catch (GuzzleHttpTransferException $e) {
                 $status = $e->getCode();
                 if ($status == 400) {
@@ -126,16 +124,18 @@ class LINENotifyController extends Controller
             // get status
             LINE_Notify_User::updateStatus($access_token);
 
-            return view('LINE/notify_auth', compact('success'));
-
-        } elseif ($stats) {
-            // 回報 JSON 數據
-            return response()->json(LINE_Notify_User::getStats());
+            return view('LINE.notify_auth', compact('success'));
         } else {
             // 歡迎畫面
             $client_id = $this->client_id;
             $redirect_uri = $this->redirect_uri;
-            return view('LINE/notify_auth', compact('client_id', 'redirect_uri'));
+            return view('LINE.notify_auth', compact('client_id', 'redirect_uri'));
         }
+    }
+
+    public function stats()
+    {
+        $stats = LINE_Notify_User::getStats();
+        return view('LINE.stats', compact('stats'));
     }
 }

@@ -23,18 +23,21 @@ class LINE_Notify_User extends Model
     public static function getStats()
     {
         return [
-            "Total" => [
-                "Total" => static::all()->count(),
-                "Active" => static::all()->where("status", "200")->count(),
-                "Inactive" => static::all()->where("status", "401")->count(),
+            'Total' => [
+                'Total' => static::all()->count(),
+                'Active' => static::all()->where('status', '=', 200)->count(),
+                'Inactive' => static::all()->where('status', '=', 401)->count(),
+                'Others' => static::all()->whereNotIn('status', [200, 401])->count()
             ],
-            "USER" => [
-                "Active" => static::all()->where("targetType", "USER")->where("status", "200")->count(),
-                "Inactive" => static::all()->where("targetType", "USER")->where("status", "401")->count(),
+            'USER' => [
+                'Active' => static::all()->where('targetType', 'USER')->where('status', '=', 200)->count(),
+                'Inactive' => static::all()->where('targetType', 'USER')->where('status', '=', 401)->count(),
+                'Others' => static::all()->where('targetType', 'USER')->whereNotIn('status', [200, 401])->count()
             ],
-            "GROUP" => [
-                "Active" => static::all()->where("targetType", "GROUP")->where("status", "200")->count(),
-                "Inactive" => static::all()->where("targetType", "GROUP")->where("status", "401")->count(),
+            'GROUP' => [
+                'Active' => static::all()->where('targetType', 'GROUP')->where('status', '=', 200)->count(),
+                'Inactive' => static::all()->where('targetType', 'GROUP')->where('status', '=', 401)->count(),
+                'Others' => static::all()->where('targetType', 'GROUP')->whereNotIn('status', [200, 401])->count()
             ],
         ];
     }
