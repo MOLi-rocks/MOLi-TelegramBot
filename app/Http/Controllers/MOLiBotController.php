@@ -11,7 +11,7 @@ use Telegram;
 
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
-
+use MOLiBot\Services\FuelPriceService;
 use Log;
 
 class MOLiBotController extends Controller
@@ -22,13 +22,18 @@ class MOLiBotController extends Controller
     /** @var \Illuminate\Support\Collection NCDR_should_mute */
     private $NCDR_should_mute;
 
+    private $fuelPriceService;
+
     /**
      * MOLiBotController constructor.
+     * @param FuelPriceService $fuelPriceService
      */
-    public function __construct() {
+    public function __construct(FuelPriceService $fuelPriceService) {
         $this->NCDR_to_BOTChannel_list = collect(['地震', '土石流', '河川高水位', '降雨', '停班停課', '道路封閉', '雷雨', '颱風']); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
 
         $this->NCDR_should_mute = collect(['土石流']); // 哪些類別的 NCDR 訊息要靜音
+
+        $this->fuelPriceService = $fuelPriceService;
     }
 
     /**
@@ -226,30 +231,7 @@ class MOLiBotController extends Controller
      */
     public function getFuelPrice()
     {
-        $client = new GuzzleHttpClient();
-
-        try {
-            $response = $client->request('GET', 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx/getCPCMainProdListPrice', [
-                'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'cache-control' => 'no-cache'
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            return $e->getCode();
-        }
-
-        $fileContents = $response->getBody()->getContents();
-
-        // SOAP response to regular XML
-        $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
-
-        $formatter = Formatter::make($xml, Formatter::XML);
-
-        $json = $formatter->toArray();
-
-        return $json['diffgrdiffgram']['NewDataSet']['tbTable'];
+        return $this->fuelPriceService->getLiveFuelPrice();
     }
 
     public function getHistoryFuelPrice(Request $request)

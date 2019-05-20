@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Telegram;
 
 use Carbon\Carbon;
-use MOLiBot\Models\FuelPrice;
+use MOLiBot\Services\FuelPriceService;
 
 class GetFuelPriceGap extends Command
 {
@@ -25,22 +25,22 @@ class GetFuelPriceGap extends Command
     protected $description = '計算每週油價價差（排程用）';
 
     /**
-     * @var FuelPrice
+     * @var fuelPriceService
      */
-    private $FuelPriceModel;
+    private $fuelPriceService;
 
     /**
      * Create a new command instance.
      *
-     * @param FuelPrice $FuelPriceModel
+     * @param FuelPriceService $fuelPriceService
      *
      * @return void
      */
-    public function __construct(FuelPrice $FuelPriceModel)
+    public function __construct(FuelPriceService $fuelPriceService)
     {
         parent::__construct();
 
-        $this->FuelPriceModel = $FuelPriceModel;
+        $this->fuelPriceService = $fuelPriceService;
     }
 
     /**
@@ -50,44 +50,9 @@ class GetFuelPriceGap extends Command
      */
     public function handle()
     {
-        $datas = app('MOLiBot\Http\Controllers\MOLiBotController')->getFuelPrice();
+        $datas = $this->fuelPriceService->getLiveFuelPrice();
 
-        $result = array();
-
-        foreach ($datas as $data) {
-            if ( $this->FuelPriceModel->where('name', '=', $data['產品名稱'])->where('start_at', '=', $data['牌價生效時間'])->exists() ) {
-                $result += array($data['產品名稱'] => ' 將 不調整 (' . $data['參考牌價'] . ')');
-            } else {
-                $lasttime = $this->FuelPriceModel->where('name', '=', $data['產品名稱'])
-                    ->orderBy('start_at', 'desc')
-                    ->first();
-
-                if ($lasttime) {
-                    $lasttimeprice = $lasttime->price;
-                } else {
-                    $lasttimeprice = '0';
-                }
-
-                $this->FuelPriceModel->create([
-                    'name' => $data['產品名稱'],
-                    'unit' => $data['計價單位'],
-                    'price' => $data['參考牌價'],
-                    'start_at' => $data['牌價生效時間']
-                ]);
-
-                $pricegap_cal = bcsub($data['參考牌價'], $lasttimeprice, 1);
-
-                $pricegap = floatval($pricegap_cal);
-
-                if ($pricegap > 0) {
-                    $result += array($data['產品名稱'] => ' 將 調漲 ' . $pricegap . ' ' . $data['計價單位'] . ' (' . (float)$lasttimeprice . ' &#8594; ' . $data['參考牌價'] . ')');
-                } else if ($pricegap < 0) {
-                    $result += array($data['產品名稱'] => ' 將 調降 ' . abs($pricegap) . ' ' . $data['計價單位'] . ' (' . (float)$lasttimeprice . ' &#8594; ' . $data['參考牌價'] . ')');
-                } else {
-                    $result += array($data['產品名稱'] => ' 將 不調整 (' . $data['參考牌價'] . ')');
-                }
-            }
-        }
+        $result = $this->fuelPriceService->calculateGap($datas);
 
         $tomorrow = Carbon::tomorrow();
 
