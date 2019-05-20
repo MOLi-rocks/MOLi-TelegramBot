@@ -4,7 +4,6 @@ namespace MOLiBot\Http\Controllers;
 
 use Illuminate\Http\Request;
 use MOLiBot\Services\LINENotifyService;
-use SoapBox\Formatter\Formatter;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 
@@ -81,8 +80,7 @@ class LINENotifyController extends Controller
                 ]);
 
                 $response = $response->getBody()->getContents();
-                $formatter = Formatter::make($response, Formatter::JSON);
-                $json = $formatter->toArray();
+                $json = json_decode($response)->toArray();
                 $access_token = $json['access_token'];
                 $success = true;
                 $this->lineNotifyService->createToken($access_token);
@@ -99,7 +97,10 @@ class LINENotifyController extends Controller
 
             // send a welcome message
             try {
-                $msg = "\n歡迎使用暨大通知，此服務由 MOLi 實驗室維護\n如有疑問可至粉專或群組詢問\nhttps://moli.rocks";
+                $msg = PHP_EOL .'歡迎使用暨大通知，此服務由 MOLi 實驗室維護' . PHP_EOL .
+                    '如有疑問可至粉專或群組詢問' . PHP_EOL .
+                    'https://moli.rocks';
+
                 $this->sendMsg($access_token, $msg);
             } catch (\Exception $e) {
                 return $e->getCode();

@@ -3,7 +3,6 @@
 namespace MOLiBot\Services;
 
 use MOLiBot\Repositories\LINENotifyUserRepository;
-use SoapBox\Formatter\Formatter;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 
@@ -29,8 +28,7 @@ class LINENotifyService
             ]);
 
             $response = $response->getBody()->getContents();
-            $formatter = Formatter::make($response, Formatter::JSON);
-            $json = $formatter->toArray();
+            $json = json_decode($response)->toArray();
 
             return $json;
         } catch (GuzzleHttpTransferException $e) {

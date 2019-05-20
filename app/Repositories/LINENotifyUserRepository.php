@@ -16,7 +16,7 @@ class LINENotifyUserRepository
     public function getAllToken()
     {
         return LINENotifyUser::where('status', '!=', '401')
-            ->pluck('access_token')->toArray();
+            ->pluck('access_token');
     }
 
     public function getTotalStats()
