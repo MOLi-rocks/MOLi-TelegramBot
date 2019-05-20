@@ -5,9 +5,7 @@ namespace MOLiBot\Console\Commands;
 use Illuminate\Console\Command;
 
 use Telegram;
-use MOLiBot\Models\Published_NCDR_RSS;
-use Fukuball\Jieba\Jieba;
-use Fukuball\Jieba\Finalseg;
+use MOLiBot\Services\NcdrRssService;
 
 class NCDR_RSS extends Command
 {
@@ -26,9 +24,9 @@ class NCDR_RSS extends Command
     protected $description = 'Check New RSS Feed From NCDR';
 
     /**
-     * @var Published_NCDR_RSS
+     * @var ncdrRssService
      */
-    private $Published_NCDR_RSSModel;
+    private $ncdrRssService;
 
     /** @var \Illuminate\Support\Collection NCDR_to_BOTChannel_list */
     private $NCDR_to_BOTChannel_list;
@@ -39,15 +37,15 @@ class NCDR_RSS extends Command
     /**
      * Create a new command instance.
      *
-     * @param Published_NCDR_RSS $Published_NCNU_RSSModel
+     * @param NcdrRssService $ncdrRssService
      * 
      * @return void
      */
-    public function __construct(Published_NCDR_RSS $Published_NCDR_RSSModel)
+    public function __construct(NcdrRssService $ncdrRssService)
     {
         parent::__construct();
         
-        $this->Published_NCDR_RSSModel = $Published_NCDR_RSSModel;
+        $this->ncdrRssService = $ncdrRssService;
 
         $this->NCDR_to_BOTChannel_list = collect(['地震', '土石流', '河川高水位', '降雨', '停班停課', '道路封閉', '雷雨', '颱風']); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
 
@@ -61,14 +59,14 @@ class NCDR_RSS extends Command
      */
     public function handle()
     {
-        $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getNCDR_RSS();
+        $json = $this->ncdrRssService->getNcdrRss();
 
         $items = $json['entry'];
 
         foreach ($items as $item) {
             $category = $item['category']['@attributes']['term'];
 
-            if ( !$this->Published_NCDR_RSSModel->where('id', $item['id'])->exists() ) {
+            if ( !$this->ncdrRssService->checkRssPublished($item['id']) ) {
                 if ($this->option('init')) {
                     $chat_id = env('TEST_CHANNEL');
                 } else {
@@ -82,7 +80,7 @@ class NCDR_RSS extends Command
                     ]);
                 }
 
-                $this->Published_NCDR_RSSModel->create(['id' => $item['id'], 'category' => $category]);
+                $this->ncdrRssService->storePublishedRss($item['id'], $category);
 
                 sleep(5);
             }
