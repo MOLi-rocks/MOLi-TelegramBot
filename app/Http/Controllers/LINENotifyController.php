@@ -23,32 +23,13 @@ class LINENotifyController extends Controller
         $this->lineNotifyService = $LINENotifyService;
     }
 
-    public static function sendMsg($access_token, $msg)
+    public function sendMsg($access_token, $msg)
     {
-        $client = new GuzzleHttpClient();
         try {
-            $response = $client->request('POST', 'https://notify-api.line.me/api/notify', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $access_token,
-                ],
-                'form_params' => [
-                    'message' => $msg,
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            $status = $e->getCode();
-            if ($status == 400) {
-                throw new \Exception('400 - Unauthorized request');
-            } elseif ($status == 401) {
-                throw new \Exception('401 -  Invalid access token');
-            } elseif ($status == 500) {
-                throw new \Exception('500 - Failure due to server error');
-            } else {
-                throw new \Exception('Processed over time or stopped');
-            }
+            return $this->lineNotifyService->sendMsg($access_token, $msg);
+        } catch (\Exception $e) {
+            return $e->getCode();
         }
-        return $response;
     }
 
     public function getStatus($access_token)

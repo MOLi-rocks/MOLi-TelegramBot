@@ -13,6 +13,7 @@ use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use MOLiBot\Services\FuelPriceService;
 use MOLiBot\Services\NcdrRssService;
+use MOLiBot\Services\NcnuRssService;
 use Log;
 
 class MOLiBotController extends Controller
@@ -25,20 +26,39 @@ class MOLiBotController extends Controller
 
     private $fuelPriceService;
     private $ncdrRssService;
+    private $ncnuRssService;
 
     /**
      * MOLiBotController constructor.
      * @param FuelPriceService $fuelPriceService
      * @param NcdrRssService $ncdrRssService
+     * @param NcnuRssService $ncnuRssService
      */
-    public function __construct(FuelPriceService $fuelPriceService, NcdrRssService $ncdrRssService) {
-        $this->NCDR_to_BOTChannel_list = collect(['地震', '土石流', '河川高水位', '降雨', '停班停課', '道路封閉', '雷雨', '颱風']); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
+    public function __construct(
+        FuelPriceService $fuelPriceService,
+        NcdrRssService $ncdrRssService,
+        NcnuRssService $ncnuRssService
+    ) {
+        // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
+        $this->NCDR_to_BOTChannel_list = collect([
+            '地震',
+            '土石流',
+            '河川高水位',
+            '降雨',
+            '停班停課',
+            '道路封閉',
+            '雷雨',
+            '颱風'
+        ]);
 
-        $this->NCDR_should_mute = collect(['土石流']); // 哪些類別的 NCDR 訊息要靜音
+        // 哪些類別的 NCDR 訊息要靜音
+        $this->NCDR_should_mute = collect(['土石流']);
 
         $this->fuelPriceService = $fuelPriceService;
 
         $this->ncdrRssService = $ncdrRssService;
+
+        $this->ncnuRssService = $ncnuRssService;
     }
 
     /**
@@ -64,27 +84,7 @@ class MOLiBotController extends Controller
 
     public function getNCNU_RSS()
     {
-        $client = new GuzzleHttpClient();
-
-        try {
-            $response = $client->request('GET', 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx', [
-                'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'cache-control' => 'no-cache'
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            return $e->getCode();
-        }
-
-        $fileContents = $response->getBody()->getContents();
-
-        $formatter = Formatter::make($fileContents, Formatter::XML);
-
-        $json = $formatter->toArray();
-
-        return $json;
+        return $this->ncnuRssService->getNcnuRss();
     }
 
     public function getNCDR_RSS()
