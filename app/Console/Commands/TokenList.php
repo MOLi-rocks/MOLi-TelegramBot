@@ -4,7 +4,7 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use MOLiBot\Models\MOLi_Bot_ApiToken;
+use MOLiBot\Services\MOLiBotApiTokenService;
 
 class TokenList extends Command
 {
@@ -23,22 +23,22 @@ class TokenList extends Command
     protected $description = 'List All Token for MOLi Bot API';
 
     /**
-     * @var MOLi_Bot_ApiToken
+     * @var MOLiBotApiTokenService
      */
-    private $MOLi_Bot_API_TOKENModel;
+    private $MOLiBotApiTokenService;
 
     /**
      * Create a new command instance.
      * 
-     * @param MOLi_Bot_ApiToken $MOLi_Bot_API_TOKENModel
+     * @param MOLiBotApiTokenService $MOLiBotApiTokenService
      *
      * @return void
      */
-    public function __construct(MOLi_Bot_ApiToken $MOLi_Bot_API_TOKENModel)
+    public function __construct(MOLiBotApiTokenService $MOLiBotApiTokenService)
     {
         parent::__construct();
 
-        $this->MOLi_Bot_API_TOKENModel = $MOLi_Bot_API_TOKENModel;
+        $this->MOLiBotApiTokenService = $MOLiBotApiTokenService;
     }
 
     /**
@@ -48,7 +48,7 @@ class TokenList extends Command
      */
     public function handle()
     {
-        $tokens = $this->MOLi_Bot_API_TOKENModel->all(['user', 'token', 'created_at'])->toArray();
+        $tokens = $this->MOLiBotApiTokenService->listToken();
         $headers = ['User', 'Token', 'created_at'];
         $this->table($headers, $tokens);
     }

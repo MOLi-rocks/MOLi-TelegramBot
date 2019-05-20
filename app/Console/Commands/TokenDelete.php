@@ -4,7 +4,7 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use MOLiBot\Models\MOLi_Bot_ApiToken;
+use MOLiBot\Services\MOLiBotApiTokenService;
 
 class TokenDelete extends Command
 {
@@ -23,22 +23,22 @@ class TokenDelete extends Command
     protected $description = 'Delete Specified API in MOLi Bot';
 
     /**
-     * @var MOLi_Bot_ApiToken
+     * @var MOLiBotApiTokenService
      */
-    private $MOLi_Bot_API_TOKENModel;
+    private $MOLiBotApiTokenService;
 
     /**
      * Create a new command instance.
      *
-     * @param MOLi_Bot_ApiToken $MOLi_Bot_API_TOKENModel
+     * @param MOLiBotApiTokenService $MOLiBotApiTokenService
      *
      * @return void
      */
-    public function __construct(MOLi_Bot_ApiToken $MOLi_Bot_API_TOKENModel)
+    public function __construct(MOLiBotApiTokenService $MOLiBotApiTokenService)
     {
         parent::__construct();
 
-        $this->MOLi_Bot_API_TOKENModel = $MOLi_Bot_API_TOKENModel;
+        $this->MOLiBotApiTokenService = $MOLiBotApiTokenService;
     }
 
     /**
@@ -49,9 +49,11 @@ class TokenDelete extends Command
     public function handle()
     {
         $token = $this->argument('token');
-        if ($this->MOLi_Bot_API_TOKENModel->where('token', $token)->exists()) {
+
+        if ( $this->MOLiBotApiTokenService->checkTokenExist($token) ) {
             if ($this->confirm('Are You Sure to Delete This Token?')) {
-                $this->MOLi_Bot_API_TOKENModel->where('token', $token)->delete();
+                $this->MOLiBotApiTokenService->deleteToken($token);
+
                 $this->info('Token Delete Success!');
             }
         } else {
