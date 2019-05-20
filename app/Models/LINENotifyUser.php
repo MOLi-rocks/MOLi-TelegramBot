@@ -5,7 +5,7 @@ namespace MOLiBot\Models;
 use Illuminate\Database\Eloquent\Model;
 use MOLiBot\Http\Controllers\LINENotifyController;
 
-class LINE_Notify_User extends Model
+class LINENotifyUser extends Model
 {
     protected $table = 'line_notify_users';
 
@@ -45,14 +45,14 @@ class LINE_Notify_User extends Model
     {
         $result = LINENotifyController::getStatus($token);
         if (is_array($result)) {
-            LINE_Notify_User::where('access_token', $token)
+            Line_Notify_::where('access_token', $token)
                 ->update([
                     'targetType' => $result['targetType'],
                     'target' => $result['target'],
                     'status' => $result['status']
                 ]);
         } else {
-            LINE_Notify_User::where('access_token', $token)
+            Line_Notify_::where('access_token', $token)
                 ->update([
                     'status' => $result
                 ]);

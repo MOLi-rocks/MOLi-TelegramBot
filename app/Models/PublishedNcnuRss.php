@@ -4,7 +4,7 @@ namespace MOLiBot\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Published_NCNU_RSS extends Model
+class PublishedNcnuRss extends Model
 {
     public $timestamps = false;
 

@@ -4,9 +4,9 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use MOLiBot\Models\LINE_Notify_User;
+use MOLiBot\Models\Line_Notify_;
 use Telegram;
-use MOLiBot\Models\Published_NCNU_RSS;
+use MOLiBot\Models\Published_NcnuRss;
 use Fukuball\Jieba\Jieba;
 use Fukuball\Jieba\Finalseg;
 use MOLiBot\Http\Controllers\LINENotifyController;
@@ -28,18 +28,18 @@ class NCNU_RSS extends Command
     protected $description = 'Check New RSS Feed From NCNU';
 
     /**
-     * @var Published_NCNU_RSS
+     * @var Published_NcnuRss
      */
     private $Published_NCNU_RSSModel;
     
     /**
      * Create a new command instance.
      *
-     * @param Published_NCNU_RSS $Published_NCNU_RSSModel
+     * @param Published_NcnuRss $Published_NCNU_RSSModel
      * 
      * @return void
      */
-    public function __construct(Published_NCNU_RSS $Published_NCNU_RSSModel)
+    public function __construct(Published_NcnuRss $Published_NCNU_RSSModel)
     {
         parent::__construct();
         
@@ -86,13 +86,13 @@ class NCNU_RSS extends Command
                 ]);
 
                 // send to LINE Notify
-                $LNU = LINE_Notify_User::getAllToken(); // LINE Notify Users
+                $LNU = Line_Notify_::getAllToken(); // LINE Notify Users
                 $msg = PHP_EOL .$item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'];
                 foreach ($LNU as $key => $token){
                     try {
                         LINENotifyController::sendMsg($token, $msg);
                     } catch (\Exception $e) {
-                        LINE_Notify_User::updateStatus($token);
+                        Line_Notify_::updateStatus($token);
                     }
 
                     // LINE 限制一分鐘上限 1000 次，做一些保留次數

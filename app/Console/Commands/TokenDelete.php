@@ -4,7 +4,7 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use MOLiBot\Models\MOLi_Bot_API_TOKEN;
+use MOLiBot\Models\MOLi_Bot_ApiToken;
 
 class TokenDelete extends Command
 {
@@ -23,18 +23,18 @@ class TokenDelete extends Command
     protected $description = 'Delete Specified API in MOLi Bot';
 
     /**
-     * @var MOLi_Bot_API_TOKEN
+     * @var MOLi_Bot_ApiToken
      */
     private $MOLi_Bot_API_TOKENModel;
 
     /**
      * Create a new command instance.
      *
-     * @param MOLi_Bot_API_TOKEN $MOLi_Bot_API_TOKENModel
+     * @param MOLi_Bot_ApiToken $MOLi_Bot_API_TOKENModel
      *
      * @return void
      */
-    public function __construct(MOLi_Bot_API_TOKEN $MOLi_Bot_API_TOKENModel)
+    public function __construct(MOLi_Bot_ApiToken $MOLi_Bot_API_TOKENModel)
     {
         parent::__construct();
 

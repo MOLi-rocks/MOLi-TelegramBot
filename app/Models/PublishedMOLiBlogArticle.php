@@ -4,7 +4,7 @@ namespace MOLiBot\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Published_NCDR_RSS extends Model
+class PublishedMOLiBlogArticle extends Model
 {
     public $timestamps = false;
 
@@ -12,7 +12,7 @@ class Published_NCDR_RSS extends Model
 
     protected $primaryKey = 'id';
 
-    protected $table = 'published_ncdr_rss';
+    protected $table = 'Published_MOLi_blog_article';
 
-    protected $fillable = ['id', 'category'];
+    protected $fillable = ['id', 'uuid', 'title'];
 }

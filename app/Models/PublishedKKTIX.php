@@ -4,7 +4,7 @@ namespace MOLiBot\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Published_KKTIX extends Model
+class PublishedKKTIX extends Model
 {
     public $timestamps = false;
 

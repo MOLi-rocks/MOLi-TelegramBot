@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Carbon\Carbon;
 
-class MOLi_Bot_API_TOKEN extends Model
+class MOLiBotApiToken extends Model
 {
     use SoftDeletes;
 

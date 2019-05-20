@@ -3,7 +3,7 @@
 namespace MOLiBot\Http\Middleware;
 
 use Closure;
-use MOLiBot\Models\MOLi_Bot_API_TOKEN;
+use MOLiBot\Models\MOLi_Bot_ApiToken;
 
 class VerifyAPIToken
 {
@@ -16,7 +16,7 @@ class VerifyAPIToken
      */
     public function handle($request, Closure $next)
     {
-        if ( MOLi_Bot_API_TOKEN::where('token', $request->header('Authorization'))->exists() ) {
+        if ( MOLi_Bot_ApiToken::where('token', $request->header('Authorization'))->exists() ) {
             return $next($request);
         }
 

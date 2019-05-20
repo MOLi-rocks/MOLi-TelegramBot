@@ -3,7 +3,7 @@
 namespace MOLiBot\Http\Controllers;
 
 use Illuminate\Http\Request;
-use MOLiBot\Models\LINE_Notify_User;
+use MOLiBot\Models\Line_Notify_;
 use SoapBox\Formatter\Formatter;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
@@ -99,7 +99,7 @@ class LINENotifyController extends Controller
                 $json = $formatter->toArray();
                 $access_token = $json['access_token'];
                 $success = true;
-                LINE_Notify_User::create([
+                Line_Notify_::create([
                     'access_token' => $access_token
                 ]);
             } catch (GuzzleHttpTransferException $e) {
@@ -122,7 +122,7 @@ class LINENotifyController extends Controller
             }
 
             // get status
-            LINE_Notify_User::updateStatus($access_token);
+            Line_Notify_::updateStatus($access_token);
 
             return view('LINE.notify_auth', compact('success'));
         } else {
@@ -135,7 +135,7 @@ class LINENotifyController extends Controller
 
     public function stats()
     {
-        $stats = LINE_Notify_User::getStats();
+        $stats = Line_Notify_::getStats();
         return view('LINE.stats', compact('stats'));
     }
 }
