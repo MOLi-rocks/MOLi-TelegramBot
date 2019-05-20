@@ -4,9 +4,9 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use MOLiBot\LINE_Notify_User;
+use MOLiBot\Models\LINE_Notify_User;
 use Telegram;
-use MOLiBot\Published_NCNU_RSS;
+use MOLiBot\Models\Published_NCNU_RSS;
 use Fukuball\Jieba\Jieba;
 use Fukuball\Jieba\Finalseg;
 use MOLiBot\Http\Controllers\LINENotifyController;

@@ -3,7 +3,7 @@
 namespace MOLiBot\Http\Controllers;
 
 use Illuminate\Http\Request;
-use MOLiBot\LINE_Notify_User;
+use MOLiBot\Models\LINE_Notify_User;
 use SoapBox\Formatter\Formatter;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;

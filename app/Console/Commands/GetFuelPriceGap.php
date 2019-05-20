@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Telegram;
 
 use Carbon\Carbon;
-use MOLiBot\FuelPrice;
+use MOLiBot\Models\FuelPrice;
 
 class GetFuelPriceGap extends Command
 {

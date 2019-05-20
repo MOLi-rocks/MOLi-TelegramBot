@@ -11,7 +11,7 @@ use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 
-use MOLiBot\WhoUseWhatCommand;
+use MOLiBot\Models\WhoUseWhatCommand;
 
 class HydraDVRRemoteControlCommand extends Command
 {

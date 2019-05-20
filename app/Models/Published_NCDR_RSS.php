@@ -1,6 +1,6 @@
 <?php
 
-namespace MOLiBot;
+namespace MOLiBot\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

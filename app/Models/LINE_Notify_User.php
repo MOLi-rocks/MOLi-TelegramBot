@@ -1,10 +1,9 @@
 <?php
 
-namespace MOLiBot;
+namespace MOLiBot\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use MOLiBot\Http\Controllers\LINENotifyController;
-
 
 class LINE_Notify_User extends Model
 {

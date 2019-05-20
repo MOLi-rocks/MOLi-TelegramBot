@@ -4,7 +4,7 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use MOLiBot\MOLi_Bot_API_TOKEN;
+use MOLiBot\Models\MOLi_Bot_API_TOKEN;
 
 class TokenList extends Command
 {

@@ -3,7 +3,7 @@
 namespace MOLiBot\Http\Middleware;
 
 use Closure;
-use MOLiBot\MOLi_Bot_API_TOKEN;
+use MOLiBot\Models\MOLi_Bot_API_TOKEN;
 
 class VerifyAPIToken
 {

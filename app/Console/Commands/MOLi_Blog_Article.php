@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use Telegram;
-use MOLiBot\Published_MOLi_Blog_Article;
+use MOLiBot\Models\Published_MOLi_Blog_Article;
 
 class MOLi_Blog_Article extends Command
 {

@@ -5,7 +5,7 @@ namespace MOLiBot\Console\Commands;
 use Illuminate\Console\Command;
 
 use Telegram;
-use MOLiBot\Published_NCDR_RSS;
+use MOLiBot\Models\Published_NCDR_RSS;
 use Fukuball\Jieba\Jieba;
 use Fukuball\Jieba\Finalseg;
 

@@ -8,7 +8,7 @@ use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 
 use Telegram;
-use MOLiBot\Published_KKTIX;
+use MOLiBot\Models\Published_KKTIX;
 
 class MOLiDay_Events extends Command
 {

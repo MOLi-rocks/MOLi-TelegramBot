@@ -5,7 +5,7 @@ namespace MOLiBot\Console\Commands;
 use Illuminate\Console\Command;
 
 use Carbon\Carbon;
-use MOLiBot\MOLi_Bot_API_TOKEN;
+use MOLiBot\Models\MOLi_Bot_API_TOKEN;
 use Hash;
 
 class TokenGenerator extends Command
