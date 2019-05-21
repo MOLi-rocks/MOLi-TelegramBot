@@ -28,7 +28,7 @@ class LINENotifyService
             ]);
 
             $response = $response->getBody()->getContents();
-            $json = json_decode($response)->toArray();
+            $json = json_decode($response, true);
 
             return $json;
         } catch (GuzzleHttpTransferException $e) {
