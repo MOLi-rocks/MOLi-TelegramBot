@@ -4,9 +4,7 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Carbon\Carbon;
-use MOLiBot\MOLi_Bot_API_TOKEN;
-use Hash;
+use MOLiBot\Services\MOLiBotApiTokenService;
 
 class TokenGenerator extends Command
 {
@@ -25,22 +23,22 @@ class TokenGenerator extends Command
     protected $description = 'Generate New Token for MOLi Bot API';
 
     /**
-     * @var MOLi_Bot_API_TOKEN
+     * @var MOLiBotApiTokenService
      */
-    private $MOLi_Bot_API_TOKENModel;
+    private $MOLiBotApiTokenService;
 
     /**
      * Create a new command instance.
      *
-     * @param MOLi_Bot_API_TOKEN $MOLi_Bot_API_TOKENModel
+     * @param MOLiBotApiTokenService $MOLiBotApiTokenService
      *
      * @return void
      */
-    public function __construct(MOLi_Bot_API_TOKEN $MOLi_Bot_API_TOKENModel)
+    public function __construct(MOLiBotApiTokenService $MOLiBotApiTokenService)
     {
         parent::__construct();
 
-        $this->MOLi_Bot_API_TOKENModel = $MOLi_Bot_API_TOKENModel;
+        $this->MOLiBotApiTokenService = $MOLiBotApiTokenService;
     }
 
     /**
@@ -51,8 +49,9 @@ class TokenGenerator extends Command
     public function handle()
     {
         $who = $this->ask('who will use this token?');
-        $fp = md5(((float) date ( "YmdHis" ) + rand(100,999)).rand(1000,9999));
-        $this->MOLi_Bot_API_TOKENModel->create(['token' => $fp, 'user' => $who]);
-        $this->info('Token for ' . $who . ' is ' . $fp);
+
+        $data = $this->MOLiBotApiTokenService->createToken($who);
+
+        $this->info('Token for ' . $data->user . ' is ' . $data->token);
     }
 }

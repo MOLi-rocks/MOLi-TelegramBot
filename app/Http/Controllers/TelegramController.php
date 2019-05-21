@@ -11,7 +11,7 @@ use Telegram;
 use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\RequestException as GuzzleHttpRequestException;
-use MOLiBot\WhoUseWhatCommand;
+use MOLiBot\Models\WhoUseWhatCommand;
 
 use Log;
 

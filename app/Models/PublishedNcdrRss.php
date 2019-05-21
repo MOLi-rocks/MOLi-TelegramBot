@@ -1,10 +1,10 @@
 <?php
 
-namespace MOLiBot;
+namespace MOLiBot\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Published_NCDR_RSS extends Model
+class PublishedNcdrRss extends Model
 {
     public $timestamps = false;
 

@@ -4,10 +4,8 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use \GuzzleHttp\Client as GuzzleHttpClient;
-use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use Telegram;
-use MOLiBot\Published_MOLi_Blog_Article;
+use MOLiBot\Services\MOLiBlogArticleService;
 
 class MOLi_Blog_Article extends Command
 {
@@ -26,22 +24,22 @@ class MOLi_Blog_Article extends Command
     protected $description = 'Check New Article From MOLi Blog（add --dry-run for testing mode）';
 
     /**
-     * @var Published_MOLi_Blog_Article
+     * @var MOLiBlogArticleService
      */
-    private $Published_MOLi_Blog_ArticleModel;
+    private $MOLiBlogArticleService;
 
     /**
      * Create a new command instance.
      *
-     * @param Published_MOLi_Blog_Article $Published_MOLi_Blog_ArticleModel
+     * @param MOLiBlogArticleService $MOLiBlogArticleService
      *
      * @return void
      */
-    public function __construct(Published_MOLi_Blog_Article $Published_MOLi_Blog_ArticleModel)
+    public function __construct(MOLiBlogArticleService $MOLiBlogArticleService)
     {
         parent::__construct();
 
-        $this->Published_MOLi_Blog_ArticleModel = $Published_MOLi_Blog_ArticleModel;
+        $this->MOLiBlogArticleService = $MOLiBlogArticleService;
     }
 
     /**
@@ -65,7 +63,7 @@ class MOLi_Blog_Article extends Command
         }
 
         while(true) {
-            $fileContents = $this->getData($limit);
+            $fileContents = $this->MOLiBlogArticleService->getMOLiBlogArticles($limit);
 
             if (!empty($fileContents)) {
                 if (!empty(json_decode($fileContents->getBody())->{'posts'})) {
@@ -83,7 +81,7 @@ class MOLi_Blog_Article extends Command
 
             $post = $posts[$use_post];
 
-            if ($this->Published_MOLi_Blog_ArticleModel->where('id', $post->id)->exists()) {
+            if ($this->MOLiBlogArticleService->checkArticlePublished($post->id)) {
                 break;
             } else {
                 if ($this->option('dry-run')) {
@@ -113,11 +111,7 @@ class MOLi_Blog_Article extends Command
                             $tags
                     ]);
 
-                    $this->Published_MOLi_Blog_ArticleModel->create([
-                        'id' => $post->id,
-                        'uuid' => $post->uuid,
-                        'title' => $post->title
-                    ]);
+                    $this->MOLiBlogArticleService->storePublishedArticle($post);
                 }
 
                 sleep(5);
@@ -133,26 +127,5 @@ class MOLi_Blog_Article extends Command
         }
 
         return;
-    }
-
-    private function getData($limit = 1)
-    {
-        $MOLi_blog_api = env('MOLi_BLOG_URL') . '/ghost/api/v0.1/posts/?client_id=' . env('MOLi_BLOG_CLIENT_ID') . '&client_secret=' . env('MOLi_BLOG_CLIENT_SECRET') . '&include=author,tags&limit=' . $limit;
-
-        $client = new GuzzleHttpClient();
-
-        try {
-            $fileContents = $client->request('GET', $MOLi_blog_api, [
-                'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'Accept' => 'application/json'
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            $fileContents = '';
-        }
-
-        return $fileContents;
     }
 }

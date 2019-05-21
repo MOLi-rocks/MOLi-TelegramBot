@@ -3,72 +3,38 @@
 namespace MOLiBot\Http\Controllers;
 
 use Illuminate\Http\Request;
-use MOLiBot\LINE_Notify_User;
-use SoapBox\Formatter\Formatter;
+use MOLiBot\Services\LINENotifyService;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 
 class LINENotifyController extends Controller
 {
-
     private $redirect_uri;
     private $client_id;
     private $client_secret;
+    private $lineNotifyService;
 
-    public function __construct()
+    public function __construct(LINENotifyService $LINENotifyService)
     {
         $this->redirect_uri = config('line.line_notify_redirect_uri');
         $this->client_id = config('line.line_notify_client_id');
         $this->client_secret = config('line.line_notify_client_secret');
+
+        $this->lineNotifyService = $LINENotifyService;
     }
 
-    public static function sendMsg($access_token, $msg)
+    public function sendMsg($access_token, $msg)
     {
-        $client = new GuzzleHttpClient();
         try {
-            $response = $client->request('POST', 'https://notify-api.line.me/api/notify', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $access_token,
-                ],
-                'form_params' => [
-                    'message' => $msg,
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            $status = $e->getCode();
-            if ($status == 400) {
-                throw new \Exception('400 - Unauthorized request');
-            } elseif ($status == 401) {
-                throw new \Exception('401 -  Invalid access token');
-            } elseif ($status == 500) {
-                throw new \Exception('500 - Failure due to server error');
-            } else {
-                throw new \Exception('Processed over time or stopped');
-            }
-        }
-        return $response;
-    }
-
-    public static function getStatus($access_token)
-    {
-        $client = new GuzzleHttpClient();
-        try {
-            $response = $client->request('GET', 'https://notify-api.line.me/api/status', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $access_token,
-                ],
-                'timeout' => 10
-            ]);
-            $response = $response->getBody()->getContents();
-            $formatter = Formatter::make($response, Formatter::JSON);
-            $json = $formatter->toArray();
-
-            return $json;
-        } catch (GuzzleHttpTransferException $e) {
+            return $this->lineNotifyService->sendMsg($access_token, $msg);
+        } catch (\Exception $e) {
             return $e->getCode();
         }
+    }
 
+    public function getStatus($access_token)
+    {
+        return $this->lineNotifyService->getStatus($access_token);
     }
 
     public function auth(Request $request)
@@ -95,13 +61,10 @@ class LINENotifyController extends Controller
                 ]);
 
                 $response = $response->getBody()->getContents();
-                $formatter = Formatter::make($response, Formatter::JSON);
-                $json = $formatter->toArray();
+                $json = json_decode($response)->toArray();
                 $access_token = $json['access_token'];
                 $success = true;
-                LINE_Notify_User::create([
-                    'access_token' => $access_token
-                ]);
+                $this->lineNotifyService->createToken($access_token);
             } catch (GuzzleHttpTransferException $e) {
                 $status = $e->getCode();
                 if ($status == 400) {
@@ -115,14 +78,17 @@ class LINENotifyController extends Controller
 
             // send a welcome message
             try {
-                $msg = "\n歡迎使用暨大通知，此服務由 MOLi 實驗室維護\n如有疑問可至粉專或群組詢問\nhttps://moli.rocks";
+                $msg = PHP_EOL .'歡迎使用暨大通知，此服務由 MOLi 實驗室維護' . PHP_EOL .
+                    '如有疑問可至粉專或群組詢問' . PHP_EOL .
+                    'https://moli.rocks';
+
                 $this->sendMsg($access_token, $msg);
             } catch (\Exception $e) {
                 return $e->getCode();
             }
 
-            // get status
-            LINE_Notify_User::updateStatus($access_token);
+            // update status
+            $this->lineNotifyService->updateStatus($access_token);
 
             return view('LINE.notify_auth', compact('success'));
         } else {
@@ -135,7 +101,7 @@ class LINENotifyController extends Controller
 
     public function stats()
     {
-        $stats = LINE_Notify_User::getStats();
+        $stats = $this->lineNotifyService->getAllStats();
         return view('LINE.stats', compact('stats'));
     }
 }

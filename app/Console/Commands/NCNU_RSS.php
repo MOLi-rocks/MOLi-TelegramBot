@@ -4,12 +4,11 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use MOLiBot\LINE_Notify_User;
 use Telegram;
-use MOLiBot\Published_NCNU_RSS;
+use MOLiBot\Services\LINENotifyService;
+use MOLiBot\Services\NcnuRssService;
 use Fukuball\Jieba\Jieba;
 use Fukuball\Jieba\Finalseg;
-use MOLiBot\Http\Controllers\LINENotifyController;
 
 class NCNU_RSS extends Command
 {
@@ -28,22 +27,29 @@ class NCNU_RSS extends Command
     protected $description = 'Check New RSS Feed From NCNU';
 
     /**
-     * @var Published_NCNU_RSS
+     * @var NcnuRssService
      */
-    private $Published_NCNU_RSSModel;
+    private $ncnuRssService;
+
+    /**
+     * @var LINENotifyService
+     */
+    private $LINENotifyService;
     
     /**
      * Create a new command instance.
      *
-     * @param Published_NCNU_RSS $Published_NCNU_RSSModel
-     * 
+     * @param NcnuRssService $ncnuRssService
+     * @param LINENotifyService $LINENotifyService
      * @return void
      */
-    public function __construct(Published_NCNU_RSS $Published_NCNU_RSSModel)
+    public function __construct(NcnuRssService $ncnuRssService, LINENotifyService $LINENotifyService)
     {
         parent::__construct();
         
-        $this->Published_NCNU_RSSModel = $Published_NCNU_RSSModel;
+        $this->ncnuRssService = $ncnuRssService;
+
+        $this->LINENotifyService = $LINENotifyService;
     }
 
     /**
@@ -55,18 +61,21 @@ class NCNU_RSS extends Command
     {
         ini_set('memory_limit', '1024M');
 
-        Jieba::init(array('mode'=>'default','dict'=>'big'));
+        Jieba::init([
+            'mode'=>'default',
+            'dict'=>'big'
+        ]);
 
         Finalseg::init();
 
-        $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getNCNU_RSS();
+        $json = $this->ncnuRssService->getNcnuRss();
 
         $items = $json['channel']['item'];
 
         foreach ($items as $item) {
             $hashtag = '';
 
-            if ( !$this->Published_NCNU_RSSModel->where('guid', $item['guid'])->exists() ) {
+            if ( !$this->ncnuRssService->checkRssPublished($item['guid']) ) {
                 $seg_list = Jieba::cut($item['title']);
 
                 foreach($seg_list as $seg_list_item) {
@@ -86,13 +95,13 @@ class NCNU_RSS extends Command
                 ]);
 
                 // send to LINE Notify
-                $LNU = LINE_Notify_User::getAllToken(); // LINE Notify Users
+                $LNU = $this->LINENotifyService->getAllToken(); // LINE Notify Users
                 $msg = PHP_EOL .$item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'];
                 foreach ($LNU as $key => $token){
                     try {
-                        LINENotifyController::sendMsg($token, $msg);
+                        $this->LINENotifyService->sendMsg($token, $msg);
                     } catch (\Exception $e) {
-                        LINE_Notify_User::updateStatus($token);
+                        $this->LINENotifyService->updateStatus($token);
                     }
 
                     // LINE 限制一分鐘上限 1000 次，做一些保留次數
@@ -101,7 +110,7 @@ class NCNU_RSS extends Command
                     }
                 }
 
-                $this->Published_NCNU_RSSModel->create(['guid' => $item['guid'], 'title' => $item['title']]);
+                $this->ncnuRssService->storePublishedRss($item['guid'], $item['title']);
 
                 // 避免太過頻繁發送
                 sleep(5);

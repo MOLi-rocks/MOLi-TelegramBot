@@ -4,11 +4,8 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use \GuzzleHttp\Client as GuzzleHttpClient;
-use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
-
 use Telegram;
-use MOLiBot\Published_KKTIX;
+use MOLiBot\Services\MOLiDayService;
 
 class MOLiDay_Events extends Command
 {
@@ -27,22 +24,22 @@ class MOLiDay_Events extends Command
     protected $description = 'Check New MOLiDay Event From KKTIX（add --dry-run for testing mode）';
 
     /**
-     * @var Published_KKTIX
+     * @var MOLiDayService
      */
-    private $Published_KKTIXModel;
+    private $MOLiDayService;
     
     /**
      * Create a new command instance.
      *
-     * @param Published_KKTIX $Published_KKTIXModel
+     * @param MOLiDayService $MOLiDayService
      * 
      * @return void
      */
-    public function __construct(Published_KKTIX $Published_KKTIXModel)
+    public function __construct(MOLiDayService $MOLiDayService)
     {
         parent::__construct();
         
-        $this->Published_KKTIXModel = $Published_KKTIXModel;
+        $this->MOLiDayService = $MOLiDayService;
     }
 
     /**
@@ -52,23 +49,7 @@ class MOLiDay_Events extends Command
      */
     public function handle()
     {
-        $client = new GuzzleHttpClient();
-
-        try {
-            $response = $client->request('GET', 'https://moli.kktix.cc/events.json', [
-                'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'Accept' => 'application/json',
-                    'cache-control' => 'no-cache'
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            $this->error('Can\'t Get Data!');
-            return;
-        }
-
-        $fileContents = $response->getBody()->getContents();
+        $fileContents = $this->MOLiDayService->getEvents();
 
         if (!empty($fileContents)) {
             $json = json_decode($fileContents);
@@ -84,7 +65,7 @@ class MOLiDay_Events extends Command
             $datas = [];
             
             foreach ($events as $event) {
-                if ( !$this->Published_KKTIXModel->where('url', $event->url)->exists() ) {
+                if ( !$this->MOLiDayService->checkEventPublished($event->url) ) {
                     $datas[] = [
                         '活動標題' => $event->title,
                         '活動簡介' => $event->summary,
@@ -97,7 +78,7 @@ class MOLiDay_Events extends Command
             $this->table($headers, $datas);
         } else {
             foreach ($events as $event) {
-                if ( !$this->Published_KKTIXModel->where('url', $event->url)->exists() ) {
+                if ( !$this->MOLiDayService->checkEventPublished($event->url) ) {
                     if ($this->option('init')) {
                         $chat_id = env('TEST_CHANNEL');
                     } else {
@@ -112,7 +93,7 @@ class MOLiDay_Events extends Command
                             '報名網址：' . PHP_EOL . $event->url . PHP_EOL . PHP_EOL
                     ]);
 
-                    $this->Published_KKTIXModel->create(['url' => $event->url, 'title' => $event->title]);
+                    $this->MOLiDayService->storePublishedEvent($event);
 
                     sleep(5);
                 }
