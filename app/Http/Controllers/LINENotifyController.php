@@ -61,7 +61,7 @@ class LINENotifyController extends Controller
                 ]);
 
                 $response = $response->getBody()->getContents();
-                $json = json_decode($response)->toArray();
+                $json = json_decode($response, true);
                 $access_token = $json['access_token'];
                 $success = true;
                 $this->lineNotifyService->createToken($access_token);
