@@ -13,7 +13,7 @@ class CreatePublishedMOLiBlogArticleTable extends Migration
      */
     public function up()
     {
-        Schema::create('Published_MOLi_blog_article', function (Blueprint $table) {
+        Schema::create('published_moli_blog_article', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('uuid');
             $table->string('title');

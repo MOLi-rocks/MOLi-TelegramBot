@@ -12,7 +12,7 @@ class PublishedMOLiBlogArticle extends Model
 
     protected $primaryKey = 'id';
 
-    protected $table = 'Published_MOLi_blog_article';
+    protected $table = 'published_moli_blog_article';
 
     protected $fillable = ['id', 'uuid', 'title'];
 }
