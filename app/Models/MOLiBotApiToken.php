@@ -15,7 +15,7 @@ class MOLiBotApiToken extends Model
 
     protected $primaryKey = 'token';
 
-    protected $table = 'API_TOKEN';
+    protected $table = 'bot_api_token';
     
     protected $dateFormat = Carbon::ISO8601;
     

@@ -12,7 +12,7 @@ class PublishedNcnuRss extends Model
 
     protected $primaryKey = 'guid';
 
-    protected $table = 'Published_NCNU_RSS';
+    protected $table = 'published_ncnu_rss';
 
     protected $fillable = ['guid', 'title'];
 }

@@ -12,7 +12,7 @@ class PublishedKKTIX extends Model
 
     protected $primaryKey = 'url';
 
-    protected $table = 'Published_KKTIX';
+    protected $table = 'published_moli_kktix';
 
     protected $fillable = ['url', 'title'];
 }
