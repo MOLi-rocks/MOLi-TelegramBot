@@ -14,6 +14,7 @@ use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use MOLiBot\Services\FuelPriceService;
 use MOLiBot\Services\NcdrRssService;
 use MOLiBot\Services\NcnuRssService;
+use MOLiBot\Services\NcnuStaffContactService;
 use Log;
 
 class MOLiBotController extends Controller
@@ -27,17 +28,20 @@ class MOLiBotController extends Controller
     private $fuelPriceService;
     private $ncdrRssService;
     private $ncnuRssService;
+    private $ncnuStaffContactService;
 
     /**
      * MOLiBotController constructor.
      * @param FuelPriceService $fuelPriceService
      * @param NcdrRssService $ncdrRssService
      * @param NcnuRssService $ncnuRssService
+     * @param NcnuStaffContactService $ncnuStaffContactService
      */
     public function __construct(
         FuelPriceService $fuelPriceService,
         NcdrRssService $ncdrRssService,
-        NcnuRssService $ncnuRssService
+        NcnuRssService $ncnuRssService,
+        NcnuStaffContactService $ncnuStaffContactService
     ) {
         // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
         $this->NCDR_to_BOTChannel_list = collect([
@@ -59,6 +63,8 @@ class MOLiBotController extends Controller
         $this->ncdrRssService = $ncdrRssService;
 
         $this->ncnuRssService = $ncnuRssService;
+
+        $this->ncnuStaffContactService = $ncnuStaffContactService;
     }
 
     /**
@@ -179,36 +185,7 @@ class MOLiBotController extends Controller
 
     public function getStaffContact($keyword = NULL)
     {
-        $client = new GuzzleHttpClient();
-
-        try {
-            $response = $client->request('GET', 'http://ccweb1.ncnu.edu.tw/telquery/csvstaff2query.asp?name=' . urlencode($keyword) . '?1482238246', [
-                'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'cache-control' => 'no-cache'
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            return $e->getCode();
-        }
-
-        $fileContents = $response->getBody()->getContents();
-
-        $array = array();
-
-        $contents_array = str_getcsv($fileContents, "\n");
-
-        foreach ($contents_array as $content_item) {
-            $tmparray = array();
-            $items = explode(",\"", $content_item);
-            foreach ($items as $item) {
-                array_push($tmparray, trim($item, "\"\r\n "));
-            }
-            array_push($array, $tmparray);
-        }
-
-        return $array;
+        return $this->ncnuStaffContactService->getStaffContact($keyword);
     }
 
     /**

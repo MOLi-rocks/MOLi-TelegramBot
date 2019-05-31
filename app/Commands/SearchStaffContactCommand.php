@@ -8,6 +8,7 @@ use Telegram\Bot\Commands\Command;
 use DB;
 use Telegram;
 use MOLiBot\Models\WhoUseWhatCommand;
+use MOLiBot\Services\NcnuStaffContactService;
 
 class SearchStaffContactCommand extends Command
 {
@@ -22,11 +23,18 @@ class SearchStaffContactCommand extends Command
      */
 
     protected $description = '使用關鍵字搜尋暨大教職員聯絡資訊(限私訊使用)';
+
+    private $ncnuStaffContactService;
+
+    public function __construct(
+        NcnuStaffContactService $ncnuStaffContactService
+    ) {
+        $this->ncnuStaffContactService = $ncnuStaffContactService;
+    }
     
     /**
      * @inheritdoc
      */
-
     public function handle($arguments)
     {
         $update = Telegram::getWebhookUpdates();
@@ -53,7 +61,7 @@ class SearchStaffContactCommand extends Command
                 return response('OK', 200); // 強制結束 command
             }
 
-            $json = app('MOLiBot\Http\Controllers\MOLiBotController')->getStaffContact($arguments);
+            $json = $this->ncnuStaffContactService->getStaffContact($arguments);
 
             $text = '';
 
