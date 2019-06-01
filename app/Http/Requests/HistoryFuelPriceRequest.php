@@ -2,6 +2,9 @@
 
 namespace MOLiBot\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 class HistoryFuelPriceRequest extends Request
 {
     /**
@@ -24,5 +27,17 @@ class HistoryFuelPriceRequest extends Request
         return [
             'prodid' => 'required|integer|min:1|max:6'
         ];
+    }
+
+    /**
+     * Customize Failed Validation Response
+     *
+     * @throws  HttpResponseException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        $messages = $validator->errors()->all();
+        
+        throw new HttpResponseException(response()->json(compact('messages'), 400));
     }
 }
