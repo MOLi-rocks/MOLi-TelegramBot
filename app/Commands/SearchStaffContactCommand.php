@@ -24,14 +24,6 @@ class SearchStaffContactCommand extends Command
 
     protected $description = '使用關鍵字搜尋暨大教職員聯絡資訊(限私訊使用)';
 
-    private $ncnuStaffContactService;
-
-    public function __construct(
-        NcnuStaffContactService $ncnuStaffContactService
-    ) {
-        $this->ncnuStaffContactService = $ncnuStaffContactService;
-    }
-    
     /**
      * @inheritdoc
      */
@@ -61,7 +53,9 @@ class SearchStaffContactCommand extends Command
                 return response('OK', 200); // 強制結束 command
             }
 
-            $json = $this->ncnuStaffContactService->getStaffContact($arguments);
+            $ncnuStaffContactService = app('MOLiBot\Services\NcnuStaffContactService');
+
+            $json = $ncnuStaffContactService->getStaffContact($arguments);
 
             $text = '';
 
