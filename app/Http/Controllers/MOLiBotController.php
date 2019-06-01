@@ -4,13 +4,12 @@ namespace MOLiBot\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use MOLiBot\Http\Requests\HistoryFuelPriceRequest;
 use Validator;
 
 use SoapBox\Formatter\Formatter;
 use Telegram;
 
-use \GuzzleHttp\Client as GuzzleHttpClient;
-use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use MOLiBot\Services\FuelPriceService;
 use MOLiBot\Services\NcdrRssService;
 use MOLiBot\Services\NcnuRssService;
@@ -218,30 +217,9 @@ class MOLiBotController extends Controller
             return response()->json(compact('messages'), 400);
         }
 
-        $client = new GuzzleHttpClient();
+        $prodId = $request->input('prodid');
 
-        try {
-            $response = $client->request('GET', 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx/getCPCMainProdListPrice_Historical?prodid=' . $request->input('prodid'), [
-                'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'cache-control' => 'no-cache'
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            return $e->getCode();
-        }
-
-        $fileContents = $response->getBody()->getContents();
-
-        // SOAP response to regular XML
-        $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
-
-        $formatter = Formatter::make($xml, Formatter::XML);
-
-        $json = $formatter->toArray();
-
-        return $json['diffgrdiffgram']['NewDataSet']['tbTable'];
+        return $this->fuelPriceService->getHistoryFuelPrice($prodId);
     }
 
     public function anyRoute()
