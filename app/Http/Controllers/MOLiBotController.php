@@ -195,28 +195,8 @@ class MOLiBotController extends Controller
         return $this->fuelPriceService->getLiveFuelPrice();
     }
 
-    public function getHistoryFuelPrice(Request $request)
+    public function getHistoryFuelPrice(HistoryFuelPriceRequest $request)
     {
-        /*
-        $prodid = array(
-            '1' => '92無鉛汽油',
-            '2' => '95無鉛汽油',
-            '3' => '98無鉛汽油',
-            '4' => '超級/高級柴油',
-            '5' => '低硫燃料油(0.5%)',
-            '6' => '甲種低硫燃料油(0.5)'
-        );
-        */
-
-        $validator = Validator::make($request->all(), [
-            'prodid' => 'required|integer|min:1|max:6',
-        ]);
-
-        if ($validator->fails()) {
-            $messages = $validator->errors()->all();
-            return response()->json(compact('messages'), 400);
-        }
-
         $prodId = $request->input('prodid');
 
         return $this->fuelPriceService->getHistoryFuelPrice($prodId);
