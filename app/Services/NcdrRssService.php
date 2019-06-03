@@ -5,7 +5,6 @@ namespace MOLiBot\Services;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use MOLiBot\Repositories\PublishedNcdrRssRepository;
-use SoapBox\Formatter\Formatter;
 
 class NcdrRssService
 {
@@ -21,24 +20,24 @@ class NcdrRssService
         $client = new GuzzleHttpClient();
 
         try {
-            $response = $client->request('GET', 'https://alerts.ncdr.nat.gov.tw/RssAtomFeeds.ashx', [
-                'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'cache-control' => 'no-cache'
-                ],
-                'timeout' => 10
-            ]);
+            $response = $client->request(
+                'GET',
+                'https://alerts.ncdr.nat.gov.tw/JSONAtomFeeds.ashx',
+                [
+                    'headers' => [
+                        'User-Agent' => 'MOLi Bot',
+                        'cache-control' => 'no-cache'
+                    ],
+                    'timeout' => 10
+                ]
+            );
         } catch (GuzzleHttpTransferException $e) {
             return $e->getCode();
         }
 
         $fileContents = $response->getBody()->getContents();
 
-        $formatter = Formatter::make($fileContents, Formatter::XML);
-
-        $json = $formatter->toArray();
-
-        return $json;
+        return json_decode($fileContents, true);
     }
 
     public function checkRssPublished($id)
@@ -49,5 +48,14 @@ class NcdrRssService
     public function storePublishedRss($id, $category)
     {
         return $this->publishedNcdrRssRepository->storePublishedRss($id, $category);
+    }
+
+    /**
+     * @param array $excludeId
+     * @return boolean
+     */
+    public function deletePublishedRecordWithExcludeId($excludeId)
+    {
+        return $this->publishedNcdrRssRepository->deletePublishedRecordWithExcludeId($excludeId);
     }
 }

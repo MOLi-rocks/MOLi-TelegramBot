@@ -47,9 +47,22 @@ class NCDR_RSS extends Command
         
         $this->ncdrRssService = $ncdrRssService;
 
-        $this->NCDR_to_BOTChannel_list = collect(['地震', '土石流', '河川高水位', '降雨', '停班停課', '道路封閉', '雷雨', '颱風']); // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
+        // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
+        $this->NCDR_to_BOTChannel_list = collect([
+            '地震',
+            '土石流',
+            '河川高水位',
+            '降雨',
+            '停班停課',
+            '道路封閉',
+            '雷雨',
+            '颱風'
+        ]);
 
-        $this->NCDR_should_mute = collect(['土石流']); // 哪些類別的 NCDR 訊息要靜音
+        // 哪些類別的 NCDR 訊息要靜音
+        $this->NCDR_should_mute = collect([
+            '土石流'
+        ]);
     }
 
     /**
@@ -63,8 +76,10 @@ class NCDR_RSS extends Command
 
         $items = $json['entry'];
 
+        $newId = [];
+
         foreach ($items as $item) {
-            $category = $item['category']['@attributes']['term'];
+            $category = $item['category']['@term'];
 
             if ( !$this->ncdrRssService->checkRssPublished($item['id']) ) {
                 if ($this->option('init')) {
@@ -76,14 +91,20 @@ class NCDR_RSS extends Command
                 if ($this->NCDR_to_BOTChannel_list->contains($category)) {
                     Telegram::sendMessage([
                         'chat_id' => $chat_id,
-                        'text' => trim($item['summary']) . PHP_EOL . '#' . $category
+                        'text' => trim($item['summary']['#text']) . PHP_EOL . '#' . $category
                     ]);
                 }
 
                 $this->ncdrRssService->storePublishedRss($item['id'], $category);
 
+                array_push($newId, $item['id']);
+
                 sleep(5);
             }
+        }
+
+        if (!empty($newId)) {
+            $this->ncdrRssService->deletePublishedRecordWithExcludeId($newId);
         }
 
         $this->info('Mission Complete!');
