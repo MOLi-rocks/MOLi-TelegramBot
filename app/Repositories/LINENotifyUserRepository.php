@@ -6,28 +6,46 @@ use MOLiBot\Models\LINENotifyUser;
 
 class LINENotifyUserRepository
 {
+    private $LINENotifyUserModel;
+
+    /**
+     * LINENotifyUserRepository constructor.
+     * @param LINENotifyUser $LINENotifyUserModel
+     */
+    public function __construct(LINENotifyUser $LINENotifyUserModel)
+    {
+        $this->LINENotifyUserModel = $LINENotifyUserModel;
+    }
+
     public function createToken($token)
     {
-        LINENotifyUser::create([
+        $this->LINENotifyUserModel->create([
             'access_token' => $token
         ]);
     }
 
     public function getAllToken()
     {
-        return LINENotifyUser::where('status', '!=', '401')
+        return $this->LINENotifyUserModel
+            ->where('status', '!=', '401')
             ->pluck('access_token');
     }
 
     public function getTotalStats()
     {
-        $total = LINENotifyUser::all()->count();
+        $total = $this->LINENotifyUserModel->all()->count();
 
-        $active = LINENotifyUser::where('status', '=', 200)->count();
+        $active = $this->LINENotifyUserModel
+            ->where('status', '=', 200)
+            ->count();
 
-        $inactive = LINENotifyUser::where('status', '=', 401)->count();
+        $inactive = $this->LINENotifyUserModel
+            ->where('status', '=', 401)
+            ->count();
 
-        $others = LINENotifyUser::whereNotIn('status', [200, 401])->count();
+        $others = $this->LINENotifyUserModel
+            ->whereNotIn('status', [200, 401])
+            ->count();
 
         return [
             'Total' => $total,
@@ -39,15 +57,18 @@ class LINENotifyUserRepository
 
     public function getUserStats()
     {
-        $total = LINENotifyUser::all()->count();
+        $total = $this->LINENotifyUserModel->all()->count();
 
-        $active = LINENotifyUser::where('targetType', 'USER')
+        $active = $this->LINENotifyUserModel
+            ->where('targetType', 'USER')
             ->where('status', '=', 200)->count();
 
-        $inactive = LINENotifyUser::where('targetType', 'USER')
+        $inactive = $this->LINENotifyUserModel
+            ->where('targetType', 'USER')
             ->where('status', '=', 401)->count();
 
-        $others = LINENotifyUser::where('targetType', 'USER')
+        $others = $this->LINENotifyUserModel
+            ->where('targetType', 'USER')
             ->whereNotIn('status', [200, 401])->count();
 
         return [
@@ -60,15 +81,18 @@ class LINENotifyUserRepository
 
     public function getGroupStats()
     {
-        $total = LINENotifyUser::all()->count();
+        $total = $this->LINENotifyUserModel->all()->count();
 
-        $active = LINENotifyUser::where('targetType', 'GROUP')
+        $active = $this->LINENotifyUserModel
+            ->where('targetType', 'GROUP')
             ->where('status', '=', 200)->count();
 
-        $inactive = LINENotifyUser::where('targetType', 'GROUP')
+        $inactive = $this->LINENotifyUserModel
+            ->where('targetType', 'GROUP')
             ->where('status', '=', 401)->count();
 
-        $others = LINENotifyUser::where('targetType', 'GROUP')
+        $others = $this->LINENotifyUserModel
+            ->where('targetType', 'GROUP')
             ->whereNotIn('status', [200, 401])->count();
 
         return [
@@ -81,7 +105,8 @@ class LINENotifyUserRepository
 
     public function updateUserData($token, $result)
     {
-        LINENotifyUser::where('access_token', $token)
+        $this->LINENotifyUserModel
+            ->where('access_token', $token)
             ->update([
                 'targetType' => $result['targetType'],
                 'target' => $result['target'],
@@ -91,7 +116,8 @@ class LINENotifyUserRepository
 
     public function updateUserStatus($token, $status)
     {
-        LINENotifyUser::where('access_token', $token)
+        $this->LINENotifyUserModel
+            ->where('access_token', $token)
             ->update([
                 'status' => $status
             ]);

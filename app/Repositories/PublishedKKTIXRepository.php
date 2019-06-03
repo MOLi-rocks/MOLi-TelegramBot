@@ -6,14 +6,27 @@ use MOLiBot\Models\PublishedKKTIX;
 
 class PublishedKKTIXRepository
 {
+    private $publishedKKTIXModel;
+
+    /**
+     * PublishedKKTIXRepository constructor.
+     * @param PublishedKKTIX $publishedKKTIXModel
+     */
+    public function __construct(PublishedKKTIX $publishedKKTIXModel)
+    {
+        $this->publishedKKTIXModel = $publishedKKTIXModel;
+    }
+
     public function checkEventPublished($url)
     {
-        return PublishedKKTIX::where('url', '=', $url)->exists();
+        return $this->publishedKKTIXModel
+            ->where('url', '=', $url)
+            ->exists();
     }
 
     public function storePublishedEvent($event)
     {
-        return PublishedKKTIX::create([
+        return $this->publishedKKTIXModel->create([
             'url' => $event->url,
             'title' => $event->title
         ]);
