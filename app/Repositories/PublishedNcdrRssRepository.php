@@ -31,4 +31,15 @@ class PublishedNcdrRssRepository
             'category' => $category
         ]);
     }
+
+    /**
+     * @param array $excludeId
+     * @return boolean
+     */
+    public function deletePublishedRecordWithExcludeId($excludeId)
+    {
+        return $this->publishedNcdrRssModel
+            ->whereNotIn('id', $excludeId)
+            ->forceDelete();
+    }
 }
