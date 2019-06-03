@@ -6,14 +6,27 @@ use MOLiBot\Models\PublishedNcdrRss;
 
 class PublishedNcdrRssRepository
 {
+    private $publishedNcdrRssModel;
+
+    /**
+     * PublishedNcdrRssRepository constructor.
+     * @param PublishedNcdrRss $publishedNcdrRssModel
+     */
+    public function __construct(PublishedNcdrRss $publishedNcdrRssModel)
+    {
+        $this->publishedNcdrRssModel = $publishedNcdrRssModel;
+    }
+
     public function checkRssPublished($id)
     {
-        return PublishedNcdrRss::where('id', '=', $id)->exists();
+        return $this->publishedNcdrRssModel
+            ->where('id', '=', $id)
+            ->exists();
     }
 
     public function storePublishedRss($id, $category)
     {
-        return PublishedNcdrRss::create([
+        return $this->publishedNcdrRssModel->create([
             'id' => $id,
             'category' => $category
         ]);

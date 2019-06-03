@@ -6,9 +6,20 @@ use MOLiBot\Models\MOLiBotApiToken;
 
 class MOLiBotApiTokenRepository
 {
+    private $MOLiBotApiTokenModel;
+
+    /**
+     * MOLiBotApiTokenRepository constructor.
+     * @param MOLiBotApiToken $MOLiBotApiTokenModel
+     */
+    public function __construct(MOLiBotApiToken $MOLiBotApiTokenModel)
+    {
+        $this->MOLiBotApiTokenModel = $MOLiBotApiTokenModel;
+    }
+
     public function createToken($token, $user)
     {
-        return MOLiBotApiToken::create([
+        return $this->MOLiBotApiTokenModel->create([
             'token' => $token,
             'user' => $user
         ]);
@@ -16,16 +27,20 @@ class MOLiBotApiTokenRepository
 
     public function getAllToken($columns = ['*'])
     {
-        return MOLiBotApiToken::all($columns);
+        return $this->MOLiBotApiTokenModel->all($columns);
     }
 
     public function checkTokenExist($token)
     {
-        return MOLiBotApiToken::where('token', '=', $token)->exists();
+        return $this->MOLiBotApiTokenModel
+            ->where('token', '=', $token)
+            ->exists();
     }
 
     public function deleteToken($token)
     {
-        return MOLiBotApiToken::where('token', '=', $token)->delete();
+        return $this->MOLiBotApiTokenModel
+            ->where('token', '=', $token)
+            ->delete();
     }
 }
