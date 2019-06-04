@@ -30,17 +30,17 @@
             height: 300px;
         }
 
-        #total-piechart table {
+        #total-piechart {
+            display: inline-block
+            margin: 0 auto !important;
+        }
+
+        #user-piechart {
             display: inline-block;
             margin: 0 auto !important;
         }
 
-        #user-piechart table {
-            display: inline-block;
-            margin: 0 auto !important;
-        }
-
-        #group-piechart table {
+        #group-piechart {
             display: inline-block;
             margin: 0 auto !important;
         }
