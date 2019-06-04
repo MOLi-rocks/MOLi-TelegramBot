@@ -28,8 +28,6 @@
 
         .piechart {
             height: 300px;
-            display: inline-block
-            margin: 0 auto !important;
         }
 
         .padding-top {
@@ -127,17 +125,26 @@
 
                 let total_options = {
                     title: 'Total Stats',
-                    sliceVisibilityThreshold: 0
+                    sliceVisibilityThreshold: 0,
+                    legend: {
+                        alignment: 'center'
+                    }
                 };
 
                 let user_options = {
                     title: 'User Stats',
-                    sliceVisibilityThreshold: 0
+                    sliceVisibilityThreshold: 0,
+                    legend: {
+                        alignment: 'center'
+                    }
                 };
 
                 let group_options = {
                     title: 'Group Stats',
-                    sliceVisibilityThreshold: 0
+                    sliceVisibilityThreshold: 0,
+                    legend: {
+                        alignment: 'center'
+                    }
                 };
 
                 const total_chart = new google.visualization.PieChart(document.getElementById('total-piechart'));
