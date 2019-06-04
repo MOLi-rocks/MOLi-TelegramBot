@@ -31,17 +31,17 @@
         }
 
         #total-piechart table {
-            width: auto;
+            display: inline-block;
             margin: 0 auto !important;
         }
 
         #user-piechart table {
-            width: auto;
+            display: inline-block;
             margin: 0 auto !important;
         }
 
         #group-piechart table {
-            width: auto;
+            display: inline-block;
             margin: 0 auto !important;
         }
 
