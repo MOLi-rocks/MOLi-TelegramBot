@@ -28,20 +28,7 @@
 
         .piechart {
             height: 300px;
-        }
-
-        #total-piechart {
             display: inline-block
-            margin: 0 auto !important;
-        }
-
-        #user-piechart {
-            display: inline-block;
-            margin: 0 auto !important;
-        }
-
-        #group-piechart {
-            display: inline-block;
             margin: 0 auto !important;
         }
 
