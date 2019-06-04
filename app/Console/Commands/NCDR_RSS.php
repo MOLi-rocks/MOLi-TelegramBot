@@ -76,10 +76,10 @@ class NCDR_RSS extends Command
 
         $items = $json['entry'];
 
-        $newId = [];
+        $nowListId = [];
 
         foreach ($items as $item) {
-            $category = $item['category']['@term'];
+            array_push($nowListId, $item['id']);
 
             if ( !$this->ncdrRssService->checkRssPublished($item['id']) ) {
                 if ($this->option('init')) {
@@ -87,6 +87,8 @@ class NCDR_RSS extends Command
                 } else {
                     $chat_id = env('WEATHER_CHANNEL');
                 }
+
+                $category = $item['category']['@term'];
 
                 if ($this->NCDR_to_BOTChannel_list->contains($category)) {
                     Telegram::sendMessage([
@@ -97,15 +99,11 @@ class NCDR_RSS extends Command
 
                 $this->ncdrRssService->storePublishedRss($item['id'], $category);
 
-                array_push($newId, $item['id']);
-
                 sleep(5);
             }
         }
 
-        if (!empty($newId)) {
-            $this->ncdrRssService->deletePublishedRecordWithExcludeId($newId);
-        }
+        $this->ncdrRssService->deletePublishedRecordWithExcludeId($nowListId);
 
         $this->info('Mission Complete!');
     }
