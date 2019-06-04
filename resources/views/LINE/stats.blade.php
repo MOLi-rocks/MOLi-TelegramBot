@@ -127,7 +127,8 @@
                     title: 'Total Stats',
                     sliceVisibilityThreshold: 0,
                     legend: {
-                        alignment: 'center'
+                        alignment: 'center',
+                        position: 'bottom'
                     }
                 };
 
@@ -135,7 +136,8 @@
                     title: 'User Stats',
                     sliceVisibilityThreshold: 0,
                     legend: {
-                        alignment: 'center'
+                        alignment: 'center',
+                        position: 'bottom'
                     }
                 };
 
@@ -143,7 +145,8 @@
                     title: 'Group Stats',
                     sliceVisibilityThreshold: 0,
                     legend: {
-                        alignment: 'center'
+                        alignment: 'center',
+                        position: 'bottom'
                     }
                 };
 
