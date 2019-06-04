@@ -2,66 +2,11 @@
 <html>
 <head>
     <title>暨大最新公告 LINE Notify</title>
-    <link rel='icon' href='https://moli.rocks/favicon.ico' />
+    <link rel="icon" href="https://moli.rocks/favicon.ico" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script>
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            var total_data = google.visualization.arrayToDataTable([
-                ['Status', 'Count'],
-                ['Active', {{ $stats['Total']['Active'] }}],
-                ['Inactive', {{ $stats['Total']['Inactive'] }}],
-                ['Others', {{ $stats['Total']['Others'] }}]
-            ]);
-
-            var user_data = google.visualization.arrayToDataTable([
-                ['Status', 'Count'],
-                ['Active', {{ $stats['USER']['Active'] }}],
-                ['Inactive', {{ $stats['USER']['Inactive'] }}],
-                ['Others', {{ $stats['USER']['Others'] }}]
-            ]);
-
-            var group_data = google.visualization.arrayToDataTable([
-                ['Status', 'Count'],
-                ['Active', {{ $stats['GROUP']['Active'] }}],
-                ['Inactive', {{ $stats['GROUP']['Inactive'] }}],
-                ['Others', {{ $stats['GROUP']['Others'] }}]
-            ]);
-
-            var total_options = {
-                title: 'Total Stats',
-                sliceVisibilityThreshold: 0
-            };
-
-            var user_options = {
-                title: 'User Stats',
-                sliceVisibilityThreshold: 0
-            };
-
-            var group_options = {
-                title: 'Group Stats',
-                sliceVisibilityThreshold: 0
-            };
-
-            var total_chart = new google.visualization.PieChart(document.getElementById('total-piechart'));
-
-            var user_chart = new google.visualization.PieChart(document.getElementById('user-piechart'));
-
-            var group_chart = new google.visualization.PieChart(document.getElementById('group-piechart'));
-
-            total_chart.draw(total_data, total_options);
-            user_chart.draw(user_data, user_options);
-            group_chart.draw(group_data, group_options);
-        }
-
-    </script>
     <style>
         html {
             position: relative;
@@ -79,6 +24,25 @@
         .center-text {
             text-align: center;
             vertical-align: center;
+        }
+
+        .piechart {
+            height: 300px;
+        }
+
+        #total-piechart table {
+            width: auto;
+            margin: 0 auto !important;
+        }
+
+        #user-piechart table {
+            width: auto;
+            margin: 0 auto !important;
+        }
+
+        #group-piechart table {
+            width: auto;
+            margin: 0 auto !important;
         }
 
         .padding-top {
@@ -107,17 +71,17 @@
         </div>
         <div class="row padding-top">
             <div class="col center-text">
-                <div id="total-piechart" style="width: 100%;"></div>
+                <div id="total-piechart" class="piechart"></div>
             </div>
         </div>
         <div class="row padding-top">
             <div class="col center-text">
-                <div id="user-piechart" style="width: 100%;"></div>
+                <div id="user-piechart" class="piechart"></div>
             </div>
         </div>
         <div class="row padding-top">
             <div class="col center-text">
-                <div id="group-piechart" style="width: 100%;"></div>
+                <div id="group-piechart" class="piechart"></div>
             </div>
         </div>
     </div>
@@ -142,5 +106,68 @@
             </div>
         </div>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        $(function() {
+            google.charts.load('current', {'packages': ['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                let total_data = google.visualization.arrayToDataTable([
+                    ['Status', 'Count'],
+                    ['Active', {{ $stats['Total']['Active'] }}],
+                    ['Inactive', {{ $stats['Total']['Inactive'] }}],
+                    ['Others', {{ $stats['Total']['Others'] }}]
+                ]);
+
+                let user_data = google.visualization.arrayToDataTable([
+                    ['Status', 'Count'],
+                    ['Active', {{ $stats['USER']['Active'] }}],
+                    ['Inactive', {{ $stats['USER']['Inactive'] }}],
+                    ['Others', {{ $stats['USER']['Others'] }}]
+                ]);
+
+                let group_data = google.visualization.arrayToDataTable([
+                    ['Status', 'Count'],
+                    ['Active', {{ $stats['GROUP']['Active'] }}],
+                    ['Inactive', {{ $stats['GROUP']['Inactive'] }}],
+                    ['Others', {{ $stats['GROUP']['Others'] }}]
+                ]);
+
+                let total_options = {
+                    title: 'Total Stats',
+                    sliceVisibilityThreshold: 0
+                };
+
+                let user_options = {
+                    title: 'User Stats',
+                    sliceVisibilityThreshold: 0
+                };
+
+                let group_options = {
+                    title: 'Group Stats',
+                    sliceVisibilityThreshold: 0
+                };
+
+                const total_chart = new google.visualization.PieChart(document.getElementById('total-piechart'));
+
+                const user_chart = new google.visualization.PieChart(document.getElementById('user-piechart'));
+
+                const group_chart = new google.visualization.PieChart(document.getElementById('group-piechart'));
+
+                total_chart.draw(total_data, total_options);
+                user_chart.draw(user_data, user_options);
+                group_chart.draw(group_data, group_options);
+            }
+        });
+
+        $(window).resize(function () {
+            drawChart();
+        });
+    </script>
 </body>
 </html>

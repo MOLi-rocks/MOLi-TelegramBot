@@ -2,25 +2,11 @@
 <html>
 <head>
     <title>暨大最新公告 LINE Notify</title>
-    <link rel='icon' href='https://moli.rocks/favicon.ico' />
+    <link rel="icon" href="https://moli.rocks/favicon.ico"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-    @if (isset($client_id) and isset($redirect_uri))
-    <script>
-        function oAuth2() {
-            var URL = 'https://notify-bot.line.me/oauth/authorize?';
-            URL += 'response_type=code';
-            URL += '&client_id={{ $client_id }}';
-            URL += '&redirect_uri={{ $redirect_uri }}';
-            URL += '&scope=notify';
-            URL += '&state=NO_STATE';
-            window.location.href = URL;
-        }
-    </script>
-    @endif
     <style>
         html {
             position: relative;
@@ -85,7 +71,7 @@
                 <i class="fab fa-line fa-10x line-logo"></i>
             </div>
         </div>
-        @if (isset($success) and $success == true)
+        @if (isset($success) && $success == true)
             <div class="row padding-top">
                 <div class="col center-text">
                     <h1>恭喜完成連動！</h1>
@@ -171,5 +157,22 @@
             </div>
         </div>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    @if (isset($client_id) && isset($redirect_uri))
+        <script>
+            function oAuth2() {
+                let URL = 'https://notify-bot.line.me/oauth/authorize?';
+                URL += 'response_type=code';
+                URL += '&client_id={{ $client_id }}';
+                URL += '&redirect_uri={{ $redirect_uri }}';
+                URL += '&scope=notify';
+                URL += '&state=NO_STATE';
+                window.location.href = URL;
+            }
+        </script>
+    @endif
 </body>
 </html>
