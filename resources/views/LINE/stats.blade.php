@@ -163,10 +163,10 @@
                 user_chart.draw(user_data, user_options);
                 group_chart.draw(group_data, group_options);
             }
-        });
-
-        $(window).resize(function () {
-            drawChart();
+            
+            $(window).resize(function () {
+                drawChart();
+            });
         });
     </script>
 </body>
