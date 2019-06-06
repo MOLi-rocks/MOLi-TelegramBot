@@ -88,12 +88,12 @@ class NCDR_RSS extends Command
                     $chat_id = env('WEATHER_CHANNEL');
                 }
 
-                $category = $item->category->{@term};
+                $category = $item->category->{'@term'};
 
                 if ($this->NCDR_to_BOTChannel_list->contains($category)) {
                     Telegram::sendMessage([
                         'chat_id' => $chat_id,
-                        'text' => trim($item->summary->{#text}) . PHP_EOL . '#' . $category
+                        'text' => trim($item->summary->{'#text'}) . PHP_EOL . '#' . $category
                     ]);
                 }
 
