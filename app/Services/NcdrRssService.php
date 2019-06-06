@@ -36,8 +36,14 @@ class NcdrRssService
         }
 
         $fileContents = $response->getBody()->getContents();
+        
+        $fileContents = json_decode($fileContents, true);
+        
+        if (!is_array($fileContents['entry'])) {
+            $fileContents['entry'] = [$fileContents['entry']];
+        }
 
-        return json_decode($fileContents, true);
+        return $fileContents;
     }
 
     public function checkRssPublished($id)
