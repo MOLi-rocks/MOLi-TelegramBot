@@ -35,12 +35,10 @@ class NcdrRssService
             return $e->getCode();
         }
 
-        $fileContents = $response->getBody()->getContents();
-        
-        $fileContents = json_decode($fileContents, true);
-        
-        if (!is_array($fileContents['entry'])) {
-            $fileContents['entry'] = [$fileContents['entry']];
+        $fileContents = json_decode($response->getBody()->getContents());
+
+        if (!is_array($fileContents->entry)) {
+            $fileContents->entry = [$fileContents->entry];
         }
 
         return $fileContents;
