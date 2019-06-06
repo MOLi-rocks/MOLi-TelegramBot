@@ -94,7 +94,9 @@ class MOLiBotController extends Controller
 
     public function getNCDR_RSS()
     {
-        return $this->ncdrRssService->getNcdrRss();
+        $rss = $this->ncdrRssService->getNcdrRss();
+        
+        return response()->json($rss);
     }
 
     public function postNCDR(Request $request)
