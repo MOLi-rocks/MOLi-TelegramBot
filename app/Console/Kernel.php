@@ -5,9 +5,6 @@ namespace MOLiBot\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
-use Psy\Command\Command;
-use Telegram;
-
 class Kernel extends ConsoleKernel
 {
     /**
@@ -16,15 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\Inspire::class,
-        Commands\TokenGenerator::class,
-        Commands\TokenList::class,
-        Commands\TokenDelete::class,
-        Commands\NCNU_RSS::class,
-        Commands\MOLiDay_Events::class,
-        Commands\GetFuelPriceGap::class,
-        Commands\MOLi_Blog_Article::class,
-        Commands\NCDR_RSS::class
+        //
     ];
 
     /**
@@ -35,8 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-                 ->hourly();
+        //$schedule->command('inspire')
+        //         ->hourly();
 
         $schedule->command('rss:check')
                  ->everyTenMinutes()->withoutOverlapping();
@@ -52,5 +41,17 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('ncdr:check')
             ->everyTenMinutes()->withoutOverlapping();
+    }
+
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        $this->load(__DIR__.'/Commands');
+
+        require base_path('routes/console.php');
     }
 }
