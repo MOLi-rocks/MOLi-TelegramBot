@@ -17,7 +17,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         // \MOLiBot\Http\Middleware\TrimStrings::class,
         // \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \MOLiBot\Http\Middleware\TrustProxies::class,
+        // \MOLiBot\Http\Middleware\TrustProxies::class,
         \Barryvdh\Cors\HandleCors::class,
     ];
 
