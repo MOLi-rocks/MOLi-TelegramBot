@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'line_notify_client_id' => env('LINE_NOTIFY_CLIENT_ID'),
+    'line_notify_client_id' => env('LINE_NOTIFY_CLIENT_ID', 'YOUR-CLIENT-ID'),
 
     /*
     |--------------------------------------------------------------------------
@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'line_notify_client_secret' => env('LINE_NOTIFY_CLIENT_SECRET'),
+    'line_notify_client_secret' => env('LINE_NOTIFY_CLIENT_SECRET', 'YOUR-CLIENT-SECRET'),
 
     /*
     |--------------------------------------------------------------------------
@@ -43,6 +43,6 @@ return [
     |
     */
 
-    'line_notify_redirect_uri' => env('LINE_NOTIFY_REDIRECT_URI'),
+    'line_notify_redirect_uri' => env('LINE_NOTIFY_REDIRECT_URI', 'YOUR-REDIRECT_URI'),
 
 ];
