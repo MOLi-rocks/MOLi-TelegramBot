@@ -26,6 +26,6 @@ class PublishedNCNURSSTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Published_NCNU_RSS');
+        Schema::dropIfExists('published_ncnu_rss');
     }
 }
