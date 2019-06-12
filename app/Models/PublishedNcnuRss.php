@@ -8,12 +8,10 @@ use Illuminate\Database\Eloquent\Model;
  * MOLiBot\Models\PublishedNcnuRss
  *
  * @property string $guid
- * @property string $title
  * @method static \Illuminate\Database\Eloquent\Builder|\MOLiBot\Models\PublishedNcnuRss newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\MOLiBot\Models\PublishedNcnuRss newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\MOLiBot\Models\PublishedNcnuRss query()
  * @method static \Illuminate\Database\Eloquent\Builder|\MOLiBot\Models\PublishedNcnuRss whereGuid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\MOLiBot\Models\PublishedNcnuRss whereTitle($value)
  * @mixin \Eloquent
  */
 class PublishedNcnuRss extends Model
@@ -26,5 +24,5 @@ class PublishedNcnuRss extends Model
 
     protected $table = 'published_ncnu_rss';
 
-    protected $fillable = ['guid', 'title'];
+    protected $fillable = ['guid'];
 }
