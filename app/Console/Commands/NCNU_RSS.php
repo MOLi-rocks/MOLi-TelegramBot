@@ -110,7 +110,7 @@ class NCNU_RSS extends Command
                     }
                 }
 
-                $this->ncnuRssService->storePublishedRss($item['guid'], $item['title']);
+                $this->ncnuRssService->storePublishedRss($item['guid']);
 
                 // 避免太過頻繁發送
                 sleep(5);
