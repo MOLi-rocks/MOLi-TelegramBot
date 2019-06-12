@@ -26,6 +26,6 @@ class PublishedKKTIXTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Published_KKTIX');
+        Schema::dropIfExists('published_moli_kktix');
     }
 }
