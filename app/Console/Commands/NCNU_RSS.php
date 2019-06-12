@@ -76,44 +76,42 @@ class NCNU_RSS extends Command
             $hashtag = '';
 
             if ( !$this->ncnuRssService->checkRssPublished($item['guid']) ) {
-                $seg_list = Jieba::cut($item['title']);
-
-                foreach($seg_list as $seg_list_item) {
-                    $hashtag .= '#' . $seg_list_item . ' ';
-                }
-
                 if ($this->option('init')) {
-                    $chat_id = env('TEST_CHANNEL');
+                    $this->ncnuRssService->storePublishedRss($item['guid']);
                 } else {
-                    $chat_id = env('NEWS_CHANNEL');
-                }
+                    $seg_list = Jieba::cut($item['title']);
 
-                // send to Telegram Channel
-                Telegram::sendMessage([
-                    'chat_id' => $chat_id,
-                    'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'] . PHP_EOL . PHP_EOL . $hashtag
-                ]);
-
-                // send to LINE Notify
-                $LNU = $this->LINENotifyService->getAllToken(); // LINE Notify Users
-                $msg = PHP_EOL .$item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'];
-                foreach ($LNU as $key => $token){
-                    try {
-                        $this->LINENotifyService->sendMsg($token, $msg);
-                    } catch (\Exception $e) {
-                        $this->LINENotifyService->updateStatus($token);
+                    foreach($seg_list as $seg_list_item) {
+                        $hashtag .= '#' . $seg_list_item . ' ';
                     }
 
-                    // LINE 限制一分鐘上限 1000 次，做一些保留次數
-                    if( ($key+1) % 950 == 0) {
-                        sleep(62);
+                    // send to Telegram Channel
+                    Telegram::sendMessage([
+                        'chat_id' => env('NEWS_CHANNEL'),
+                        'text' => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'] . PHP_EOL . PHP_EOL . $hashtag
+                    ]);
+
+                    // send to LINE Notify
+                    $LNU = $this->LINENotifyService->getAllToken(); // LINE Notify Users
+                    $msg = PHP_EOL .$item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'];
+                    foreach ($LNU as $key => $token){
+                        try {
+                            $this->LINENotifyService->sendMsg($token, $msg);
+                        } catch (\Exception $e) {
+                            $this->LINENotifyService->updateStatus($token);
+                        }
+
+                        // LINE 限制一分鐘上限 1000 次，做一些保留次數
+                        if( ($key+1) % 950 == 0) {
+                            sleep(62);
+                        }
                     }
+
+                    $this->ncnuRssService->storePublishedRss($item['guid']);
+
+                    // 避免太過頻繁發送
+                    sleep(5);
                 }
-
-                $this->ncnuRssService->storePublishedRss($item['guid']);
-
-                // 避免太過頻繁發送
-                sleep(5);
             }
         }
 
