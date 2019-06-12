@@ -26,7 +26,7 @@ class AddStatusToLineNotifyUsersTable extends Migration
     public function down()
     {
         Schema::table('line_notify_users', function (Blueprint $table) {
-            //
+            $table->dropColumn('status');
         });
     }
 }
