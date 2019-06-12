@@ -24,11 +24,10 @@ class PublishedNcnuRssRepository
             ->exists();
     }
 
-    public function storePublishedRss($guid, $title)
+    public function storePublishedRss($guid)
     {
         return $this->publishedNcnuRssModel->create([
-            'guid' => $guid,
-            'title' => $title
+            'guid' => $guid
         ]);
     }
 }
