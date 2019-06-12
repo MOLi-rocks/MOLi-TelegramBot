@@ -46,8 +46,8 @@ class NcnuRssService
         return $this->publishedNcnuRssRepository->checkRssPublished($guid);
     }
 
-    public function storePublishedRss($guid, $title)
+    public function storePublishedRss($guid)
     {
-        return $this->publishedNcnuRssRepository->storePublishedRss($guid, $title);
+        return $this->publishedNcnuRssRepository->storePublishedRss($guid);
     }
 }
