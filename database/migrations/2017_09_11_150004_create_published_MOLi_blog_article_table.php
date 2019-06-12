@@ -27,6 +27,6 @@ class CreatePublishedMOLiBlogArticleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Published_MOLi_blog_article');
+        Schema::dropIfExists('published_moli_blog_article');
     }
 }
