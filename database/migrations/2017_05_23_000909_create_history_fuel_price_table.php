@@ -17,7 +17,7 @@ class CreateHistoryFuelPriceTable extends Migration
             $table->string('name');
             $table->string('unit');
             $table->decimal('price', 8, 3);
-            $table->dateTimeTz('start_at');
+            $table->string('start_at');
             $table->primary(['name', 'start_at']);
         });
     }

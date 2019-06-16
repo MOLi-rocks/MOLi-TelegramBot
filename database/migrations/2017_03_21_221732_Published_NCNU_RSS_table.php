@@ -15,7 +15,6 @@ class PublishedNCNURSSTable extends Migration
     {
         Schema::create('published_ncnu_rss', function (Blueprint $table) {
             $table->string('guid')->primary();
-            $table->string('title');
         });
     }
 
