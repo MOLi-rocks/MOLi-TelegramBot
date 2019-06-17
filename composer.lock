@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db524bd3fcfbf0efc02532583e3af668",
+    "content-hash": "ee9442e234c2943be11ea3eec3cba158",
     "packages": [
         {
             "name": "barryvdh/laravel-cors",
@@ -1359,35 +1359,46 @@
         },
         {
             "name": "league/csv",
-            "version": "6.3.0",
+            "version": "9.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/csv.git",
-                "reference": "5ffb2b42ed5d7ae20d80d4480b34743f5086d4a8"
+                "reference": "b574a7d8b28f1528e011d8652fb7d2e83410d4c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/csv/zipball/5ffb2b42ed5d7ae20d80d4480b34743f5086d4a8",
-                "reference": "5ffb2b42ed5d7ae20d80d4480b34743f5086d4a8",
+                "url": "https://api.github.com/repos/thephpleague/csv/zipball/b574a7d8b28f1528e011d8652fb7d2e83410d4c9",
+                "reference": "b574a7d8b28f1528e011d8652fb7d2e83410d4c9",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": ">=5.4.0"
+                "php": ">=7.0.10"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "ext-curl": "*",
+                "friendsofphp/php-cs-fixer": "^2.12",
+                "phpstan/phpstan": "^0.9.2",
+                "phpstan/phpstan-phpunit": "^0.9.4",
+                "phpstan/phpstan-strict-rules": "^0.9.0",
+                "phpunit/phpunit": "^6.0"
+            },
+            "suggest": {
+                "ext-iconv": "Needed to ease transcoding CSV using iconv stream filters"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.3-dev"
+                    "dev-master": "9.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
                     "League\\Csv\\": "src"
-                }
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1402,6 +1413,7 @@
                 }
             ],
             "description": "Csv data manipulation made easy in PHP",
+            "homepage": "http://csv.thephpleague.com",
             "keywords": [
                 "csv",
                 "export",
@@ -1410,7 +1422,7 @@
                 "read",
                 "write"
             ],
-            "time": "2015-01-21T12:06:27+00:00"
+            "time": "2019-06-07T06:24:33+00:00"
         },
         {
             "name": "league/flysystem",
@@ -1620,20 +1632,23 @@
         },
         {
             "name": "mustangostang/spyc",
-            "version": "0.5.1",
+            "version": "0.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mustangostang/spyc.git",
-                "reference": "dc4785b4d7227fd9905e086d499fb8abfadf9977"
+                "reference": "23c35ae854d835f2d7bcc3e3ad743d7e57a8c14d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mustangostang/spyc/zipball/dc4785b4d7227fd9905e086d499fb8abfadf9977",
-                "reference": "dc4785b4d7227fd9905e086d499fb8abfadf9977",
+                "url": "https://api.github.com/repos/mustangostang/spyc/zipball/23c35ae854d835f2d7bcc3e3ad743d7e57a8c14d",
+                "reference": "23c35ae854d835f2d7bcc3e3ad743d7e57a8c14d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.3.*@dev"
             },
             "type": "library",
             "extra": {
@@ -1648,7 +1663,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT License"
+                "MIT"
             ],
             "authors": [
                 {
@@ -1663,7 +1678,7 @@
                 "yaml",
                 "yml"
             ],
-            "time": "2013-02-21T10:52:01+00:00"
+            "time": "2017-02-24T16:06:33+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -2214,28 +2229,38 @@
         },
         {
             "name": "soapbox/laravel-formatter",
-            "version": "2.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SoapBox/laravel-formatter.git",
-                "reference": "9149adcf6f14a563ccd5b81579e802b1f402aef9"
+                "reference": "af93de26a38982a3a7c6105100100d8c5aba4733"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SoapBox/laravel-formatter/zipball/9149adcf6f14a563ccd5b81579e802b1f402aef9",
-                "reference": "9149adcf6f14a563ccd5b81579e802b1f402aef9",
+                "url": "https://api.github.com/repos/SoapBox/laravel-formatter/zipball/af93de26a38982a3a7c6105100100d8c5aba4733",
+                "reference": "af93de26a38982a3a7c6105100100d8c5aba4733",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": ">=4.0",
-                "league/csv": "~6.0",
-                "mustangostang/spyc": "0.5.*@dev",
-                "php": ">=5.4.0"
+                "illuminate/support": "~5.5",
+                "league/csv": "~9.0",
+                "mustangostang/spyc": "~0.6",
+                "php": ">=7.0.10"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7 || ^6.5"
             },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Formatter": "SoapBox\\Formatter"
+                    }
+                }
+            },
             "autoload": {
-                "psr-0": {
-                    "SoapBox\\Formatter": "src/"
+                "psr-4": {
+                    "SoapBox\\Formatter\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2265,7 +2290,7 @@
                 "xml",
                 "yaml"
             ],
-            "time": "2014-10-20T15:15:48+00:00"
+            "time": "2018-06-27T14:37:07+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
