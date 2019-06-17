@@ -102,15 +102,13 @@
                     <a href="https://telegram.me/MOLi_rocks" target="_blank">
                         <img class="tg-logo" src="{{ asset('img/telegram_logo.png') }}" alt="Telegram logo">
                     </a>
-                    <br />
-                    Telegram
+                    <p>Telegram</p>
                 </div>
                 <div class="col-12 col-md-3 center-text">
                     <a href="https://www.facebook.com/MOLi.rocks" target="_blank">
                         <img class="fb-logo" src="{{ asset('img/facebook_logo.png') }}" alt="Facebook logo">
                     </a>
-                    <br />
-                    Facebook
+                    <p>Facebook</p>
                 </div>
             </div>
         </div>
