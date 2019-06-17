@@ -37,9 +37,9 @@
             height: 150px; /* Set the fixed height of the footer here */
         }
 
-        .button {
-            background-color: #4CAF50; /* Green */
-            border: none;
+        .button-apply {
+            background-color: #4CAF50;
+            border: 2px solid #4CAF50;
             color: white;
             padding: 16px 32px;
             text-align: center;
@@ -52,15 +52,28 @@
             cursor: pointer;
         }
 
-        .button1 {
+        .button-apply:hover {
             background-color: white;
             color: black;
-            border: 2px solid #4CAF50;
         }
 
-        .button1:hover {
-            background-color: #4CAF50;
-            color: white;
+        @media (prefers-color-scheme: dark)
+        {
+            body {
+                background-color: #2a2a2e;
+                color: #cfcfd1;
+            }
+
+            .button-apply {
+                background-color: #4CAF50;
+                border: 2px solid #4CAF50;
+                color: white;
+            }
+
+            .button-apply:hover {
+                background-color: #2a2a2e;
+                color: #4CAF50;
+            }
         }
     </style>
 </head>
@@ -101,7 +114,7 @@
             </div>
             <div class="row padding-top">
                 <div class="col center-text">
-                    <a href="{{ Route('line_notify_auth') }}"><button class="button button1">重新嘗試連動</button></a>
+                    <a href="{{ Route('line_notify_auth') }}"><button class="button-apply">重新嘗試連動</button></a>
                 </div>
             </div>
         @else
@@ -119,7 +132,7 @@
             </div>
             <div class="row padding-top">
                 <div class="col center-text">
-                    <button class="button button1" onclick="oAuth2();">點此申請暨大最新公告 LINE Notify</button>
+                    <button class="button-apply" onclick="oAuth2();">點此申請暨大最新公告 LINE Notify</button>
                 </div>
             </div>
             <div class="row padding-top">

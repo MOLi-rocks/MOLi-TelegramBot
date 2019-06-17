@@ -40,6 +40,14 @@
             width: 100%;
             height: 150px; /* Set the fixed height of the footer here */
         }
+
+        @media (prefers-color-scheme: dark)
+        {
+            body {
+                background-color: #2a2a2e;
+                color: #cfcfd1;
+            }
+        }
     </style>
 </head>
 <body>
