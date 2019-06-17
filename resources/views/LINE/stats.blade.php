@@ -21,6 +21,14 @@
             width: 150px;
         }
 
+        .tg-logo {
+            width: 50px;
+        }
+
+        .fb-logo {
+            width: 50px;
+        }
+
         .center-text {
             text-align: center;
             vertical-align: center;
@@ -54,7 +62,7 @@
     <div class="container">
         <div class="row padding-top">
             <div class="col center-text">
-                <img class="line-logo" src="{{ asset('img/LINE_APP.png') }}">
+                <img class="line-logo" src="{{ asset('img/LINE_APP_logo.png') }}" alt="LINE logo">
             </div>
         </div>
         <div class="row padding-top">
@@ -91,10 +99,18 @@
                     <P>南投縣埔里鎮大學路 470 號管理學院 237 室</P>
                 </div>
                 <div class="col-12 col-md-2 center-text">
-                    <a href="https://telegram.me/MOLi_rocks" target="_blank"><i class="fab fa-telegram fa-4x"></i></a><br />Telegram
+                    <a href="https://telegram.me/MOLi_rocks" target="_blank">
+                        <img class="tg-logo" src="{{ asset('img/telegram_logo.png') }}" alt="Telegram logo">
+                    </a>
+                    <br />
+                    Telegram
                 </div>
                 <div class="col-12 col-md-3 center-text">
-                    <a href="https://www.facebook.com/MOLi.rocks" target="_blank"><i class="fab fa-facebook-square fa-4x"></i></a><br />Facebook
+                    <a href="https://www.facebook.com/MOLi.rocks" target="_blank">
+                        <img class="fb-logo" src="{{ asset('img/facebook_logo.png') }}" alt="Facebook logo">
+                    </a>
+                    <br />
+                    Facebook
                 </div>
             </div>
         </div>
