@@ -18,7 +18,7 @@
         }
 
         .line-logo {
-            color: #4CAF50;/* LINE Green */
+            width: 150px;
         }
 
         .center-text {
@@ -81,7 +81,7 @@
     <div class="container">
         <div class="row padding-top">
             <div class="col center-text">
-                <i class="fab fa-line fa-10x line-logo"></i>
+                <img class="line-logo" src="{{ asset('img/LINE_APP.png') }}">
             </div>
         </div>
         @if (isset($success) && $success == true)
