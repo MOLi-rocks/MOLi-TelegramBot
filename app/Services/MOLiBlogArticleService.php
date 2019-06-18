@@ -29,6 +29,7 @@ class MOLiBlogArticleService
             $fileContents = $client->request('GET', $MOLi_blog_api, [
                 'headers' => [
                     'User-Agent' => 'MOLi Bot',
+                    'Accept-Encoding' => 'gzip',
                     'Accept' => 'application/json'
                 ],
                 'timeout' => 10

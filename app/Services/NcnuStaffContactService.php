@@ -23,6 +23,7 @@ class NcnuStaffContactService
                 [
                     'headers' => [
                         'User-Agent' => 'MOLi Bot',
+                        'Accept-Encoding' => 'gzip',
                         'cache-control' => 'no-cache'
                     ],
                     'timeout' => 10
