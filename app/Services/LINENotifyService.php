@@ -23,6 +23,7 @@ class LINENotifyService
             $response = $client->request('GET', 'https://notify-api.line.me/api/status', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $access_token,
+                    'Accept-Encoding' => 'gzip'
                 ],
                 'timeout' => 10
             ]);
@@ -80,6 +81,7 @@ class LINENotifyService
             $response = $client->request('POST', 'https://notify-api.line.me/api/notify', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $access_token,
+                    'Accept-Encoding' => 'gzip'
                 ],
                 'form_params' => [
                     'message' => $msg,

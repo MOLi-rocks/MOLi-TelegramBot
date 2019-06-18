@@ -24,6 +24,7 @@ class MOLiDayService
                 'headers' => [
                     'User-Agent' => 'MOLi Bot',
                     'Accept' => 'application/json',
+                    'Accept-Encoding' => 'gzip',
                     'cache-control' => 'no-cache'
                 ],
                 'timeout' => 10

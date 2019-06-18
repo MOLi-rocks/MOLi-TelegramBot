@@ -24,6 +24,7 @@ class NcnuRssService
             $response = $client->request('GET', 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx', [
                 'headers' => [
                     'User-Agent' => 'MOLi Bot',
+                    'Accept-Encoding' => 'gzip',
                     'cache-control' => 'no-cache'
                 ],
                 'timeout' => 10

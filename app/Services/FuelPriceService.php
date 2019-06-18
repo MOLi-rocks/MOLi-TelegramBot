@@ -26,6 +26,7 @@ class FuelPriceService
                 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx/getCPCMainProdListPrice', [
                     'headers' => [
                         'User-Agent' => 'MOLi Bot',
+                        'Accept-Encoding' => 'gzip',
                         'cache-control' => 'no-cache'
                     ],
                     'timeout' => 10
@@ -111,6 +112,7 @@ class FuelPriceService
                 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx/getCPCMainProdListPrice_Historical?prodid=' . $prodId, [
                 'headers' => [
                     'User-Agent' => 'MOLi Bot',
+                    'Accept-Encoding' => 'gzip',
                     'cache-control' => 'no-cache'
                 ],
                 'timeout' => 10
