@@ -68,9 +68,9 @@ class NCNU_RSS extends Command
 
         Finalseg::init();
 
-        $json = $this->ncnuRssService->getNcnuRss();
+        $contents = $this->ncnuRssService->getNcnuRss();
 
-        $items = $json['channel']['item'];
+        $items = $contents['channel']['item'];
 
         foreach ($items as $item) {
             $hashtag = '';

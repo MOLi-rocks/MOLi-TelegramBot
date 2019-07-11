@@ -72,32 +72,34 @@ class NCDR_RSS extends Command
      */
     public function handle()
     {
-        $json = $this->ncdrRssService->getNcdrRss();
+        $contents = $this->ncdrRssService->getNcdrRss();
 
-        $items = $json->entry;
+        $items = $contents['entry'];
 
         $nowListId = [];
 
         foreach ($items as $item) {
-            array_push($nowListId, $item->id);
+            $itemId = $item['id'];
 
-            if ( !$this->ncdrRssService->checkRssPublished($item->id) ) {
+            array_push($nowListId, $itemId);
+
+            if ( !$this->ncdrRssService->checkRssPublished($itemId) ) {
                 if ($this->option('init')) {
                     $chat_id = env('TEST_CHANNEL');
                 } else {
                     $chat_id = env('WEATHER_CHANNEL');
                 }
 
-                $category = $item->category->{'@term'};
+                $category = $item['category']['@term'];
 
                 if ($this->NCDR_to_BOTChannel_list->contains($category)) {
                     Telegram::sendMessage([
                         'chat_id' => $chat_id,
-                        'text' => trim($item->summary->{'#text'}) . PHP_EOL . '#' . $category
+                        'text' => trim($item['summary']['#text']) . PHP_EOL . '#' . $category
                     ]);
                 }
 
-                $this->ncdrRssService->storePublishedRss($item->id, $category);
+                $this->ncdrRssService->storePublishedRss($itemId, $category);
 
                 sleep(5);
             }
