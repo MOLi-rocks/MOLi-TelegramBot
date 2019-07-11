@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
         //$schedule->command('inspire')
         //         ->hourly();
 
-        $schedule->command('rss:check')
+        $schedule->command('ncnu:rss-check')
                  ->everyTenMinutes()->withoutOverlapping();
         
         $schedule->command('kktix:check')
@@ -39,7 +39,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('fuelprice:checkgap')
                  ->weekly()->sundays()->at('12:05')->withoutOverlapping();
 
-        $schedule->command('ncdr:check')
+        $schedule->command('ncdr:rss-check')
             ->everyTenMinutes()->withoutOverlapping();
     }
 

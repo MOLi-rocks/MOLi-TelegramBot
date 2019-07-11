@@ -2,47 +2,27 @@
 
 namespace MOLiBot\Services;
 
-use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use MOLiBot\Repositories\PublishedNcdrRssRepository;
+use MOLiBot\RssSources\Ncdr as RssSource;
 
 class NcdrRssService
 {
     private $publishedNcdrRssRepository;
+    private $rssSource;
 
     public function __construct(PublishedNcdrRssRepository $publishedNcdrRssRepository)
     {
         $this->publishedNcdrRssRepository = $publishedNcdrRssRepository;
+        $this->rssSource = new RssSource();
     }
 
+    /**
+     * @return array|mixed|void
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getNcdrRss()
     {
-        $client = new GuzzleHttpClient();
-
-        try {
-            $response = $client->request(
-                'GET',
-                'https://alerts.ncdr.nat.gov.tw/JSONAtomFeeds.ashx',
-                [
-                    'headers' => [
-                        'User-Agent' => 'MOLi Bot',
-                        'Accept-Encoding' => 'gzip',
-                        'cache-control' => 'no-cache'
-                    ],
-                    'timeout' => 10
-                ]
-            );
-        } catch (GuzzleHttpTransferException $e) {
-            return $e->getCode();
-        }
-
-        $fileContents = json_decode($response->getBody()->getContents());
-
-        if (!is_array($fileContents->entry)) {
-            $fileContents->entry = [$fileContents->entry];
-        }
-
-        return $fileContents;
+        return $this->rssSource->getContent();
     }
 
     public function checkRssPublished($id)

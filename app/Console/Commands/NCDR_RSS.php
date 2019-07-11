@@ -5,6 +5,7 @@ namespace MOLiBot\Console\Commands;
 use Illuminate\Console\Command;
 
 use Telegram;
+use Exception;
 use MOLiBot\Services\NcdrRssService;
 
 class NCDR_RSS extends Command
@@ -14,7 +15,7 @@ class NCDR_RSS extends Command
      *
      * @var string
      */
-    protected $signature = 'ncdr:check {--init}';
+    protected $signature = 'ncdr:rss-check {--init}';
 
     /**
      * The console command description.
@@ -69,42 +70,49 @@ class NCDR_RSS extends Command
      * Execute the console command.
      *
      * @return mixed
+     * @throws
      */
     public function handle()
     {
-        $json = $this->ncdrRssService->getNcdrRss();
+        try {
+            $contents = $this->ncdrRssService->getNcdrRss();
 
-        $items = $json->entry;
+            $items = $contents['entry'];
 
-        $nowListId = [];
+            $nowListId = [];
 
-        foreach ($items as $item) {
-            array_push($nowListId, $item->id);
+            foreach ($items as $item) {
+                $itemId = $item['id'];
 
-            if ( !$this->ncdrRssService->checkRssPublished($item->id) ) {
-                if ($this->option('init')) {
-                    $chat_id = env('TEST_CHANNEL');
-                } else {
-                    $chat_id = env('WEATHER_CHANNEL');
+                array_push($nowListId, $itemId);
+
+                if (!$this->ncdrRssService->checkRssPublished($itemId)) {
+                    if ($this->option('init')) {
+                        $chat_id = env('TEST_CHANNEL');
+                    } else {
+                        $chat_id = env('WEATHER_CHANNEL');
+                    }
+
+                    $category = $item['category']['@term'];
+
+                    if ($this->NCDR_to_BOTChannel_list->contains($category)) {
+                        Telegram::sendMessage([
+                            'chat_id' => $chat_id,
+                            'text'    => trim($item['summary']['#text']) . PHP_EOL . '#' . $category
+                        ]);
+                    }
+
+                    $this->ncdrRssService->storePublishedRss($itemId, $category);
+
+                    sleep(5);
                 }
-
-                $category = $item->category->{'@term'};
-
-                if ($this->NCDR_to_BOTChannel_list->contains($category)) {
-                    Telegram::sendMessage([
-                        'chat_id' => $chat_id,
-                        'text' => trim($item->summary->{'#text'}) . PHP_EOL . '#' . $category
-                    ]);
-                }
-
-                $this->ncdrRssService->storePublishedRss($item->id, $category);
-
-                sleep(5);
             }
+
+            $this->ncdrRssService->deletePublishedRecordWithExcludeId($nowListId);
+
+            $this->info('Mission Complete!');
+        } catch (Exception $e) {
+            $this->error($e->getMessage());
         }
-
-        $this->ncdrRssService->deletePublishedRecordWithExcludeId($nowListId);
-
-        $this->info('Mission Complete!');
     }
 }
