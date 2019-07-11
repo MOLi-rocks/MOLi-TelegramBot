@@ -5,7 +5,7 @@ namespace MOLiBot\Http\Controllers;
 use Illuminate\Http\Request;
 
 use MOLiBot\Http\Requests\HistoryFuelPriceRequest;
-use Validator;
+use Exception;
 
 use SoapBox\Formatter\Formatter;
 use Telegram;
@@ -94,9 +94,7 @@ class MOLiBotController extends Controller
 
     public function getNCDR_RSS()
     {
-        $rss = $this->ncdrRssService->getNcdrRss();
-        
-        return response()->json($rss);
+        return $this->ncdrRssService->getNcdrRss();
     }
 
     public function postNCDR(Request $request)

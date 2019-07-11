@@ -2,44 +2,27 @@
 
 namespace MOLiBot\Services;
 
-use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use MOLiBot\Repositories\PublishedNcnuRssRepository;
-use SoapBox\Formatter\Formatter;
+use MOLiBot\RssSources\Ncnu as RssSource;
 
 class NcnuRssService
 {
     private $publishedNcnuRssRepository;
+    private $rssSource;
 
     public function __construct(PublishedNcnuRssRepository $publishedNcnuRssRepository)
     {
         $this->publishedNcnuRssRepository = $publishedNcnuRssRepository;
+        $this->rssSource = new RssSource();
     }
 
+    /**
+     * @return array|mixed|void
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getNcnuRss()
     {
-        $client = new GuzzleHttpClient();
-
-        try {
-            $response = $client->request('GET', 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx', [
-                'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'Accept-Encoding' => 'gzip',
-                    'cache-control' => 'no-cache'
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            return $e->getCode();
-        }
-
-        $fileContents = $response->getBody()->getContents();
-
-        $formatter = Formatter::make($fileContents, Formatter::XML);
-
-        $json = $formatter->toArray();
-
-        return $json;
+        return $this->rssSource->getContent();
     }
 
     public function checkRssPublished($guid)
