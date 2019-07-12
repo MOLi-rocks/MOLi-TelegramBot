@@ -119,8 +119,10 @@ class NCNU_RSS extends Command
             }
 
             $this->info('Mission Complete!');
+            return;
         } catch (Exception $e) {
             $this->error($e->getMessage());
+            return;
         }
     }
 }

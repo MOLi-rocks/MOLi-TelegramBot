@@ -1,8 +1,8 @@
 <?php
 
-namespace MOLiBot\RssSources;
+namespace MOLiBot\DataSources;
 
-use MOLiBot\Exceptions\RssRetriveException;
+use MOLiBot\Exceptions\DataSourceRetriveException;
 use Exception;
 
 class Ncdr extends Source
@@ -10,10 +10,10 @@ class Ncdr extends Source
     protected $url = 'https://alerts.ncdr.nat.gov.tw/JSONAtomFeeds.ashx';
 
     /**
-     * @return array|mixed|void
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
      */
-    public function getContent()
+    public function getContent() : array
     {
         try {
             $response = $this->httpClient->request('GET', $this->url);
@@ -26,7 +26,7 @@ class Ncdr extends Source
 
             return $fileContents;
         } catch (Exception $e) {
-            throw new RssRetriveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
         }
     }
 }

@@ -111,8 +111,10 @@ class NCDR_RSS extends Command
             $this->ncdrRssService->deletePublishedRecordWithExcludeId($nowListId);
 
             $this->info('Mission Complete!');
+            return;
         } catch (Exception $e) {
             $this->error($e->getMessage());
+            return;
         }
     }
 }

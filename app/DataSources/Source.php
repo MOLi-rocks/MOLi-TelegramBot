@@ -1,6 +1,6 @@
 <?php
 
-namespace MOLiBot\RssSources;
+namespace MOLiBot\DataSources;
 
 use GuzzleHttp\Client as GuzzleHttpClient;
 
@@ -12,15 +12,16 @@ abstract class Source implements SourceInterface
     {
         $this->httpClient = new GuzzleHttpClient([
             'headers' => [
-                'User-Agent' => 'MOLi Bot',
+                'User-Agent'      => 'MOLi Bot',
                 'Accept-Encoding' => 'gzip',
-                'cache-control' => 'no-cache'
+                'Accept'          => 'application/json',
+                'cache-control'   => 'no-cache'
             ],
             'timeout' => 10
         ]);
     }
 
-    public function getContent()
+    public function getContent(): array
     {
         return [];
     }

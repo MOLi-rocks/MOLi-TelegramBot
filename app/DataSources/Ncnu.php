@@ -1,8 +1,8 @@
 <?php
 
-namespace MOLiBot\RssSources;
+namespace MOLiBot\DataSources;
 
-use MOLiBot\Exceptions\RssRetriveException;
+use MOLiBot\Exceptions\DataSourceRetriveException;
 use Exception;
 use SoapBox\Formatter\Formatter;
 
@@ -11,10 +11,10 @@ class Ncnu extends Source
     protected $url = 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx';
 
     /**
-     * @return array|mixed|void
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
      */
-    public function getContent()
+    public function getContent() : array
     {
         try {
             $response = $this->httpClient->request('GET', $this->url);
@@ -29,7 +29,7 @@ class Ncnu extends Source
 
             return $formatted;
         } catch (Exception $e) {
-            throw new RssRetriveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
         }
     }
 }
