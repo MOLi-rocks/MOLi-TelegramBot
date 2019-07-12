@@ -3,33 +3,41 @@
 namespace MOLiBot\Services;
 
 use MOLiBot\Repositories\PublishedNcnuRssRepository;
-use MOLiBot\RssSources\Ncnu as RssSource;
+use MOLiBot\DataSources\Ncnu as DataSource;
 
 class NcnuRssService
 {
     private $publishedNcnuRssRepository;
-    private $rssSource;
+    private $dataSource;
 
     public function __construct(PublishedNcnuRssRepository $publishedNcnuRssRepository)
     {
         $this->publishedNcnuRssRepository = $publishedNcnuRssRepository;
-        $this->rssSource = new RssSource();
+        $this->dataSource = new DataSource();
     }
 
     /**
-     * @return array|mixed|void
+     * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getNcnuRss()
     {
-        return $this->rssSource->getContent();
+        return $this->dataSource->getContent();
     }
 
+    /**
+     * @param $guid string
+     * @return bool
+     */
     public function checkRssPublished($guid)
     {
         return $this->publishedNcnuRssRepository->checkRssPublished($guid);
     }
 
+    /**
+     * @param $guid string
+     * @return \Illuminate\Database\Eloquent\Model|PublishedNcnuRssRepository
+     */
     public function storePublishedRss($guid)
     {
         return $this->publishedNcnuRssRepository->storePublishedRss($guid);

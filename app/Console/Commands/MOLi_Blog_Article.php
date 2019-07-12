@@ -14,7 +14,7 @@ class MOLi_Blog_Article extends Command
      *
      * @var string
      */
-    protected $signature = 'blog:check {--dry-run} {--init}';
+    protected $signature = 'MOLi:blog-article-check {--dry-run} {--init}';
 
     /**
      * The console command description.

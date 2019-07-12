@@ -17,6 +17,10 @@ class PublishedKKTIXRepository
         $this->publishedKKTIXModel = $publishedKKTIXModel;
     }
 
+    /**
+     * @param $url string
+     * @return bool
+     */
     public function checkEventPublished($url)
     {
         return $this->publishedKKTIXModel
@@ -24,11 +28,15 @@ class PublishedKKTIXRepository
             ->exists();
     }
 
+    /**
+     * @param $event array
+     * @return \Illuminate\Database\Eloquent\Model|PublishedKKTIX
+     */
     public function storePublishedEvent($event)
     {
         return $this->publishedKKTIXModel->create([
-            'url' => $event->url,
-            'title' => $event->title
+            'url' => $event['url'],
+            'title' => $event['title']
         ]);
     }
 }

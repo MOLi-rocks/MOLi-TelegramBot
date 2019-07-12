@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('ncnu:rss-check')
                  ->everyTenMinutes()->withoutOverlapping();
         
-        $schedule->command('kktix:check')
+        $schedule->command('MOLi:kktix-event-check')
                  ->everyTenMinutes()->withoutOverlapping();
 
         $schedule->command('blog:check')
