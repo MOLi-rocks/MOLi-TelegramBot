@@ -7,7 +7,17 @@ use Exception;
 
 class Ncdr extends Source
 {
-    protected $url = 'https://alerts.ncdr.nat.gov.tw/JSONAtomFeeds.ashx';
+    private $url;
+
+    /**
+     * Ncdr constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->url = 'https://alerts.ncdr.nat.gov.tw/JSONAtomFeeds.ashx';
+    }
 
     /**
      * @return array

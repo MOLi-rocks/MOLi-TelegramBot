@@ -7,7 +7,17 @@ use Exception;
 
 class MoliKktix extends Source
 {
-    protected $url = 'https://moli.kktix.cc/events.json';
+    private $url;
+
+    /**
+     * MoliKktix constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->url = 'https://moli.kktix.cc/events.json';
+    }
 
     /**
      * @return array
