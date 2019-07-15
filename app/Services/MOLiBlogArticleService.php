@@ -2,50 +2,45 @@
 
 namespace MOLiBot\Services;
 
-use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use MOLiBot\Repositories\PublishedMOLiBlogArticleRepository;
+use MOLiBot\DataSources\MoliBlogArticle as DataSource;
 
 class MOLiBlogArticleService
 {
     private $publishedMOLiBlogArticleRepository;
+    private $dataSource;
 
     public function __construct(PublishedMOLiBlogArticleRepository $publishedMOLiBlogArticleRepository)
     {
         $this->publishedMOLiBlogArticleRepository = $publishedMOLiBlogArticleRepository;
+        $this->dataSource = new DataSource();
     }
 
-    public function getMOLiBlogArticles($limit = 1)
+    /**
+     * @param int $page
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getMOLiBlogArticles($page = 1)
     {
-        $MOLi_blog_api = env('MOLi_BLOG_URL') . '/ghost/api/v0.1/posts/' .
-            '?client_id=' . env('MOLi_BLOG_CLIENT_ID') .
-            '&client_secret=' . env('MOLi_BLOG_CLIENT_SECRET') .
-            '&include=author,tags' .
-            '&limit=' . $limit;
+        $this->dataSource->setPage($page);
 
-        $client = new GuzzleHttpClient();
-
-        try {
-            $fileContents = $client->request('GET', $MOLi_blog_api, [
-                'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'Accept-Encoding' => 'gzip',
-                    'Accept' => 'application/json'
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            $fileContents = '';
-        }
-
-        return $fileContents;
+        return $this->dataSource->getContent();
     }
 
+    /**
+     * @param $articleId
+     * @return bool
+     */
     public function checkArticlePublished($articleId)
     {
         return $this->publishedMOLiBlogArticleRepository->checkArticlePublished($articleId);
     }
 
+    /**
+     * @param $post
+     * @return \Illuminate\Database\Eloquent\Model|PublishedMOLiBlogArticleRepository
+     */
     public function storePublishedArticle($post)
     {
         return $this->publishedMOLiBlogArticleRepository->storePublishedArticle($post);
