@@ -8,7 +8,17 @@ use SoapBox\Formatter\Formatter;
 
 class Ncnu extends Source
 {
-    protected $url = 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx';
+    private $url;
+
+    /**
+     * Ncnu constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->url = 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx';
+    }
 
     /**
      * @return array

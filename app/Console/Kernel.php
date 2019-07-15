@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('MOLi:kktix-event-check')
                  ->everyTenMinutes()->withoutOverlapping();
 
-        $schedule->command('blog:check')
+        $schedule->command('MOLi:blog-article-check')
                  ->everyTenMinutes()->withoutOverlapping();
 
         $schedule->command('fuelprice:checkgap')

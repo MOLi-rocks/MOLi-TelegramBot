@@ -5,18 +5,33 @@ namespace MOLiBot\DataSources;
 use MOLiBot\Exceptions\DataSourceRetriveException;
 use Exception;
 
-class Ncdr extends Source
+class MoliBlogArticle extends Source
 {
     private $url;
+    private $page = 1;
 
     /**
-     * Ncdr constructor.
+     * MoliKktix constructor.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->url = 'https://alerts.ncdr.nat.gov.tw/JSONAtomFeeds.ashx';
+        $this->url = env('MOLi_BLOG_URL') . '/ghost/api/v0.1/posts/' .
+            '?client_id=' . env('MOLi_BLOG_CLIENT_ID') .
+            '&client_secret=' . env('MOLi_BLOG_CLIENT_SECRET') .
+            '&include=author,tags';
+    }
+
+    /**
+     * @param $page
+     * @return void
+     */
+    public function setPage($page)
+    {
+        if (!empty($page)) {
+            $this->page = $page;
+        }
     }
 
     /**
@@ -26,13 +41,9 @@ class Ncdr extends Source
     public function getContent() : array
     {
         try {
-            $response = $this->httpClient->request('GET', $this->url);
+            $response = $this->httpClient->request('GET', $this->url . '&page=' . $this->page);
 
             $fileContents = json_decode($response->getBody()->getContents(), true);
-
-            if (!is_array($fileContents['entry'])) {
-                $fileContents['entry'] = [$fileContents['entry']];
-            }
 
             return $fileContents;
         } catch (Exception $e) {
