@@ -2,11 +2,8 @@
 
 namespace MOLiBot\Services;
 
-use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use MOLiBot\Repositories\FuelPriceRepository;
 use MOLiBot\DataSources\CPCProductPrice as DataSource;
-use SoapBox\Formatter\Formatter;
 
 class FuelPriceService
 {
