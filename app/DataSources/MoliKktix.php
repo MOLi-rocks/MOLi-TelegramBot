@@ -30,6 +30,10 @@ class MoliKktix extends Source
 
             $fileContents = json_decode($response->getBody()->getContents(), true);
 
+            if (!isset($fileContents['entry'])) {
+                throw new Exception('Entry Not Exist', 503);
+            }
+
             if (!is_array($fileContents['entry'])) {
                 $fileContents['entry'] = [$fileContents['entry']];
             }
