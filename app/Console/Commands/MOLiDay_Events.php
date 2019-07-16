@@ -55,10 +55,6 @@ class MOLiDay_Events extends Command
             $fileContents = $this->MOLiDayService->getEvents();
 
             $events = $fileContents['entry'];
-            
-            if (empty($events)) {
-                throw new Exception('Event is empty');
-            }
 
             if ($this->option('dry-run')) {
                 $headers = ['活動標題', '活動簡介', '活動地點', '報名網址'];
