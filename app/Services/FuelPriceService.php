@@ -2,52 +2,33 @@
 
 namespace MOLiBot\Services;
 
-use GuzzleHttp\Client as GuzzleHttpClient;
-use GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 use MOLiBot\Repositories\FuelPriceRepository;
-use SoapBox\Formatter\Formatter;
+use MOLiBot\DataSources\CPCProductPrice as DataSource;
 
 class FuelPriceService
 {
     private $fuelPriceRepository;
+    private $dataSource;
 
     public function __construct(FuelPriceRepository $fuelPriceRepository)
     {
         $this->fuelPriceRepository = $fuelPriceRepository;
+        $this->dataSource = new DataSource();
     }
 
+    /**
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getLiveFuelPrice()
     {
-        $client = new GuzzleHttpClient();
-
-        try {
-            $response = $client->request(
-                'GET',
-                'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx/getCPCMainProdListPrice', [
-                    'headers' => [
-                        'User-Agent' => 'MOLi Bot',
-                        'Accept-Encoding' => 'gzip',
-                        'cache-control' => 'no-cache'
-                    ],
-                    'timeout' => 10
-                ]
-            );
-        } catch (GuzzleHttpTransferException $e) {
-            return $e->getCode();
-        }
-
-        $fileContents = $response->getBody()->getContents();
-
-        // SOAP response to regular XML
-        $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
-
-        $formatter = Formatter::make($xml, Formatter::XML);
-
-        $json = $formatter->toArray();
-
-        return $json['diffgrdiffgram']['NewDataSet']['tbTable'];
+        return $this->dataSource->getContent();
     }
 
+    /**
+     * @param $liveDatas
+     * @return array
+     */
     public function calculateGap($liveDatas)
     {
         $result = [];
@@ -91,45 +72,15 @@ class FuelPriceService
         return $result;
     }
 
+    /**
+     * @param $prodId
+     * @return int|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getHistoryFuelPrice($prodId)
     {
-        /*
-        $prodId = array(
-            '1' => '92無鉛汽油',
-            '2' => '95無鉛汽油',
-            '3' => '98無鉛汽油',
-            '4' => '超級/高級柴油',
-            '5' => '低硫燃料油(0.5%)',
-            '6' => '甲種低硫燃料油(0.5)'
-        );
-        */
+        $this->dataSource->setHistoryProdId($prodId);
 
-        $client = new GuzzleHttpClient();
-
-        try {
-            $response = $client->request(
-                'GET',
-                'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx/getCPCMainProdListPrice_Historical?prodid=' . $prodId, [
-                'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'Accept-Encoding' => 'gzip',
-                    'cache-control' => 'no-cache'
-                ],
-                'timeout' => 10
-            ]);
-        } catch (GuzzleHttpTransferException $e) {
-            return $e->getCode();
-        }
-
-        $fileContents = $response->getBody()->getContents();
-
-        // SOAP response to regular XML
-        $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
-
-        $formatter = Formatter::make($xml, Formatter::XML);
-
-        $json = $formatter->toArray();
-
-        return $json['diffgrdiffgram']['NewDataSet']['tbTable'];
+        return $this->dataSource->getHistoryContent();
     }
 }
