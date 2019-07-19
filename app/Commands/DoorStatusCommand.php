@@ -32,7 +32,9 @@ class DoorStatusCommand extends Command
         try {
             $data = new MoliDoorStatus();
 
-            $status = $data->getContent();
+            $content = $data->getContent();
+
+            $status = $content['Status'];
 
             switch ($status){
                 case 1:
