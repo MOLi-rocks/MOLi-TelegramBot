@@ -50,9 +50,7 @@ class GetFuelPriceGap extends Command
      */
     public function handle()
     {
-        $datas = $this->fuelPriceService->getLiveFuelPrice();
-
-        $result = $this->fuelPriceService->calculateGap($datas);
+        $result = $this->fuelPriceService->calculateGap();
 
         $tomorrow = Carbon::tomorrow();
 
