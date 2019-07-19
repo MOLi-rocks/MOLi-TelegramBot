@@ -26,46 +26,46 @@ class FuelPriceService
     }
 
     /**
-     * @param $liveDatas
      * @return array
+     * @throws
      */
-    public function calculateGap($liveDatas)
+    public function calculateGap()
     {
         $result = [];
 
-        foreach ($liveDatas as $data) {
-            if ( $this->fuelPriceRepository->checkRecordExistByNameStartTime($data['產品名稱'], $data['牌價生效時間']) ) {
+        $priceContents = $this->dataSource->getContent();
+
+        foreach ($priceContents as $data) {
+            $lastRecord = $this->fuelPriceRepository->getNewestRecordByName($data['產品名稱']);
+
+            if ($lastRecord->start_at == $data['牌價生效時間']) {
                 $result += [
-                    $data['產品名稱'] => ' 將 不調整 (' . $data['參考牌價'] . ')'
+                    $data['產品名稱'] => ' 將 不調整 (' . (float)$data['參考牌價'] . ')'
                 ];
             } else {
-                $lasttime = $this->fuelPriceRepository->getNewestRecordByName($data['產品名稱']);
+                $lastPrice = $lastRecord->price ?? 0;
 
-                if ($lasttime) {
-                    $lasttimeprice = $lasttime->price;
+                $priceGapCal = bcsub((string)$data['參考牌價'], (string)$lastPrice, 1);
+
+                $priceGap = floatval($priceGapCal);
+
+                if ($priceGap > 0) {
+                    $result += [
+                        $data['產品名稱'] => ' 將 調漲 ' . $priceGap . ' ' . $data['計價單位'] .
+                            ' (' . (float)$lastPrice . ' &#8594; ' . (float)$data['參考牌價'] . ')'
+                    ];
+                } else if ($priceGap < 0) {
+                    $result += [
+                        $data['產品名稱'] => ' 將 調降 ' . abs($priceGap) . ' ' . $data['計價單位'] .
+                            ' (' . (float)$lastPrice . ' &#8594; ' . (float)$data['參考牌價'] . ')'
+                    ];
                 } else {
-                    $lasttimeprice = '0';
+                    $result += [
+                        $data['產品名稱'] => ' 將 不調整 (' . (float)$data['參考牌價'] . ')'
+                    ];
                 }
 
                 $this->fuelPriceRepository->createPriceRecord($data);
-
-                $pricegap_cal = bcsub($data['參考牌價'], $lasttimeprice, 1);
-
-                $pricegap = floatval($pricegap_cal);
-
-                if ($pricegap > 0) {
-                    $result += [
-                        $data['產品名稱'] => ' 將 調漲 ' . $pricegap . ' ' . $data['計價單位'] . ' (' . (float)$lasttimeprice . ' &#8594; ' . $data['參考牌價'] . ')'
-                    ];
-                } else if ($pricegap < 0) {
-                    $result += [
-                        $data['產品名稱'] => ' 將 調降 ' . abs($pricegap) . ' ' . $data['計價單位'] . ' (' . (float)$lasttimeprice . ' &#8594; ' . $data['參考牌價'] . ')'
-                    ];
-                } else {
-                    $result += [
-                        $data['產品名稱'] => ' 將 不調整 (' . $data['參考牌價'] . ')'
-                    ];
-                }
             }
         }
 
