@@ -5,7 +5,6 @@ namespace MOLiBot\Http\Controllers;
 use Illuminate\Http\Request;
 
 use MOLiBot\Http\Requests\HistoryFuelPriceRequest;
-use Exception;
 
 use SoapBox\Formatter\Formatter;
 use Telegram;
