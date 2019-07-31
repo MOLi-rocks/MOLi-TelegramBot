@@ -112,7 +112,7 @@ class TelegramController extends Controller
         // Commands handler method returns an Update object.
         // So you can further process $update object
         // to however you want.
-        if ( (bool)env('LOG_INPUT') ) {
+        if ( config('app.log_input') ) {
             Log::info($update);
         }
 

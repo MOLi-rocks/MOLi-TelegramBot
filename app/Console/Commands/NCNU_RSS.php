@@ -90,7 +90,7 @@ class NCNU_RSS extends Command
 
                         // send to Telegram Channel
                         Telegram::sendMessage([
-                            'chat_id' => env('NEWS_CHANNEL'),
+                            'chat_id' => config('telegram-channel.ncnu_news'),
                             'text'    => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'] . PHP_EOL . PHP_EOL . $hashtag
                         ]);
 

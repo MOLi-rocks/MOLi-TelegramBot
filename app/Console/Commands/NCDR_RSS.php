@@ -88,9 +88,9 @@ class NCDR_RSS extends Command
 
                 if (!$this->ncdrRssService->checkRssPublished($itemId)) {
                     if ($this->option('init')) {
-                        $chat_id = env('TEST_CHANNEL');
+                        $chat_id = config('telegram-channel.test');
                     } else {
-                        $chat_id = env('WEATHER_CHANNEL');
+                        $chat_id = config('telegram-channel.weather');
                     }
 
                     $category = $item['category']['@term'];

@@ -17,9 +17,9 @@ class MoliBlogArticle extends Source
     {
         parent::__construct();
 
-        $this->url = env('MOLi_BLOG_URL') . '/ghost/api/v0.1/posts/' .
-            '?client_id=' . env('MOLi_BLOG_CLIENT_ID') .
-            '&client_secret=' . env('MOLi_BLOG_CLIENT_SECRET') .
+        $this->url = config('moli.blog.url') . '/ghost/api/v0.1/posts/' .
+            '?client_id=' . config('moli.blog.client_id') .
+            '&client_secret=' . config('moli.blog.client_secret') .
             '&include=author,tags';
     }
 
