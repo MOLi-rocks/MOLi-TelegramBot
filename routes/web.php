@@ -37,9 +37,9 @@ Route::group(['middleware' => 'bot.token'], function () {
     Route::post('locations', 'TelegramController@postSendLocation');
 });
 
-Route::post(env('TELEGRAM_BOT_TOKEN'), 'TelegramController@postWebhook');
+Route::post(config('telegram.bot_token'), 'TelegramController@postWebhook');
 
-Route::post(env('NCDR_URL'), 'MOLiBotController@postNCDR');
+Route::post(config('ncdr.url'), 'MOLiBotController@postNCDR');
 
 // keep this route at bottom of file
 Route::any('/{any?}', 'MOLiBotController@anyRoute');

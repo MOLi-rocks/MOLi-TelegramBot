@@ -102,12 +102,12 @@ class MOLiBotController extends Controller
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
 
-        if ( (bool)env('LOG_INPUT') ) {
+        if ( config('app.log_input') ) {
             Log::info(json_encode($json, JSON_UNESCAPED_UNICODE));
         }
 
         if ($json['status'] == 'Actual') {
-            $channel_to = env('WEATHER_CHANNEL');
+            $channel_to = config('telegram-channel.weather');
             $posted = collect([]);
 
             if (!isset($json['info']['event'])) {// info 是個 array

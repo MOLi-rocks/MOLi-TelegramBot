@@ -55,9 +55,9 @@ class GetFuelPriceGap extends Command
         $tomorrow = Carbon::tomorrow();
 
         if ($this->option('init')) {
-            $chat_id = env('TEST_CHANNEL');
+            $chat_id = config('telegram-channel.test');
         } else {
-            $chat_id = env('MOLi_CHANNEL');
+            $chat_id = config('telegram-channel.MOLi');
         }
 
         Telegram::sendMessage([

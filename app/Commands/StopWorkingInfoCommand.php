@@ -38,7 +38,7 @@ class StopWorkingInfoCommand extends Command
         try {
             $response = $client->request(
                 'GET',
-                $baseUrl . '/api/datastore?format=json&capcode=WSC&apikey=' . env('NCDR_API_KEY'),
+                $baseUrl . '/api/datastore?format=json&capcode=WSC&apikey=' . config('ncdr.key'),
                 ['timeout' => 10]
             );
         } catch (GuzzleHttpTransferException $e) {

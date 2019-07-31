@@ -116,16 +116,16 @@ class MOLi_Blog_Article extends Command
                 }
 
                 if ($this->option('init')) {
-                    $chat_id = env('TEST_CHANNEL');
+                    $chat_id = config('telegram-channel.test');
                 } else {
-                    $chat_id = env('MOLi_CHANNEL');
+                    $chat_id = config('telegram-channel.MOLi');
                 }
 
                 Telegram::sendMessage([
                     'chat_id' => $chat_id,
                     'text'    => 'MOLi Blog 新文快報：' . PHP_EOL .
                         $post['title'] . ' By ' . $post['author']['name'] . PHP_EOL .
-                        env('MOLi_BLOG_URL') . $post['url'] . PHP_EOL . PHP_EOL .
+                        config('moli.blog.url') . $post['url'] . PHP_EOL . PHP_EOL .
                         $tags
                 ]);
 
