@@ -25,7 +25,7 @@ class StopWorkingInfoCommand extends Command
      */
     public function handle($arguments)
     {
-        if (empty(env('NCDR_API_KEY'))) {
+        if (empty(config('ncdr.key'))) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
             $this->replyWithMessage(['text' => '此服務未啟動']);
             return response('OK', 200); // 強制結束 command

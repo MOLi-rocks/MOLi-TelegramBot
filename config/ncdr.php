@@ -2,8 +2,8 @@
 
 return [
 
-        'url' => env('NCDR_URL', 'YOUR-URL'),
+        'url' => env('NCDR_URL'),
 
-        'key' => env('NCDR_API_KEY', 'YOUR-KEY'),
+        'key' => env('NCDR_API_KEY'),
 
 ];
