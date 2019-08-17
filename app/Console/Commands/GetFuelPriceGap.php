@@ -50,16 +50,14 @@ class GetFuelPriceGap extends Command
      */
     public function handle()
     {
-        $datas = $this->fuelPriceService->getLiveFuelPrice();
-
-        $result = $this->fuelPriceService->calculateGap($datas);
+        $result = $this->fuelPriceService->calculateGap();
 
         $tomorrow = Carbon::tomorrow();
 
         if ($this->option('init')) {
-            $chat_id = env('TEST_CHANNEL');
+            $chat_id = config('telegram-channel.test');
         } else {
-            $chat_id = env('MOLi_CHANNEL');
+            $chat_id = config('telegram-channel.MOLi');
         }
 
         Telegram::sendMessage([

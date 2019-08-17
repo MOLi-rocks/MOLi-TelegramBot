@@ -4,20 +4,19 @@ namespace MOLiBot\DataSources;
 
 use MOLiBot\Exceptions\DataSourceRetriveException;
 use Exception;
-use SoapBox\Formatter\Formatter;
 
-class Ncnu extends Source
+class MoliDoorStatus extends Source
 {
     private $url;
 
     /**
-     * Ncnu constructor.
+     * MoliKktix constructor.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->url = 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx';
+        $this->url = 'https://bot.moli.rocks:8000';
     }
 
     /**
@@ -29,15 +28,9 @@ class Ncnu extends Source
         try {
             $response = $this->httpClient->request('GET', $this->url);
 
-            $fileContents = $response->getBody()->getContents();
+            $fileContents = json_decode($response->getBody()->getContents(), true);
 
-            $formatted = Formatter::make($fileContents, Formatter::XML)->toArray();
-
-            if (!is_array($formatted['channel']['item'])) {
-                $formatted['channel']['item'] = [$formatted['channel']['item']];
-            }
-
-            return $formatted;
+            return $fileContents;
         } catch (Exception $e) {
             throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
         }

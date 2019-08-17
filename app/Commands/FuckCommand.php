@@ -25,6 +25,7 @@ class FuckCommand extends Command
      */
     public function handle($arguments)
     {
+        /*
         $baseUrl = 'https://nmsl.shadiao.app/';
 
         $client = new GuzzleHttpClient();
@@ -47,5 +48,9 @@ class FuckCommand extends Command
         }
 
         return response('OK', 200);
+        */
+        $this->replyWithChatAction(['action' => Actions::TYPING]);
+        $this->replyWithMessage(['text' => '呵呵！']);
+        return response('OK', 200); // 強制結束 command
     }
 }

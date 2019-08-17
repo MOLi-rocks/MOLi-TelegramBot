@@ -17,6 +17,10 @@ class FuelPriceRepository
         $this->fuelPriceModel = $fuelPriceModel;
     }
 
+    /**
+     * @param $data
+     * @return \Illuminate\Database\Eloquent\Model|FuelPrice
+     */
     public function createPriceRecord($data)
     {
         return $this->fuelPriceModel->create([
@@ -27,6 +31,10 @@ class FuelPriceRepository
         ]);
     }
 
+    /**
+     * @param $productName
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     */
     public function getNewestRecordByName($productName)
     {
         return $this->fuelPriceModel->where('name', '=', $productName)
@@ -34,6 +42,11 @@ class FuelPriceRepository
             ->first();
     }
 
+    /**
+     * @param $productName
+     * @param $startAt
+     * @return bool
+     */
     public function checkRecordExistByNameStartTime($productName, $startAt)
     {
         return $this->fuelPriceModel->where('name', '=', $productName)

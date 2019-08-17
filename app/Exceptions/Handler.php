@@ -56,8 +56,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if (env('APP_ENV') == 'production') {
-            if ( $request->is( env('TELEGRAM_BOT_TOKEN') ) ) {
+        if (config('app.env') == 'production') {
+            if ( $request->is( config('telegram.bot_token') ) ) {
                 Log:info($e);
                 return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 200);
             } else {

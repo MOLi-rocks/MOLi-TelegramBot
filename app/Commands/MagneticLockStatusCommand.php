@@ -73,7 +73,7 @@ class MagneticLockStatusCommand extends Command
             ]);
 
             try {
-                $response = $client->request('GET', env('SCREEN_SHOT'), ['timeout' => 10]);
+                $response = $client->request('GET', config('moli.rpos.snapshot_url'), ['timeout' => 10]);
             } catch (GuzzleHttpTransferException $e) {
                 $this->replyWithMessage(['text' => '暫時無法取得截圖！']);
                 return response('OK', 200);// 強制結束 command

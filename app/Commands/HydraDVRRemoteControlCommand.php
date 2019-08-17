@@ -148,7 +148,7 @@ class HydraDVRRemoteControlCommand extends Command
         $client = new GuzzleHttpClient();
 
         try {
-            $client->request('GET', env('DVR_BASE_URL').$position, [
+            $client->request('GET', config('moli.dvr.control_url') . $position, [
                 'headers' => [
                     'User-Agent' => 'MOLi Bot',
                     'Accept'     => 'application/json'
@@ -157,7 +157,7 @@ class HydraDVRRemoteControlCommand extends Command
             ]);
 
             if ($position != 'door') {
-                $response = $client->request('GET', env('DVR_SHOT'), [
+                $response = $client->request('GET', config('moli.dvr.snapshot_url'), [
                     'headers' => [
                         'User-Agent' => 'MOLi Bot',
                         'Accept' => 'application/json'

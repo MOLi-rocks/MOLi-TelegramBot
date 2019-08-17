@@ -125,6 +125,8 @@ return [
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
+    'log_input' => (bool)env('LOG_INPUT', false),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

@@ -5,6 +5,7 @@ namespace MOLiBot\Console\Commands;
 use Illuminate\Console\Command;
 
 use Telegram;
+use Exception;
 use MOLiBot\Services\MOLiBlogArticleService;
 
 class MOLi_Blog_Article extends Command
@@ -46,86 +47,94 @@ class MOLi_Blog_Article extends Command
      * Execute the console command.
      *
      * @return mixed
+     * @throws
      */
     public function handle()
     {
-        if ( !filter_var(env('MOLi_BLOG_URL'), FILTER_VALIDATE_URL) ) {
-            $this->error('MOLi_BLOG_API URL is not valid!');
+        try {
+            $printPosts = [];
+
+            $contents = $this->MOLiBlogArticleService->getMOLiBlogArticles(1);
+
+            $totalPages = $contents['meta']['pagination']['pages'];
+
+            $posts = $contents['posts'];
+
+            $postResult = $this->postHandler($posts);
+
+            $printPosts = array_merge($printPosts, $postResult);
+
+            if ($totalPages != 1) {
+                for ($i = 2; $i <= $totalPages; $i++) {
+                    $moreContents = $this->MOLiBlogArticleService->getMOLiBlogArticles($i);
+
+                    $morePosts = $moreContents['posts'];
+
+                    $morePostResult = $this->postHandler($morePosts);
+
+                    $printPosts = array_merge($printPosts, $morePostResult);
+                }
+            }
+
+            if ($this->option('dry-run')) {
+                $headers = ['id', 'uuid', '文章標題'];
+
+                $this->table($headers, $printPosts);
+            } else {
+                $this->info('Mission Complete!');
+            }
+
+            return;
+        } catch (Exception $e) {
+            $this->error($e->getMessage());
             return;
         }
+    }
 
-        $limit = 1;
+    /**
+     * @param $posts array
+     * @return array
+     */
+    private function postHandler($posts)
+    {
+        $printPosts = [];
 
-        if ($this->option('dry-run')) {
-            $headers = ['id', 'uuid', '文章標題'];
-
-            $datas = [];
-        }
-
-        while(true) {
-            $fileContents = $this->MOLiBlogArticleService->getMOLiBlogArticles($limit);
-
-            if (!empty($fileContents)) {
-                if (!empty(json_decode($fileContents->getBody())->{'posts'})) {
-                    $posts = json_decode($fileContents->getBody())->{'posts'};
-                } else {
-                    $this->error('No post!');
-                    break;
-                }
-            } else {
-                $this->error('Can\'t Get Data!');
-                break;
+        foreach ($posts as $post) {
+            if ($this->option('dry-run')) {
+                $printPosts[] = [
+                    'id'   => $post['id'],
+                    'uuid' => $post['uuid'],
+                    '文章標題' => $post['title']
+                ];
             }
 
-            $use_post = $limit - 1; // 拿第幾篇 post 來比對
+            if (!$this->MOLiBlogArticleService->checkArticlePublished($post['id']) && !$this->option('dry-run')) {
+                $tags = '';
 
-            $post = $posts[$use_post];
-
-            if ($this->MOLiBlogArticleService->checkArticlePublished($post->id)) {
-                break;
-            } else {
-                if ($this->option('dry-run')) {
-                    $datas[] = [
-                        'id' => $post->id,
-                        'uuid' => $post->uuid,
-                        '文章標題' => $post->title
-                    ];
-                } else {
-                    $tags = '';
-
-                    foreach ($post->tags as $tag) {
-                        $tags .= '#' . $tag->name . ' ';
-                    }
-
-                    if ($this->option('init')) {
-                        $chat_id = env('TEST_CHANNEL');
-                    } else {
-                        $chat_id = env('MOLi_CHANNEL');
-                    }
-
-                    Telegram::sendMessage([
-                        'chat_id' => $chat_id,
-                        'text' => 'MOLi Blog 新文快報：' . PHP_EOL .
-                            $post->title . ' By ' . $post->author->name . PHP_EOL .
-                            env('MOLi_BLOG_URL') . $post->url . PHP_EOL . PHP_EOL .
-                            $tags
-                    ]);
-
-                    $this->MOLiBlogArticleService->storePublishedArticle($post);
+                foreach ($post['tags'] as $tag) {
+                    $tags .= '#' . $tag['name'] . ' ';
                 }
+
+                if ($this->option('init')) {
+                    $chat_id = config('telegram-channel.test');
+                } else {
+                    $chat_id = config('telegram-channel.MOLi');
+                }
+
+                Telegram::sendMessage([
+                    'chat_id' => $chat_id,
+                    'text'    => 'MOLi Blog 新文快報：' . PHP_EOL .
+                        $post['title'] . ' By ' . $post['author']['name'] . PHP_EOL .
+                        config('moli.blog.url') . $post['url'] . PHP_EOL . PHP_EOL .
+                        $tags
+                ]);
+
+                $this->MOLiBlogArticleService->storePublishedArticle($post);
 
                 sleep(5);
-
-                $limit++;
             }
         }
 
-        if ($this->option('dry-run')) {
-            $this->table($headers, $datas);
-        } else {
-            $this->info('Mission Complete!');
-        }
-
-        return;
+        return $printPosts;
     }
 }

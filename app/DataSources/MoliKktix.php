@@ -7,7 +7,17 @@ use Exception;
 
 class MoliKktix extends Source
 {
-    protected $url = 'https://moli.kktix.cc/events.json';
+    private $url;
+
+    /**
+     * MoliKktix constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->url = 'https://moli.kktix.cc/events.json';
+    }
 
     /**
      * @return array
@@ -19,6 +29,10 @@ class MoliKktix extends Source
             $response = $this->httpClient->request('GET', $this->url);
 
             $fileContents = json_decode($response->getBody()->getContents(), true);
+
+            if (!isset($fileContents['entry'])) {
+                throw new Exception('Entry Not Exist', 503);
+            }
 
             if (!is_array($fileContents['entry'])) {
                 $fileContents['entry'] = [$fileContents['entry']];

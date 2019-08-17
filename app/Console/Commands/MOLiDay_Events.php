@@ -75,9 +75,9 @@ class MOLiDay_Events extends Command
                 foreach ($events as $event) {
                     if (!$this->MOLiDayService->checkEventPublished($event['url'])) {
                         if ($this->option('init')) {
-                            $chat_id = env('TEST_CHANNEL');
+                            $chat_id = config('telegram-channel.test');
                         } else {
-                            $chat_id = env('MOLi_CHANNEL');
+                            $chat_id = config('telegram-channel.MOLi');
                         }
 
                         Telegram::sendMessage([
