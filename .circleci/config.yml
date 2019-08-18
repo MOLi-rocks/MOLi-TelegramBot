@@ -58,6 +58,10 @@ jobs:
       - run: touch storage/testing.sqlite
       - run: php artisan migrate --env=testing --database=sqlite_testing --force
 
+      # setup .env file
+      - run: cp .env.example .env
+      - run: php artisan key:generate
+
       # run tests with phpunit or codecept
       - run: ./vendor/bin/phpunit
       # this example uses codecept but you're not limited to it
