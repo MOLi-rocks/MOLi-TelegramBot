@@ -13,9 +13,6 @@
 #### A. Laradock（推薦）
 如遇資料庫問題請將 MySQL 改成 5.7 版，別用 latest
 
-> **Windows 使用者請注意**  
-> Docker 在 pull 時必須使用 Windows 端的 git，不然會無法運行，且 Docker 請使用 Toolbox 版本。
-
 #### B. 實體安裝
 
 ##### Windows
@@ -37,6 +34,7 @@
 
 ## 教學文件
 
-1. [5.5 版官網英文文件](<https://laravel.com/docs/5.5>)
-2. [英文影片教學](<https://laracasts.com/>)
-3. [中文文件](<https://laravel.tw/>)
+1. [5.5 版官網英文文件](https://laravel.com/docs/5.5)
+2. [英文影片教學](https://laracasts.com/)
+3. [中文文件](https://laravel.tw/)
+4. [Laradock](https://laradock.io/)
