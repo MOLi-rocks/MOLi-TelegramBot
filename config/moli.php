@@ -4,11 +4,11 @@ return [
 
     'blog' => [
 
-        'url' => env('MOLi_BLOG_URL'),
+        'url' => 'https://blog.moli.rocks',
 
-        'client_id' => env('MOLi_BLOG_CLIENT_ID'),
+        'client_id' => env('MOLI_BLOG_CLIENT_ID'),
 
-        'client_secret' => env('MOLi_BLOG_CLIENT_SECRET'),
+        'client_secret' => env('MOLI_BLOG_CLIENT_SECRET'),
 
     ],
 
