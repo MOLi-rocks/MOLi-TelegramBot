@@ -52,14 +52,18 @@ class DotEnvSet extends Command
 
             $this->writeFile($envFilePath, $contents);
 
-            return $this->info("Environment variable with key '{$key}' has been changed from '{$oldValue}' to '{$value}'");
+            $returnStr = 'Environment variable with key ' . $key . ' has been changed';
+
+            return $this->info($returnStr);
         }
 
         $contents = $contents . "\n{$key}={$value}\n";
 
         $this->writeFile($envFilePath, $contents);
 
-        return $this->info("A new environment variable with key '{$key}' has been set to '{$value}'");
+        $returnStr = 'A new environment variable with key ' . $key . ' has been set';
+
+        return $this->info($returnStr);
     }
 
     /**
