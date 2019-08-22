@@ -18,6 +18,8 @@ jobs:
       #
       #- image: redis:3
 
+    working_directory: ~/MOLiBot-circleci
+
     steps:
       - checkout
 
