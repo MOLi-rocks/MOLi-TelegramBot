@@ -10,12 +10,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class KktixDataTest extends TestCase
 {
     /**
-     * A basic test example.
+     * Test for get content.
      *
      * @return void
-     * @throws 
+     * @throws
      */
-    public function testMoliKktix()
+    public function testMoliGetContent()
     {
         $dataSource = new MoliKktix();
 
