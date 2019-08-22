@@ -24,14 +24,11 @@ jobs:
       - run: sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
       - run: sudo docker-php-ext-install zip
       - run: sudo composer self-update
-      - run: echo $MOLI_BLOG_CLIENT_ID
-      - run: echo $MOLI_BLOG_CLIENT_SECRET
       - run:
           name: Setup Environment Variables
           command: |
-            echo "export MOLI_BLOG_CLIENT_ID=$MOLI_BLOG_CLIENT_ID" >> $BASH_ENV
-            echo "export MOLI_BLOG_CLIENT_SECRET=$MOLI_BLOG_CLIENT_SECRET" >> $BASH_ENV
-            source $BASH_ENV
+            echo $MOLI_BLOG_CLIENT_ID
+            echo $MOLI_BLOG_CLIENT_SECRET
 
       # Download and cache dependencies
 
