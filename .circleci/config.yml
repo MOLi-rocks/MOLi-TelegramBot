@@ -21,8 +21,11 @@ jobs:
     steps:
       - checkout
 
-      - run: echo "export MOLI_BLOG_CLIENT_ID=$MOLI_BLOG_CLIENT_ID" >> $BASH_ENV
-      - run: echo "$MOLI_BLOG_CLIENT_ID"
+      - run:
+          name: Echo Variable
+          command: |
+            echo $MOLI_BLOG_CLIENT_ID
+
       - run: sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
       - run: sudo docker-php-ext-install zip
       - run: sudo composer self-update
