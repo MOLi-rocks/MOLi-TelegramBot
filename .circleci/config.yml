@@ -21,7 +21,6 @@ jobs:
     steps:
       - checkout
 
-      - run: echo $TEST
       - run: sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
       - run: sudo docker-php-ext-install zip
       - run: sudo composer self-update
@@ -65,9 +64,6 @@ jobs:
       - run: php artisan key:generate
       - run: php artisan dotenv:set MOLI_BLOG_CLIENT_ID $MOLI_BLOG_CLIENT_ID
       - run: php artisan dotenv:set MOLI_BLOG_CLIENT_SECRET $MOLI_BLOG_CLIENT_SECRET
-
-      #- run: php artisan dotenv:set MOLI_BLOG_CLIENT_ID $MOLI_BLOG_CLIENT_ID
-      #- run: php artisan dotenv:set MOLI_BLOG_CLIENT_SECRET $MOLI_BLOG_CLIENT_SECRET
 
       # run tests with phpunit or codecept
       - run: ./vendor/bin/phpunit
