@@ -128,26 +128,22 @@
         @else
             <div class="row padding-top">
                 <div class="col center-text">
-                    <h2>點擊按鈕後，選取「透過1對1聊天接收LINE Notify的通知」，並且同意連動</h2>
+                    <h2>點擊按鈕後，選取「透過 1 對 1 聊天接收 LINE Notify 的通知」，並且同意連動</h2>
+                </div>
+            </div>
+            <div class="row padding-top">
+                <div class="alert alert-danger col center-text" role="alert">
+                    <h4 class="alert-heading">切勿重複申請，以免多次收到同樣訊息。</h4>
+                    <p class="mb-0">如果不確定是否曾經連動過，或是想解除連動，可以
+                        <a href="https://notify-bot.line.me/my/" class="alert-link">
+                            來這裡檢查連動狀態
+                        </a>
+                    </p>
                 </div>
             </div>
             <div class="row padding-top">
                 <div class="col center-text">
-                    <div class="alert alert-danger" role="alert">
-                        切勿重複申請，會造成同樣訊息多次收到。
-                    </div>
-                </div>
-            </div>
-            <div class="row padding-top">
-                <div class="col center-text">
-                    <button class="button-apply" onclick="oAuth2();">點此申請暨大最新公告 LINE Notify</button>
-                </div>
-            </div>
-            <div class="row padding-top">
-                <div class="col center-text">
-                    <a href="https://notify-bot.line.me/my/">
-                        <button class="btn btn-outline-danger">點此取消連動通知</button>
-                    </a>
+                    <button class="button-apply" onclick="oAuth2();">申請連動暨大最新公告 LINE Notify</button>
                 </div>
             </div>
             <div class="row padding-top">
