@@ -26,10 +26,10 @@
 
 ## 開始部署
 
-1. 將專案 pull 下來後，請 `cp .env-example .env` 並且設定好 `.env` 裡面的參數
+1. 將專案 pull 下來後，請 `cp .env.example .env` 並且設定好 `.env` 裡面的參數
 2. 再使用 `composer install` 去下載必要套件，如機器上缺乏某些套件在此時也會跳出通知並暫停
 3. `php artisan key:generate` 來產生 key，用於保護 session
-4. `php artisan migrate` 以進行資料庫遷移
+4. `php artisan migrate` 以進行資料庫遷移 (純跑 MOLi bot 可略過這一步)
 5. `php artisan serve` 即可運行，或是將 Web Server root 指向 `{your-project}/public/` 目錄
 
 ## 教學文件
