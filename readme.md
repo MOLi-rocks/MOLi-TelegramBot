@@ -28,7 +28,7 @@
 
 1. clone 本專案  
 1. 使用 `composer install` 安裝依賴套件，有任何問題在此時會跳出通知並暫停（例如：PHP 版本不符）  
-> 如在正式環境可加上 `--no-dev` 參數，將只安裝必要套件
+>> 如在正式環境可加上 `--no-dev` 參數，將只安裝必要套件
 3. 將專案內的 `.env.example` 複製為 `.env`
 4. `php artisan key:generate` 來產生 key，用於保護 session
 5. 設定資料庫連線（.env 檔）
