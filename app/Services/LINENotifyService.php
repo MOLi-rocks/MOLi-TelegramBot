@@ -73,6 +73,11 @@ class LINENotifyService
         return $this->lineNotifyUserRepository->getAllToken();
     }
 
+    public function getSendMsgToken()
+    {
+        return $this->lineNotifyUserRepository->getSendMsgToken();
+    }
+
     public function sendMsg($access_token, $msg)
     {
         $client = new GuzzleHttpClient();
@@ -93,13 +98,14 @@ class LINENotifyService
         } catch (GuzzleHttpTransferException $e) {
             $status = $e->getCode();
             if ($status == 400) {
-                throw new \Exception('400 - Unauthorized request');
+                throw new \Exception('400 - Unauthorized request', $status);
             } elseif ($status == 401) {
-                throw new \Exception('401 -  Invalid access token');
+                $this->lineNotifyUserRepository->updateUserStatus($access_token, $status);
+                throw new \Exception('401 - Invalid access token', $status);
             } elseif ($status == 500) {
-                throw new \Exception('500 - Failure due to server error');
+                throw new \Exception('500 - Failure due to server error', $status);
             } else {
-                throw new \Exception('Processed over time or stopped');
+                throw new \Exception('Processed over time or stopped', $status);
             }
         }
     }
