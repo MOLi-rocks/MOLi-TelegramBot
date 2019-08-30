@@ -97,20 +97,8 @@ class NCNU_RSS extends Command
                         ]);
 
                         // send to LINE Notify
-                        $LNU = $this->LINENotifyService->getSendMsgToken(); // LINE Notify Users
                         $lineMsg = PHP_EOL . $rawMsg;
-                        foreach ($LNU as $key => $token) {
-                            try {
-                                $this->LINENotifyService->sendMsg($token, $lineMsg);
-                            } catch (Exception $e) {
-                                $this->error($token . ' => ' . $e);
-                            }
-
-                            // LINE 限制一分鐘上限 1000 次，做一些保留次數
-                            if (($key + 1) % 950 == 0) {
-                                sleep(62);
-                            }
-                        }
+                        $this->LINENotifyService->sendMsgToAll($lineMsg);
 
                         $this->ncnuRssService->storePublishedRss($item['guid']);
 

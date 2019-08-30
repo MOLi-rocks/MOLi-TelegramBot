@@ -23,74 +23,54 @@ class LINENotifyController extends Controller
         $this->lineNotifyService = $LINENotifyService;
     }
 
+    /**
+     * @param $access_token string
+     * @param $msg string
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function sendMsg($access_token, $msg)
     {
-        try {
-            return $this->lineNotifyService->sendMsg($access_token, $msg);
-        } catch (\Exception $e) {
-            return $e->getCode();
-        }
+        return $this->lineNotifyService->sendMsg($access_token, $msg);
     }
 
+    /**
+     * @param $access_token string
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getStatus($access_token)
     {
         return $this->lineNotifyService->getStatus($access_token);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function auth(Request $request)
     {
         $code = $request->query('code', false);
 
         if ($code) {
-            $client = new GuzzleHttpClient();
-            // get access_token
-            try {
-                $response = $client->request('POST', 'https://notify-bot.line.me/oauth/token', [
-                    'headers'     => [
-                        'User-Agent'    => 'MOLi Bot',
-                        'cache-control' => 'no-cache'
-                    ],
-                    'form_params' => [
-                        'grant_type'    => 'authorization_code',
-                        'code'          => $code,
-                        'redirect_uri'  => $this->redirect_uri,
-                        'client_id'     => $this->client_id,
-                        'client_secret' => $this->client_secret
-                    ],
-                    'timeout'     => 10
-                ]);
+            $resToken = $this->lineNotifyService->getToken(
+                $code,
+                $this->redirect_uri,
+                $this->client_id,
+                $this->client_secret
+            );
 
-                $response = $response->getBody()->getContents();
-                $json = json_decode($response, true);
-                $access_token = $json['access_token'];
-                $success = true;
-                $this->lineNotifyService->createToken($access_token);
-            } catch (GuzzleHttpTransferException $e) {
-                $status = $e->getCode();
-                if ($status == 400) {
-                    $error = '400 - Unauthorized request';
-                    return view('LINE.notify_auth', compact('error'));
-                } else {
-                    $error = 'Other - Processed over time or stopped';
-                    return view('LINE.notify_auth', compact('error'));
-                }
-            }
-
-            // send a welcome message
-            try {
-                $msg = PHP_EOL .'歡迎使用暨大通知，此服務由 MOLi 實驗室維護' . PHP_EOL .
+            if ($resToken['success']) {
+                // send a welcome message
+                $msg = PHP_EOL . '歡迎使用暨大通知，此服務由 MOLi 實驗室維護' . PHP_EOL .
                     '如有疑問可至粉專或群組詢問' . PHP_EOL .
                     'https://moli.rocks';
 
-                $this->sendMsg($access_token, $msg);
-            } catch (\Exception $e) {
-                return $e->getCode();
+                $this->sendMsg($resToken['token'], $msg);
             }
 
-            // update status
-            $this->lineNotifyService->updateStatus($access_token);
-
-            return view('LINE.notify_auth', compact('success'));
+            return view('LINE.notify_auth', compact('resToken'));
         } else {
             // 歡迎畫面
             $client_id = $this->client_id;
@@ -99,6 +79,9 @@ class LINENotifyController extends Controller
         }
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function stats()
     {
         $stats = $this->lineNotifyService->getAllStats();

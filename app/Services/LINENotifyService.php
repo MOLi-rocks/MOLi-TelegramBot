@@ -4,7 +4,6 @@ namespace MOLiBot\Services;
 
 use MOLiBot\Repositories\LINENotifyUserRepository;
 use \GuzzleHttp\Client as GuzzleHttpClient;
-use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 
 class LINENotifyService
 {
@@ -15,11 +14,16 @@ class LINENotifyService
         $this->lineNotifyUserRepository = $LINENotifyUserRepository;
     }
 
+    /**
+     * @param $access_token string
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getStatus($access_token)
     {
-        $client = new GuzzleHttpClient();
-
         try {
+            $client = new GuzzleHttpClient();
+
             $response = $client->request('GET', 'https://notify-api.line.me/api/status', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $access_token,
@@ -32,22 +36,37 @@ class LINENotifyService
             $json = json_decode($response, true);
 
             return $json;
-        } catch (GuzzleHttpTransferException $e) {
-            return $e->getCode();
+        } catch (\Exception $e) {
+            $status = $e->getCode() ?? 0;
+            return [
+                'status' => $status,
+                'message' => $e->getMessage(),
+                'targetType' => '',
+                'target' => ''
+            ];
         }
     }
 
-    public function updateStatus($token)
+    /**
+     * @param $token
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function updateUser($token)
     {
         $result = $this->getStatus($token);
 
-        if (is_array($result)) {
+        $status = $result['status'];
+
+        if ($status == 200) {
             $this->lineNotifyUserRepository->updateUserData($token, $result);
         } else {
-            $this->lineNotifyUserRepository->updateUserStatus($token, $result);
+            $this->lineNotifyUserRepository->updateUserStatus($token, $status);
         }
     }
 
+    /**
+     * @return array
+     */
     public function getAllStats()
     {
         $total = $this->lineNotifyUserRepository->getTotalStats();
@@ -63,26 +82,72 @@ class LINENotifyService
         ];
     }
 
+    /**
+     * @param $token string
+     *
+     * @return void
+     */
     public function createToken($token)
     {
         $this->lineNotifyUserRepository->createToken($token);
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function getAllToken()
     {
         return $this->lineNotifyUserRepository->getAllToken();
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function getSendMsgToken()
     {
         return $this->lineNotifyUserRepository->getSendMsgToken();
     }
 
+    /**
+     * @param $msg string
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function sendMsgToAll($msg)
+    {
+        $result = [];
+
+        $tokens = $this->getSendMsgToken();
+
+        foreach ($tokens as $key => $token) {
+            $response = $this->sendMsg($token, $msg);
+
+            $result[] = [
+                'token' => $token,
+                'status' => $response['status'],
+                'message' => $response['message']
+            ];
+
+            // LINE 限制一分鐘上限 1000 次，做一些保留次數
+            if (($key + 1) % 950 == 0) {
+                sleep(62);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $access_token string
+     * @param $msg string
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function sendMsg($access_token, $msg)
     {
-        $client = new GuzzleHttpClient();
-
         try {
+            $client = new GuzzleHttpClient();
+
             $response = $client->request('POST', 'https://notify-api.line.me/api/notify', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $access_token,
@@ -94,19 +159,83 @@ class LINENotifyService
                 'timeout' => 10
             ]);
 
-            return $response;
-        } catch (GuzzleHttpTransferException $e) {
-            $status = $e->getCode();
-            if ($status == 400) {
-                throw new \Exception('400 - Unauthorized request', $status);
-            } elseif ($status == 401) {
+            $status = $response->getStatusCode();
+
+            if ($status == 401) {
                 $this->lineNotifyUserRepository->updateUserStatus($access_token, $status);
-                throw new \Exception('401 - Invalid access token', $status);
-            } elseif ($status == 500) {
-                throw new \Exception('500 - Failure due to server error', $status);
-            } else {
-                throw new \Exception('Processed over time or stopped', $status);
             }
+
+            $rspn = json_decode($response->getBody()->getContents(), true);
+
+            return $rspn;
+        } catch (\Exception $e) {
+            $status = $e->getCode() ?? 0;
+            return [
+                'status' => $status,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * @param $code string|integer
+     * @param $redirectUri string
+     * @param $clientId string
+     * @param $clientSecret string
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getToken($code, $redirectUri, $clientId, $clientSecret)
+    {
+        try {
+            $client = new GuzzleHttpClient();
+
+            $response = $client->request('POST', 'https://notify-bot.line.me/oauth/token', [
+                'headers'     => [
+                    'User-Agent'    => 'MOLi Bot',
+                    'cache-control' => 'no-cache'
+                ],
+                'form_params' => [
+                    'grant_type'    => 'authorization_code',
+                    'code'          => $code,
+                    'redirect_uri'  => $redirectUri,
+                    'client_id'     => $clientId,
+                    'client_secret' => $clientSecret
+                ],
+                'timeout'     => 10
+            ]);
+
+            $status = $response->getStatusCode();
+
+            if ($status / 100 == 2) {
+                $response = $response->getBody()->getContents();
+
+                $json = json_decode($response, true);
+
+                $access_token = $json['access_token'];
+
+                $this->createToken($access_token);
+
+                return [
+                    'success' => true,
+                    'token'   => $access_token,
+                    'error'   => ''
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'token' => '',
+                    'error' => base64_encode($status)
+                ];
+            }
+        } catch (\Exception $e) {
+            $status = $e->getCode() ?? 0;
+
+            return [
+                'success' => false,
+                'token' => '',
+                'error' => base64_encode($status . ' - ' . $e->getMessage())
+            ];
         }
     }
 }
