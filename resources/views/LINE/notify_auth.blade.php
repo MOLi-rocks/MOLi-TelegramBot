@@ -93,7 +93,7 @@
             </div>
         </div>
         @if(isset($resToken))
-            @if ($success)
+            @if ($resToken['success'])
                 <div class="row padding-top">
                     <div class="col center-text">
                         <h1>恭喜完成連動！</h1>
@@ -112,7 +112,7 @@
                 </div>
                 <div class="row padding-top">
                     <div class="col center-text">
-                        <h2>錯誤代碼：{{ $error }}</h2>
+                        <h2>錯誤代碼：{{ $resToken['error'] }}</h2>
                     </div>
                 </div>
                 <div class="row padding-top">
