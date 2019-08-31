@@ -85,7 +85,11 @@ class LINENotifyController extends Controller
                     '如有疑問可至粉專或群組詢問' . PHP_EOL .
                     'https://moli.rocks';
 
-                $this->sendMsg($resToken['token'], $msg);
+                $resToken = $resToken['token'];
+
+                $this->lineNotifyService->updateUser($resToken);
+
+                $this->sendMsg($resToken, $msg);
             }
 
             return view('LINE.notify_auth', compact('resToken'));

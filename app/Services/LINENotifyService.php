@@ -55,12 +55,12 @@ class LINENotifyService
     {
         $result = $this->getStatus($token);
 
-        $status = $result['status'];
-
-        if ($status == 200) {
-            $this->lineNotifyUserRepository->updateUserData($token, $result);
-        } else {
-            $this->lineNotifyUserRepository->updateUserStatus($token, $status);
+        if (!empty($result['targetType'])) {
+            if ($result['target'] != 'null.') {
+                $this->lineNotifyUserRepository->updateUserData($token, $result);
+            } else {
+                $this->lineNotifyUserRepository->updateUserStatus($token, $result['status']);
+            }
         }
     }
 
