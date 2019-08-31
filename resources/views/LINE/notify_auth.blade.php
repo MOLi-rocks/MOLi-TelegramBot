@@ -62,6 +62,7 @@
 
         .button-apply:hover {
             background-color: white;
+            text-decoration: none;
             color: black;
         }
 
@@ -145,7 +146,7 @@
             </div>
             <div class="row padding-top">
                 <div class="col center-text">
-                    <button class="button-apply" onclick="oAuth2();">申請連動暨大最新公告 LINE Notify</button>
+                    <a href="{{ route('line_notify_code') }}" class="btn-link button-apply">申請連動暨大最新公告 LINE Notify</a>
                 </div>
             </div>
             <div class="row padding-top">
@@ -186,18 +187,5 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    @if (isset($client_id) && isset($redirect_uri))
-        <script>
-            function oAuth2() {
-                let URL = 'https://notify-bot.line.me/oauth/authorize?';
-                URL += 'response_type=code';
-                URL += '&client_id={{ $client_id }}';
-                URL += '&redirect_uri={{ $redirect_uri }}';
-                URL += '&scope=notify';
-                URL += '&state=NO_STATE';
-                window.location.href = URL;
-            }
-        </script>
-    @endif
 </body>
 </html>

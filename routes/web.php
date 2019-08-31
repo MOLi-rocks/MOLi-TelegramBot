@@ -13,6 +13,8 @@
 
 Route::get('/', 'MOLiBotController@getIndex');
 
+Route::get('/line-notify-code', 'LINENotifyController@code')->name('line_notify_code');
+
 Route::get('/line-notify-auth', 'LINENotifyController@auth')->name('line_notify_auth');
 
 Route::get('/line-notify-stats', 'LINENotifyController@stats')->name('line_notify_stats');
