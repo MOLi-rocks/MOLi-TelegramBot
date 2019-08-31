@@ -93,8 +93,8 @@
                 <img class="line-logo" src="{{ asset('img/LINE_APP_logo.png') }}" alt="LINE logo">
             </div>
         </div>
-        @if(isset($resToken))
-            @if ($resToken['success'])
+        @if(isset($res))
+            @if ($res['success'])
                 <div class="row padding-top">
                     <div class="col center-text">
                         <h1>恭喜完成連動！</h1>
@@ -113,7 +113,7 @@
                 </div>
                 <div class="row padding-top">
                     <div class="col center-text">
-                        <h2>錯誤代碼：{{ $resToken['error'] }}</h2>
+                        <h2>錯誤代碼：{{ $res['error'] }}</h2>
                     </div>
                 </div>
                 <div class="row padding-top">
