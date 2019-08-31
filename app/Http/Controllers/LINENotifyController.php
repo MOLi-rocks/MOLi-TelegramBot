@@ -72,23 +72,27 @@ class LINENotifyController extends Controller
         $code = $request->query('code', false);
 
         if ($code) {
-            $resToken = $this->lineNotifyService->getToken(
+            $res = $this->lineNotifyService->getToken(
                 $code,
                 $this->redirect_uri,
                 $this->client_id,
                 $this->client_secret
             );
 
-            if ($resToken['success']) {
+            if ($res['success']) {
                 // send a welcome message
                 $msg = PHP_EOL . '歡迎使用暨大通知，此服務由 MOLi 實驗室維護' . PHP_EOL .
                     '如有疑問可至粉專或群組詢問' . PHP_EOL .
                     'https://moli.rocks';
 
-                $this->sendMsg($resToken['token'], $msg);
+                $resToken = $res['token'];
+
+                $this->lineNotifyService->updateUser($resToken);
+
+                $this->sendMsg($resToken, $msg);
             }
 
-            return view('LINE.notify_auth', compact('resToken'));
+            return view('LINE.notify_auth', compact('res'));
         } else {
             // 歡迎畫面
             return view('LINE.notify_auth');
