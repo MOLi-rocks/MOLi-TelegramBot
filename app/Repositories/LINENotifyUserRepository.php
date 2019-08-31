@@ -26,6 +26,11 @@ class LINENotifyUserRepository
 
     public function getAllToken()
     {
+        return $this->LINENotifyUserModel->pluck('access_token');
+    }
+
+    public function getSendMsgToken()
+    {
         return $this->LINENotifyUserModel
             ->where('status', '!=', '401')
             ->pluck('access_token');

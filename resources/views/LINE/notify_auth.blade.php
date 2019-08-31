@@ -62,6 +62,7 @@
 
         .button-apply:hover {
             background-color: white;
+            text-decoration: none;
             color: black;
         }
 
@@ -92,39 +93,41 @@
                 <img class="line-logo" src="{{ asset('img/LINE_APP_logo.png') }}" alt="LINE logo">
             </div>
         </div>
-        @if (isset($success) && $success == true)
-            <div class="row padding-top">
-                <div class="col center-text">
-                    <h1>恭喜完成連動！</h1>
+        @if(isset($resToken))
+            @if ($resToken['success'])
+                <div class="row padding-top">
+                    <div class="col center-text">
+                        <h1>恭喜完成連動！</h1>
+                    </div>
                 </div>
-            </div>
-            <div class="row padding-top">
-                <div class="col center-text">
-                    <h1>請查看 LINE 通知，並確認 LINE Notify 並沒有被封鎖！</h1>
+                <div class="row padding-top">
+                    <div class="col center-text">
+                        <h1>請查看 LINE 通知，並確認 LINE Notify 並沒有被封鎖！</h1>
+                    </div>
                 </div>
-            </div>
-        @elseif (isset($error))
-            <div class="row padding-top">
-                <div class="col center-text">
-                    <h1>發生錯誤！</h1>
+            @else
+                <div class="row padding-top">
+                    <div class="col center-text">
+                        <h1>發生錯誤！</h1>
+                    </div>
                 </div>
-            </div>
-            <div class="row padding-top">
-                <div class="col center-text">
-                    <h2>錯誤代碼：{{ $error }}</h2>
+                <div class="row padding-top">
+                    <div class="col center-text">
+                        <h2>錯誤代碼：{{ $resToken['error'] }}</h2>
+                    </div>
                 </div>
-            </div>
-            <div class="row padding-top">
-                <div class="col center-text">
-                    <p>如問題持續發生，請聯絡 MOLi 實驗室，並且告知錯誤代碼</p>
-                    <p>If the problem continues, please contact the MOLi Lab and tell us Error Code</p>
+                <div class="row padding-top">
+                    <div class="col center-text">
+                        <p>如問題持續發生，請聯絡 MOLi 實驗室，並且告知錯誤代碼</p>
+                        <p>If the problem continues, please contact the MOLi Lab and tell us Error Code</p>
+                    </div>
                 </div>
-            </div>
-            <div class="row padding-top">
-                <div class="col center-text">
-                    <a href="{{ Route('line_notify_auth') }}"><button class="button-apply">重新嘗試連動</button></a>
+                <div class="row padding-top">
+                    <div class="col center-text">
+                        <a href="{{ Route('line_notify_auth') }}"><button class="button-apply">重新嘗試連動</button></a>
+                    </div>
                 </div>
-            </div>
+            @endif
         @else
             <div class="row padding-top">
                 <div class="col center-text">
@@ -143,7 +146,7 @@
             </div>
             <div class="row padding-top">
                 <div class="col center-text">
-                    <button class="button-apply" onclick="oAuth2();">申請連動暨大最新公告 LINE Notify</button>
+                    <a href="{{ route('line_notify_code') }}" class="btn-link button-apply">申請連動暨大最新公告 LINE Notify</a>
                 </div>
             </div>
             <div class="row padding-top">
@@ -184,18 +187,5 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    @if (isset($client_id) && isset($redirect_uri))
-        <script>
-            function oAuth2() {
-                let URL = 'https://notify-bot.line.me/oauth/authorize?';
-                URL += 'response_type=code';
-                URL += '&client_id={{ $client_id }}';
-                URL += '&redirect_uri={{ $redirect_uri }}';
-                URL += '&scope=notify';
-                URL += '&state=NO_STATE';
-                window.location.href = URL;
-            }
-        </script>
-    @endif
 </body>
 </html>

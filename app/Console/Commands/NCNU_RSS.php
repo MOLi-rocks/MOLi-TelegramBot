@@ -88,27 +88,17 @@ class NCNU_RSS extends Command
                             $hashtag .= '#' . $seg_list_item . ' ';
                         }
 
+                        $rawMsg = $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'];
+
                         // send to Telegram Channel
                         Telegram::sendMessage([
                             'chat_id' => config('telegram-channel.ncnu_news'),
-                            'text'    => $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'] . PHP_EOL . PHP_EOL . $hashtag
+                            'text'    => $rawMsg . PHP_EOL . PHP_EOL . $hashtag
                         ]);
 
                         // send to LINE Notify
-                        $LNU = $this->LINENotifyService->getAllToken(); // LINE Notify Users
-                        $msg = PHP_EOL . $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'];
-                        foreach ($LNU as $key => $token) {
-                            try {
-                                $this->LINENotifyService->sendMsg($token, $msg);
-                            } catch (Exception $e) {
-                                $this->LINENotifyService->updateStatus($token);
-                            }
-
-                            // LINE 限制一分鐘上限 1000 次，做一些保留次數
-                            if (($key + 1) % 950 == 0) {
-                                sleep(62);
-                            }
-                        }
+                        $lineMsg = PHP_EOL . $rawMsg;
+                        $this->LINENotifyService->sendMsgToAll($lineMsg);
 
                         $this->ncnuRssService->storePublishedRss($item['guid']);
 
