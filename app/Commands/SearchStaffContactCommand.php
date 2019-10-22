@@ -8,7 +8,6 @@ use Telegram\Bot\Commands\Command;
 use DB;
 use Telegram;
 use MOLiBot\Models\WhoUseWhatCommand;
-use MOLiBot\Services\NcnuStaffContactService;
 
 class SearchStaffContactCommand extends Command
 {
