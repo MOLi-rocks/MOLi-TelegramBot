@@ -8,7 +8,8 @@ use SoapBox\Formatter\Formatter;
 
 class Ncnu extends Source
 {
-    private $url;
+    private $rssUrl;
+    private $staffContactUrl;
 
     /**
      * Ncnu constructor.
@@ -17,7 +18,8 @@ class Ncnu extends Source
     {
         parent::__construct();
 
-        $this->url = 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx';
+        $this->rssUrl = 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx';
+        $this->staffContactUrl = 'http://ccweb1.ncnu.edu.tw/telquery/csvstaff2query.asp';
     }
 
     /**
@@ -27,7 +29,7 @@ class Ncnu extends Source
     public function getContent() : array
     {
         try {
-            $response = $this->httpClient->request('GET', $this->url);
+            $response = $this->httpClient->request('GET', $this->rssUrl);
 
             $fileContents = $response->getBody()->getContents();
 
@@ -53,7 +55,7 @@ class Ncnu extends Source
         try {
             $response = $this->httpClient->request(
                 'GET',
-                'http://ccweb1.ncnu.edu.tw/telquery/csvstaff2query.asp?name=' . urlencode($keyword) . '?' . time()
+                $this->staffContactUrl . '?name=' . urlencode($keyword) . '?' . time()
             );
 
             $fileContents = $response->getBody()->getContents();
