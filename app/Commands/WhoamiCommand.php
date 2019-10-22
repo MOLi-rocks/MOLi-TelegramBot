@@ -26,13 +26,15 @@ class WhoamiCommand extends Command
     {
         $update = Telegram::getWebhookUpdates();
 
-        $userid = $update->all()['message']['from']['id'];
+        $data = $update->all();
 
-        $username = $update->all()['message']['from']['username'];
+        $userid = $data['message']['from']['id'];
 
-        $first_name = $update->all()['message']['from']['first_name'];
+        $username = $data['message']['from']['username'];
 
-        $chatid = $update->all()['message']['chat']['id'];
+        $first_name = $data['message']['from']['first_name'];
+
+        $chatid = $data['message']['chat']['id'];
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
@@ -41,7 +43,7 @@ class WhoamiCommand extends Command
                 '您所設定的 username 為 @'.$username.PHP_EOL.
                 '您的 Telegram user ID 為 '.$userid.PHP_EOL.
                 '目前所在的頻道 ID 為 '.$chatid,
-            'reply_to_message_id' => $update->all()['message']['message_id']
+            'reply_to_message_id' => $data['message']['message_id']
         ]);
 
         return response('OK', 200);

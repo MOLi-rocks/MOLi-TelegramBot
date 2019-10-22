@@ -10,9 +10,8 @@ use SoapBox\Formatter\Formatter;
 use Telegram;
 
 use MOLiBot\Services\FuelPriceService;
-use MOLiBot\Services\NcdrRssService;
-use MOLiBot\Services\NcnuRssService;
-use MOLiBot\Services\NcnuStaffContactService;
+use MOLiBot\Services\NcdrService;
+use MOLiBot\Services\NcnuService;
 use Log;
 
 class MOLiBotController extends Controller
@@ -24,22 +23,19 @@ class MOLiBotController extends Controller
     private $NCDR_should_mute;
 
     private $fuelPriceService;
-    private $ncdrRssService;
-    private $ncnuRssService;
-    private $ncnuStaffContactService;
+    private $ncdrService;
+    private $ncnuService;
 
     /**
      * MOLiBotController constructor.
      * @param FuelPriceService $fuelPriceService
-     * @param NcdrRssService $ncdrRssService
-     * @param NcnuRssService $ncnuRssService
-     * @param NcnuStaffContactService $ncnuStaffContactService
+     * @param NcdrService $ncdrService
+     * @param NcnuService $ncnuService
      */
     public function __construct(
         FuelPriceService $fuelPriceService,
-        NcdrRssService $ncdrRssService,
-        NcnuRssService $ncnuRssService,
-        NcnuStaffContactService $ncnuStaffContactService
+        NcdrService $ncdrService,
+        NcnuService $ncnuService
     ) {
         // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
         $this->NCDR_to_BOTChannel_list = collect([
@@ -58,11 +54,9 @@ class MOLiBotController extends Controller
 
         $this->fuelPriceService = $fuelPriceService;
 
-        $this->ncdrRssService = $ncdrRssService;
+        $this->ncdrService = $ncdrService;
 
-        $this->ncnuRssService = $ncnuRssService;
-
-        $this->ncnuStaffContactService = $ncnuStaffContactService;
+        $this->ncnuService = $ncnuService;
     }
 
     /**
@@ -88,12 +82,12 @@ class MOLiBotController extends Controller
 
     public function getNCNU_RSS()
     {
-        return $this->ncnuRssService->getNcnuRss();
+        return $this->ncnuService->getRss();
     }
 
     public function getNCDR_RSS()
     {
-        return $this->ncdrRssService->getNcdrRss();
+        return $this->ncdrService->getRss();
     }
 
     public function postNCDR(Request $request)
@@ -183,7 +177,7 @@ class MOLiBotController extends Controller
 
     public function getStaffContact($keyword = NULL)
     {
-        return $this->ncnuStaffContactService->getStaffContact($keyword);
+        return $this->ncnuService->getStaffContact($keyword);
     }
 
     /**

@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 use Telegram;
 use Exception;
-use MOLiBot\Services\NcdrRssService;
+use MOLiBot\Services\NcdrService;
 
 class NCDR_RSS extends Command
 {
@@ -25,9 +25,9 @@ class NCDR_RSS extends Command
     protected $description = 'Check New RSS Feed From NCDR';
 
     /**
-     * @var ncdrRssService
+     * @var NcdrService
      */
-    private $ncdrRssService;
+    private $ncdrService;
 
     /** @var \Illuminate\Support\Collection NCDR_to_BOTChannel_list */
     private $NCDR_to_BOTChannel_list;
@@ -38,15 +38,15 @@ class NCDR_RSS extends Command
     /**
      * Create a new command instance.
      *
-     * @param NcdrRssService $ncdrRssService
+     * @param NcdrService $ncdrService
      * 
      * @return void
      */
-    public function __construct(NcdrRssService $ncdrRssService)
+    public function __construct(NcdrService $ncdrService)
     {
         parent::__construct();
         
-        $this->ncdrRssService = $ncdrRssService;
+        $this->ncdrService = $ncdrService;
 
         // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
         $this->NCDR_to_BOTChannel_list = collect([
@@ -75,7 +75,7 @@ class NCDR_RSS extends Command
     public function handle()
     {
         try {
-            $contents = $this->ncdrRssService->getNcdrRss();
+            $contents = $this->ncdrService->getRss();
 
             $items = $contents['entry'];
 
@@ -86,7 +86,7 @@ class NCDR_RSS extends Command
 
                 array_push($nowListId, $itemId);
 
-                if (!$this->ncdrRssService->checkRssPublished($itemId)) {
+                if (!$this->ncdrService->checkRssPublished($itemId)) {
                     if ($this->option('init')) {
                         $chat_id = config('telegram-channel.test');
                     } else {
@@ -102,13 +102,13 @@ class NCDR_RSS extends Command
                         ]);
                     }
 
-                    $this->ncdrRssService->storePublishedRss($itemId, $category);
+                    $this->ncdrService->storePublishedRss($itemId, $category);
 
                     sleep(5);
                 }
             }
 
-            $this->ncdrRssService->deletePublishedRecordWithExcludeId($nowListId);
+            $this->ncdrService->deletePublishedRecordWithExcludeId($nowListId);
 
             $this->info('Mission Complete!');
             return;

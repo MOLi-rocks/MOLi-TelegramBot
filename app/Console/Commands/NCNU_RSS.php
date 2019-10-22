@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use Telegram;
 use Exception;
 use MOLiBot\Services\LINENotifyService;
-use MOLiBot\Services\NcnuRssService;
+use MOLiBot\Services\NcnuService;
 use Fukuball\Jieba\Jieba;
 use Fukuball\Jieba\Finalseg;
 
@@ -28,9 +28,9 @@ class NCNU_RSS extends Command
     protected $description = 'Check New RSS Feed From NCNU';
 
     /**
-     * @var NcnuRssService
+     * @var NcnuService
      */
-    private $ncnuRssService;
+    private $ncnuService;
 
     /**
      * @var LINENotifyService
@@ -40,15 +40,15 @@ class NCNU_RSS extends Command
     /**
      * Create a new command instance.
      *
-     * @param NcnuRssService $ncnuRssService
+     * @param NcnuService $ncnuService
      * @param LINENotifyService $LINENotifyService
      * @return void
      */
-    public function __construct(NcnuRssService $ncnuRssService, LINENotifyService $LINENotifyService)
+    public function __construct(NcnuService $ncnuService, LINENotifyService $LINENotifyService)
     {
         parent::__construct();
         
-        $this->ncnuRssService = $ncnuRssService;
+        $this->ncnuService = $ncnuService;
 
         $this->LINENotifyService = $LINENotifyService;
     }
@@ -71,16 +71,16 @@ class NCNU_RSS extends Command
 
             Finalseg::init();
 
-            $contents = $this->ncnuRssService->getNcnuRss();
+            $contents = $this->ncnuService->getRss();
 
             $items = $contents['channel']['item'];
 
             foreach ($items as $item) {
                 $hashtag = '';
 
-                if (!$this->ncnuRssService->checkRssPublished($item['guid'])) {
+                if (!$this->ncnuService->checkRssPublished($item['guid'])) {
                     if ($this->option('init')) {
-                        $this->ncnuRssService->storePublishedRss($item['guid']);
+                        $this->ncnuService->storePublishedRss($item['guid']);
                     } else {
                         $seg_list = Jieba::cut($item['title']);
 
@@ -100,7 +100,7 @@ class NCNU_RSS extends Command
                         $lineMsg = PHP_EOL . $rawMsg;
                         $this->LINENotifyService->sendMsgToAll($lineMsg);
 
-                        $this->ncnuRssService->storePublishedRss($item['guid']);
+                        $this->ncnuService->storePublishedRss($item['guid']);
 
                         // 避免太過頻繁發送
                         sleep(5);

@@ -2,6 +2,7 @@
 
 namespace MOLiBot\Commands;
 
+use MOLiBot\Services\NcdrService;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -25,42 +26,23 @@ class StopWorkingInfoCommand extends Command
      */
     public function handle($arguments)
     {
-        if (empty(config('ncdr.key'))) {
-            $this->replyWithChatAction(['action' => Actions::TYPING]);
-            $this->replyWithMessage(['text' => '此服務未啟動']);
-            return response('OK', 200); // 強制結束 command
-        }
+        $ncdrService = app('MOLiBot\Services\NcdrService');
 
-        $baseUrl = 'https://alerts.ncdr.nat.gov.tw';
-
-        $client = new GuzzleHttpClient();
-
-        try {
-            $response = $client->request(
-                'GET',
-                $baseUrl . '/api/datastore?format=json&capcode=WSC&apikey=' . config('ncdr.key'),
-                ['timeout' => 10]
-            );
-        } catch (GuzzleHttpTransferException $e) {
-            $this->replyWithChatAction(['action' => Actions::TYPING]);
-            $this->replyWithMessage(['text' => '暫無停班停課資訊']);
-            return response('OK', 200); // 強制結束 command
-        }
-
-        $info_data = json_decode($response->getBody());
+        $data = $ncdrService->getStopWorkingInfo();
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        if ($info_data->{'success'} === false || count($info_data->{'result'}) < 1) {
-            $this->replyWithMessage(['text' => '暫無停班停課資訊']);
-        } else {
-            $output_str = '';
+        switch ($data['status']) {
+            case 0:
+                $this->replyWithMessage(['text' => '暫無停班停課資訊']);
+                break;
 
-            foreach ($info_data->{'result'} as $result) {
-                $output_str .= trim($result->{'description'}) . PHP_EOL;
-            }
+            case 1:
+                $this->replyWithMessage(['text' => $data['data']]);
+                break;
 
-            $this->replyWithMessage(['text' => $output_str]);
+            default:
+                $this->replyWithMessage(['text' => '無法取得停班停課資訊']);
         }
 
         return response('OK', 200);
