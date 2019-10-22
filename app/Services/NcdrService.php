@@ -5,7 +5,7 @@ namespace MOLiBot\Services;
 use MOLiBot\Repositories\PublishedNcdrRssRepository;
 use MOLiBot\DataSources\Ncdr as DataSource;
 
-class NcdrRssService
+class NcdrService
 {
     private $publishedNcdrRssRepository;
     private $dataSource;
@@ -20,7 +20,7 @@ class NcdrRssService
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getNcdrRss()
+    public function getRss()
     {
         return $this->dataSource->getContent();
     }
@@ -51,5 +51,35 @@ class NcdrRssService
     public function deletePublishedRecordWithExcludeId($excludeId)
     {
         return $this->publishedNcdrRssRepository->deletePublishedRecordWithExcludeId($excludeId);
+    }
+
+    /**
+     * status:
+     * 1 => 成功
+     * 0 => 失敗
+     * -1 => 錯誤
+     *
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getStopWorkingInfo()
+    {
+        try {
+            $data = $this->dataSource->getStopWorkingInfo();
+
+            if ($data['success'] === false || count($data['result']) < 1) {
+                return ['status' => 0, 'data' => ''];
+            } else {
+                $output_str = '';
+
+                foreach ($data['result'] as $result) {
+                    $output_str .= trim($result['description']) . PHP_EOL;
+                }
+
+                return ['status' => 1, 'data' => $output_str];
+            }
+        } catch (\Exception $e) {
+            return ['status' => -1, 'data' => ''];
+        }
     }
 }
