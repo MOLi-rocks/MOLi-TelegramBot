@@ -7,7 +7,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class NcnuDataTest extends TestCase
+class NcnuRssDataTest extends TestCase
 {
     /**
      * Test for get content.

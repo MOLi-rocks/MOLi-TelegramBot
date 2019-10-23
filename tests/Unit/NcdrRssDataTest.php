@@ -7,7 +7,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class NcdrDataTest extends TestCase
+class NcdrRssDataTest extends TestCase
 {
     /**
      * Test for get content.
