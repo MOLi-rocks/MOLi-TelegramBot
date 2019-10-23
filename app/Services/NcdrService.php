@@ -3,17 +3,29 @@
 namespace MOLiBot\Services;
 
 use MOLiBot\Repositories\PublishedNcdrRssRepository;
-use MOLiBot\DataSources\Ncdr as DataSource;
+use MOLiBot\DataSources\NcdrRss as RssDataSource;
+use MOLiBot\DataSources\NcdrStopWorkingInfo as StopWorkingInfoDataSource;
 
 class NcdrService
 {
     private $publishedNcdrRssRepository;
-    private $dataSource;
+    private $rssDataSource;
+    private $stopWorkingInfoSource;
 
-    public function __construct(PublishedNcdrRssRepository $publishedNcdrRssRepository)
+    /**
+     * NcdrService constructor.
+     * @param PublishedNcdrRssRepository $publishedNcdrRssRepository
+     * @param RssDataSource $rssDataSource
+     * @param StopWorkingInfoDataSource $stopWorkingInfoDataSource
+     */
+    public function __construct(PublishedNcdrRssRepository $publishedNcdrRssRepository,
+                                RssDataSource $rssDataSource,
+                                StopWorkingInfoDataSource $stopWorkingInfoDataSource
+    )
     {
         $this->publishedNcdrRssRepository = $publishedNcdrRssRepository;
-        $this->dataSource = new DataSource();
+        $this->rssDataSource = $rssDataSource;
+        $this->stopWorkingInfoSource = $stopWorkingInfoDataSource;
     }
 
     /**
@@ -22,7 +34,7 @@ class NcdrService
      */
     public function getRss()
     {
-        return $this->dataSource->getContent();
+        return $this->rssDataSource->getContent();
     }
 
     /**
@@ -65,7 +77,7 @@ class NcdrService
     public function getStopWorkingInfo()
     {
         try {
-            $data = $this->dataSource->getStopWorkingInfo();
+            $data = $this->stopWorkingInfoSource->getContent();
 
             if ($data['success'] === false || count($data['result']) < 1) {
                 return ['status' => 0, 'data' => ''];

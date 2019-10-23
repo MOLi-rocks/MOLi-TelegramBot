@@ -32,6 +32,10 @@ class TelegramController extends Controller
         $this->WhoUseWhatCommandModel = $WhoUseWhatCommandModel;
     }
 
+    /**
+     * @param Request $request
+     * @return Telegram\Bot\Message
+     */
     public function postSendMessage(Request $request)
     {
         return $send = Telegram::sendMessage([
@@ -42,6 +46,11 @@ class TelegramController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|Telegram\Bot\Message
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function postSendPhoto(Request $request)
     {
         $fileName = 'BotAPI'.rand(11111,99999);
@@ -95,6 +104,10 @@ class TelegramController extends Controller
         return $send;
     }
 
+    /**
+     * @param Request $request
+     * @return Telegram\Bot\Message
+     */
     public function postSendLocation(Request $request)
     {
         return $send = Telegram::sendLocation([
@@ -106,6 +119,10 @@ class TelegramController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function postWebhook(Request $request)
     {
         $update = Telegram::commandsHandler(true);

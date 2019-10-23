@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use MOLiBot\DataSources\Ncnu;
+use MOLiBot\DataSources\NcnuRss;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,7 +17,7 @@ class NcnuDataTest extends TestCase
      */
     public function testGetContent()
     {
-        $dataSource = new Ncnu();
+        $dataSource = new NcnuRss();
 
         $data = $dataSource->getContent();
 

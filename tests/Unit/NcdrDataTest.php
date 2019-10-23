@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use MOLiBot\DataSources\Ncdr;
+use MOLiBot\DataSources\NcdrRss;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,7 +17,7 @@ class NcdrDataTest extends TestCase
      */
     public function testGetContent()
     {
-        $dataSource = new Ncdr();
+        $dataSource = new NcdrRss();
 
         $data = $dataSource->getContent();
 
