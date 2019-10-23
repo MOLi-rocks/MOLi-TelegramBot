@@ -2,12 +2,12 @@
 
 namespace Tests\Unit;
 
-use MOLiBot\DataSources\Ncnu;
+use MOLiBot\DataSources\NcdrRss;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class NcnuDataTest extends TestCase
+class NcdrRssDataTest extends TestCase
 {
     /**
      * Test for get content.
@@ -17,14 +17,12 @@ class NcnuDataTest extends TestCase
      */
     public function testGetContent()
     {
-        $dataSource = new Ncnu();
+        $dataSource = new NcdrRss();
 
         $data = $dataSource->getContent();
 
         $this->assertArraySubset([
-            'channel' => [
-                'item' => []
-            ]
+            'entry' => []
         ], $data);
     }
 }

@@ -61,12 +61,18 @@ class MOLiBotController extends Controller
 
     /**
      * 回應對 GET / 的請求
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function getIndex()
     {
         return redirect('https://moli.rocks');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function connectTester(Request $request)
     {
         // what format to return (json or XML, default to json)
@@ -80,16 +86,28 @@ class MOLiBotController extends Controller
         }
     }
 
+    /**
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getNCNU_RSS()
     {
         return $this->ncnuService->getRss();
     }
 
+    /**
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getNCDR_RSS()
     {
         return $this->ncdrService->getRss();
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function postNCDR(Request $request)
     {
         //use $request->getContent() to get raw data
@@ -175,19 +193,30 @@ class MOLiBotController extends Controller
             ->header('Content-Type', 'text/xml');
     }
 
+    /**
+     * @param null $keyword
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getStaffContact($keyword = NULL)
     {
         return $this->ncnuService->getStaffContact($keyword);
     }
 
     /**
-     * @return mixed
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getFuelPrice()
     {
         return $this->fuelPriceService->getLiveFuelPrice();
     }
 
+    /**
+     * @param HistoryFuelPriceRequest $request
+     * @return int|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getHistoryFuelPrice(HistoryFuelPriceRequest $request)
     {
         $prodId = $request->input('prodid');
@@ -195,6 +224,9 @@ class MOLiBotController extends Controller
         return $this->fuelPriceService->getHistoryFuelPrice($prodId);
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function anyRoute()
     {
         return redirect('https://moli.rocks');

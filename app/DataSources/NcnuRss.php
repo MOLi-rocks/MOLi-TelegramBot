@@ -6,12 +6,12 @@ use MOLiBot\Exceptions\DataSourceRetriveException;
 use Exception;
 use SoapBox\Formatter\Formatter;
 
-class Ncnu extends Source
+class NcnuRss extends Source
 {
     private $url;
 
     /**
-     * Ncnu constructor.
+     * NcnuRss constructor.
      */
     public function __construct()
     {
@@ -38,27 +38,6 @@ class Ncnu extends Source
             }
 
             return $formatted;
-        } catch (Exception $e) {
-            throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
-        }
-    }
-
-    /**
-     * @param null $keyword
-     * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
-     */
-    public function getStaffContact($keyword = NULL) : array
-    {
-        try {
-            $response = $this->httpClient->request(
-                'GET',
-                'http://ccweb1.ncnu.edu.tw/telquery/csvstaff2query.asp?name=' . urlencode($keyword) . '?' . time()
-            );
-
-            $fileContents = $response->getBody()->getContents();
-
-            return str_getcsv($fileContents, "\n");
         } catch (Exception $e) {
             throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
         }

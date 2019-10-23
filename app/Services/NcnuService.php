@@ -3,17 +3,30 @@
 namespace MOLiBot\Services;
 
 use MOLiBot\Repositories\PublishedNcnuRssRepository;
-use MOLiBot\DataSources\Ncnu as DataSource;
+use MOLiBot\DataSources\NcnuRss as RssDataSource;
+use MOLiBot\DataSources\NcnuStaffContact as StaffContactDataSource;
 
 class NcnuService
 {
     private $publishedNcnuRssRepository;
-    private $dataSource;
+    private $rssDataSource;
+    private $staffContactSource;
 
-    public function __construct(PublishedNcnuRssRepository $publishedNcnuRssRepository)
+    /**
+     * NcnuService constructor.
+     * @param PublishedNcnuRssRepository $publishedNcnuRssRepository
+     * @param RssDataSource $rssDataSource
+     * @param StaffContactDataSource $staffContactDataSource
+     */
+    public function __construct(
+        PublishedNcnuRssRepository $publishedNcnuRssRepository,
+        RssDataSource $rssDataSource,
+        StaffContactDataSource $staffContactDataSource
+    )
     {
         $this->publishedNcnuRssRepository = $publishedNcnuRssRepository;
-        $this->dataSource = new DataSource();
+        $this->rssDataSource = $rssDataSource;
+        $this->staffContactSource = $staffContactDataSource;
     }
 
     /**
@@ -22,7 +35,7 @@ class NcnuService
      */
     public function getRss()
     {
-        return $this->dataSource->getContent();
+        return $this->rssDataSource->getContent();
     }
 
     /**
@@ -51,7 +64,7 @@ class NcnuService
     public function getStaffContact($keyword = NULL)
     {
         try {
-            $contents = $this->dataSource->getStaffContact($keyword);
+            $contents = $this->staffContactSource->getContent($keyword);
 
             $result = [];
 
