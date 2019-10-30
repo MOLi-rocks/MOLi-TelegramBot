@@ -114,7 +114,7 @@ class MOLiBotController extends Controller
         $formatter = Formatter::make($request->getContent(), Formatter::XML);
         $json = $formatter->toArray();
 
-        if ( config('app.log_input') ) {
+        if ( config('logging.log_input') ) {
             Log::info(json_encode($json, JSON_UNESCAPED_UNICODE));
         }
 
