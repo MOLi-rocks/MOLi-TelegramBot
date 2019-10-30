@@ -14,7 +14,7 @@
         "fukuball/jieba-php": "dev-master",
         "guzzlehttp/guzzle": "^6.2",
         "irazasyed/telegram-bot-sdk": "^2.2",
-        "laravel/framework": "5.7.*",
+        "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "soapbox/laravel-formatter": "^3.1"
     },
@@ -23,8 +23,8 @@
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^2.0",
-        "phpunit/phpunit": "^7.0",
+        "nunomaduro/collision": "^3.0",
+        "phpunit/phpunit": "^7.5",
         "barryvdh/laravel-ide-helper": "^2.3"
     },
     "autoload": {
