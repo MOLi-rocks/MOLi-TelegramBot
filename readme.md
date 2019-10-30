@@ -1,6 +1,6 @@
 # MOLi-TelegramBot
-![Laravel Version](https://img.shields.io/badge/Laravel-5.5-brightgreen.svg)
-![PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.0-orange.svg)
+![Laravel Version](https://img.shields.io/badge/Laravel-5.8-brightgreen.svg)
+![PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.2-orange.svg)
 [![CircleCI](https://circleci.com/gh/MOLi-rocks/MOLi-TelegramBot/tree/master.svg?style=svg)](https://circleci.com/gh/MOLi-rocks/MOLi-TelegramBot/tree/master)
 
 ## 開發環境說明
