@@ -41,7 +41,6 @@
 
 ## 教學文件
 
-1. [5.5 版官網英文文件](https://laravel.com/docs/5.5)
+1. [5.8 版官網英文文件](https://laravel.com/docs/5.8)
 2. [英文影片教學](https://laracasts.com/)
-3. [中文文件](https://laravel.tw/)
-4. [Laradock](https://laradock.io/)
+3. [Laradock](https://laradock.io/)
