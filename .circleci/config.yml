@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # Specify the version you desire here
-      - image: circleci/php:7.2-node-browsers
+      - image: circleci/php:7.3-node-browsers
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -62,8 +62,7 @@ jobs:
       # setup .env file
       - run: cp .env.example .env
       - run: php artisan key:generate
-      - run: php artisan dotenv:set MOLI_BLOG_CLIENT_ID $MOLI_BLOG_CLIENT_ID
-      - run: php artisan dotenv:set MOLI_BLOG_CLIENT_SECRET $MOLI_BLOG_CLIENT_SECRET
+      - run: php artisan dotenv:set MOLI_BLOG_KEY $MOLI_BLOG_KEY
 
       # run tests with phpunit or codecept
       - run: ./vendor/bin/phpunit

@@ -11,16 +11,15 @@ class MoliBlogArticle extends Source
     private $page = 1;
 
     /**
-     * MoliKktix constructor.
+     * MoliBlogArticle constructor.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->url = config('moli.blog.url') . '/ghost/api/v0.1/posts/' .
-            '?client_id=' . config('moli.blog.client_id') .
-            '&client_secret=' . config('moli.blog.client_secret') .
-            '&include=author,tags';
+        $this->url = config('moli.blog.domain') . '/ghost/api/v2/content/posts/' .
+            '?key=' . config('moli.blog.key') .
+            '&include=authors,tags';
     }
 
     /**

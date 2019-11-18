@@ -124,8 +124,8 @@ class MOLi_Blog_Article extends Command
                 Telegram::sendMessage([
                     'chat_id' => $chat_id,
                     'text'    => 'MOLi Blog 新文快報：' . PHP_EOL .
-                        $post['title'] . ' By ' . $post['author']['name'] . PHP_EOL .
-                        config('moli.blog.url') . $post['url'] . PHP_EOL . PHP_EOL .
+                        $post['title'] . ' By ' . $post['authors'][0]['name'] . PHP_EOL .
+                        $post['url'] . PHP_EOL . PHP_EOL .
                         $tags
                 ]);
 
