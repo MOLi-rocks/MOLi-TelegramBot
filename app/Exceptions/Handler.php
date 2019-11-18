@@ -5,6 +5,7 @@ namespace MOLiBot\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use MOLiBot\Http\Responses\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -56,25 +57,36 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if (config('app.env') == 'production') {
+        $res = new Response();
+
+        if (config('app.env') === 'production') {
             if ( $request->is( config('telegram.bot_token') ) ) {
                 Log:info($e);
-                return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 200);
-            } else {
-                if ($e instanceof TelegramSDKException) {
-                    return response()->json($e->getResponseData(), $e->getHttpStatusCode());
-                }
-
-                return response()->json(['massages' => 'Ooops, there is something wrong QQ'], 400);
-            }
-        } else {
-            if ($e instanceof ModelNotFoundException) {
-                $e = new NotFoundHttpException($e->getMessage(), $e);
+                return $res->jsonResponse(200, -1);
             }
 
             if ($e instanceof TelegramSDKException) {
-                return response()->json($e->getResponseData(), $e->getHttpStatusCode());
+                return $res->jsonResponse(
+                    $e->getHttpStatusCode(),
+                    -1,
+                    $e->getErrorType(),
+                    $e->getResponseData()
+                );
             }
+
+            if ($e instanceof DataSourceRetriveException) {
+                return $res->jsonResponse(404, -1, 'Data Retrive Failed');
+            }
+
+            if ($e instanceof ModelNotFoundException) {
+                return $res->jsonResponse(404, -1, 'Not Found');
+            }
+
+            return $res->jsonResponse(400, -1, 'Failed');
+        }
+
+        if ($e instanceof ModelNotFoundException) {
+            $e = new NotFoundHttpException($e->getMessage(), $e);
         }
         
         return parent::render($request, $e);
