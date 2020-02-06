@@ -21,6 +21,16 @@ class TelegramController extends Controller
     private $WhoUseWhatCommandModel;
 
     /**
+     * @var int
+     */
+    private $MOLiGroupId;
+
+    /**
+     * @var string
+     */
+    private $MOLiWelcomeMsg;
+
+    /**
      * TelegramController constructor.
      *
      * @param WhoUseWhatCommand $WhoUseWhatCommandModel
@@ -30,6 +40,23 @@ class TelegramController extends Controller
     public function __construct(WhoUseWhatCommand $WhoUseWhatCommandModel)
     {
         $this->WhoUseWhatCommandModel = $WhoUseWhatCommandModel;
+        $this->MOLiGroupId = -1001029969071;
+        $this->MOLiWelcomeMsg =
+            '歡迎來到 MOLi（創新自造者開放實驗室），這裡是讓大家一起創造、分享、實踐的開放空間。' . PHP_EOL . PHP_EOL .
+            '以下是一些資訊連結：' . PHP_EOL . PHP_EOL .
+            '/* MOLi 相關 */' . PHP_EOL .
+            '- MOLi 聊天群 @MOLi_Rocks' . PHP_EOL .
+            '- MOLi Bot @MOLiRocks_bot' . PHP_EOL .
+            '- MOLi 廣播頻道 @MOLi_Channel' . PHP_EOL .
+            '- MOLi 天氣廣播台 @MOLi_Weather'  . PHP_EOL .
+            '- MOLi 知識中心 http://hackfoldr.org/MOLi/' . PHP_EOL .
+            '- MOLi 首頁 https://MOLi.Rocks' . PHP_EOL .
+            '- MOLi Blog https://blog.moli.rocks' . PHP_EOL . PHP_EOL .
+            '/* NCNU 相關 */' . PHP_EOL .
+            '- 暨大最新公告 @NCNU_NEWS'  . PHP_EOL .
+            '- 暨大最新公告 Line 通知申請 https://bot.moli.rocks/line-notify-auth'  . PHP_EOL . PHP_EOL .
+            '/* Telegram 相關 */' . PHP_EOL .
+            '- Telegram 非官方中文站 https://telegram.how';
     }
 
     /**
@@ -132,7 +159,6 @@ class TelegramController extends Controller
         if ( config('logging.log_input') ) {
             Log::info($update);
         }
-
         /*
         {
             "update_id":(number),
@@ -175,43 +201,28 @@ class TelegramController extends Controller
             }
         }
         */
-        if ( isset($update->all()['message']['new_chat_members']) && $update->all()['message']['chat']['id'] == -1001029969071 ) { //-1001029969071 = MOLi group
+        $data = $update->all();
+
+        if ( isset($data['message']['new_chat_members']) &&
+            !$data['message']['new_chat_members']['is_bot'] &&
+            $data['message']['chat']['id'] === $this->MOLiGroupId ) {
             Telegram::sendMessage([
-                'chat_id' => $update->all()['message']['chat']['id'],
-                'reply_to_message_id' => $update->all()['message']['message_id'],
-                'text' => 
-                    '歡迎來到 MOLi（創新自造者開放實驗室），這裡是讓大家一起創造、分享、實踐的開放空間。' . PHP_EOL . 
-                    PHP_EOL .
-                    '以下是一些資訊連結：' . PHP_EOL . 
-                    PHP_EOL .
-                    '/* MOLi 相關 */' . PHP_EOL .
-                    '- MOLi 聊天群 @MOLi_Rocks' . PHP_EOL .
-                    '- MOLi Bot @MOLiRocks_bot' . PHP_EOL .
-                    '- MOLi 廣播頻道 @MOLi_Channel' . PHP_EOL .
-                    '- MOLi 天氣廣播台 @MOLi_Weather'  . PHP_EOL .
-                    '- MOLi 知識中心 http://hackfoldr.org/MOLi/' . PHP_EOL .
-                    '- MOLi 首頁 https://MOLi.Rocks' . PHP_EOL .
-                    '- MOLi Blog https://blog.moli.rocks' . PHP_EOL .
-                    PHP_EOL .
-                    '/* NCNU 相關 */' . PHP_EOL .
-                    '- 暨大最新公告 @NCNU_NEWS'  . PHP_EOL .
-                    '- 暨大最新公告 Line 通知申請 https://bot.moli.rocks/line-notify-auth'  . PHP_EOL .
-                    PHP_EOL .
-                    '/* Telegram 相關 */' . PHP_EOL .
-                    '- Telegram 非官方中文站 https://telegram.how'
+                'chat_id' => $data['message']['chat']['id'],
+                'reply_to_message_id' => $data['message']['message_id'],
+                'text' => $this->MOLiWelcomeMsg
             ]);
-        } else if ($update->all()['message']['chat']['type'] == 'private' &&
-            !isset($update->all()['message']['entities']) &&
-            isset($update->all()['message']['text']) &&
-            $this->WhoUseWhatCommandModel->where('user-id', '=', $update->all()['message']['from']['id'])->exists()) {
+        } else if ($data['message']['chat']['type'] == 'private' &&
+            !isset($data['message']['entities']) &&
+            isset($data['message']['text']) &&
+            $this->WhoUseWhatCommandModel->where('user-id', '=', $data['message']['from']['id'])->exists()) {
             $exec = Telegram::getCommandBus();
 
-            $cmd_name = $this->WhoUseWhatCommandModel->where('user-id', '=', $update->all()['message']['from']['id'])->first();
+            $cmd_name = $this->WhoUseWhatCommandModel->where('user-id', '=', $data['message']['from']['id'])->first();
 
-            if ($update->all()['message']['text'] == '/'.$cmd_name->command) {
+            if ($data['message']['text'] == '/'.$cmd_name->command) {
                 $arguments = '';
             } else {
-                $arguments = $update->all()['message']['text'];
+                $arguments = $data['message']['text'];
             }
 
             $exec->execute($cmd_name->command, $arguments, $update);
