@@ -206,11 +206,15 @@ class TelegramController extends Controller
         if ( isset($data['message']['new_chat_members']) &&
             !$data['message']['new_chat_members']['is_bot'] &&
             $data['message']['chat']['id'] === $this->MOLiGroupId ) {
-            Telegram::sendMessage([
+            $welcomeMsg = Telegram::sendMessage([
                 'chat_id' => $data['message']['chat']['id'],
                 'reply_to_message_id' => $data['message']['message_id'],
                 'text' => $this->MOLiWelcomeMsg
             ]);
+
+            $welcomeMsg = $welcomeMsg->getMessageId();
+
+
         } else if ($data['message']['chat']['type'] == 'private' &&
             !isset($data['message']['entities']) &&
             isset($data['message']['text']) &&
