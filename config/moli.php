@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'telegram' => [
+
+        'group_id' => env('MOLI_GROUP_ID')
+
+    ],
 
     'blog' => [
 
