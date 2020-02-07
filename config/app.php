@@ -155,7 +155,6 @@ return [
         MOLiBot\Providers\EventServiceProvider::class,
         MOLiBot\Providers\RouteServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
-        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
