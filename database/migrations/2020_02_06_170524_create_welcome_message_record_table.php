@@ -14,8 +14,11 @@ class CreateWelcomeMessageRecordTable extends Migration
     public function up()
     {
         Schema::create('welcome_message_record', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->bigInteger('chat_id');
+            $table->bigInteger('member_id')->comment('new member id');
+            $table->bigInteger('welcome_message_id');
+            $table->boolean('checked')->default(false);
+            $table->bigInteger('join_at')->comment('unix-timestamp of join time');
         });
     }
 

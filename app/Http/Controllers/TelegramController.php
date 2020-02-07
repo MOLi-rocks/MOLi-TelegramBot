@@ -12,13 +12,21 @@ use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\RequestException as GuzzleHttpRequestException;
 use MOLiBot\Models\WhoUseWhatCommand;
+use MOLiBot\Services\WelcomeMessageRecordService;
 
 use Log;
 
 class TelegramController extends Controller
 {
-    /** @var WhoUseWhatCommand */
+    /**
+     * @var WhoUseWhatCommand
+     */
     private $WhoUseWhatCommandModel;
+
+    /**
+     * @var WelcomeMessageRecordService
+     */
+    private $welcomeMessageRecordService;
 
     /**
      * @var int
@@ -34,12 +42,15 @@ class TelegramController extends Controller
      * TelegramController constructor.
      *
      * @param WhoUseWhatCommand $WhoUseWhatCommandModel
+     * @param WelcomeMessageRecordService $welcomeMessageRecordService
      *
      * @return void
      */
-    public function __construct(WhoUseWhatCommand $WhoUseWhatCommandModel)
+    public function __construct(WhoUseWhatCommand $WhoUseWhatCommandModel,
+                                WelcomeMessageRecordService $welcomeMessageRecordService)
     {
         $this->WhoUseWhatCommandModel = $WhoUseWhatCommandModel;
+        $this->welcomeMessageRecordService = $welcomeMessageRecordService;
         $this->MOLiGroupId = -1001029969071;
         $this->MOLiWelcomeMsg =
             '歡迎來到 MOLi（創新自造者開放實驗室），這裡是讓大家一起創造、分享、實踐的開放空間。' . PHP_EOL . PHP_EOL .
@@ -202,20 +213,23 @@ class TelegramController extends Controller
         }
         */
         $data = $update->all();
+        $chatId = $data['message']['chat']['id'];
+        $chatType = $data['message']['chat']['type'];
 
         if ( isset($data['message']['new_chat_members']) &&
             !$data['message']['new_chat_members']['is_bot'] &&
-            $data['message']['chat']['id'] === $this->MOLiGroupId ) {
+            $chatId === $this->MOLiGroupId ) {
             $welcomeMsg = Telegram::sendMessage([
-                'chat_id' => $data['message']['chat']['id'],
+                'chat_id' => $chatId,
                 'reply_to_message_id' => $data['message']['message_id'],
+                'disable_web_page_preview' => true,
                 'text' => $this->MOLiWelcomeMsg
             ]);
 
-            $welcomeMsg = $welcomeMsg->getMessageId();
-
-
-        } else if ($data['message']['chat']['type'] == 'private' &&
+            $newChatMemberId = $data['message']['new_chat_member']['id'];
+            $welcomeMsgId = $welcomeMsg->getMessageId();
+            $this->welcomeMessageRecordService->addNewRecord($chatId, $newChatMemberId, $welcomeMsgId);
+        } else if ($chatType === 'private' &&
             !isset($data['message']['entities']) &&
             isset($data['message']['text']) &&
             $this->WhoUseWhatCommandModel->where('user-id', '=', $data['message']['from']['id'])->exists()) {
