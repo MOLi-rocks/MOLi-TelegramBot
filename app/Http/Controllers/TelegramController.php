@@ -216,8 +216,8 @@ class TelegramController extends Controller
         $chatId = $data['message']['chat']['id'];
         $chatType = $data['message']['chat']['type'];
 
-        if ( isset($data['message']['new_chat_members']) &&
-            !$data['message']['new_chat_members']['is_bot'] &&
+        if ( isset($data['message']['new_chat_member']) &&
+            !$data['message']['new_chat_member']['is_bot'] &&
             $chatId === $this->MOLiGroupId ) {
             $welcomeMsg = Telegram::sendMessage([
                 'chat_id' => $chatId,
