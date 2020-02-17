@@ -8,6 +8,7 @@ use MOLiBot\Http\Requests;
 use MOLiBot\Http\Controllers\Controller;
 
 use Telegram;
+use Telegram\Bot\Api;
 use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\RequestException as GuzzleHttpRequestException;
@@ -18,6 +19,9 @@ use Log;
 
 class TelegramController extends Controller
 {
+    /** @var Api */
+    protected $telegram;
+
     /**
      * @var WhoUseWhatCommand
      */
@@ -41,14 +45,17 @@ class TelegramController extends Controller
     /**
      * TelegramController constructor.
      *
+     *  @param Api $telegram
      * @param WhoUseWhatCommand $WhoUseWhatCommandModel
      * @param WelcomeMessageRecordService $welcomeMessageRecordService
      *
      * @return void
      */
-    public function __construct(WhoUseWhatCommand $WhoUseWhatCommandModel,
+    public function __construct(Api $telegram,
+                                WhoUseWhatCommand $WhoUseWhatCommandModel,
                                 WelcomeMessageRecordService $welcomeMessageRecordService)
     {
+        $this->telegram = $telegram;
         $this->WhoUseWhatCommandModel = $WhoUseWhatCommandModel;
         $this->welcomeMessageRecordService = $welcomeMessageRecordService;
         $this->MOLiGroupId = -1001029969071;
@@ -72,11 +79,12 @@ class TelegramController extends Controller
 
     /**
      * @param Request $request
-     * @return Telegram\Bot\Message
+     * @return Telegram\Bot\Objects\Message
+     * @throws Telegram\Bot\Exceptions\TelegramSDKException
      */
     public function postSendMessage(Request $request)
     {
-        return $send = Telegram::sendMessage([
+        return $this->telegram->sendMessage([
             'chat_id' => $request->input('chat_id', ''),
             'text' => $request->input('text', ''),
             'disable_notification' => $request->input('disable_notification', false),
@@ -86,8 +94,8 @@ class TelegramController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|Telegram\Bot\Message
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return \Illuminate\Http\JsonResponse|Telegram\Bot\Objects\Message
+     * @throws \GuzzleHttp\Exception\GuzzleException|Telegram\Bot\Exceptions\TelegramSDKException
      */
     public function postSendPhoto(Request $request)
     {
@@ -129,7 +137,7 @@ class TelegramController extends Controller
             }
         }
 
-        $send = Telegram::sendPhoto([
+        $send = $this->telegram->sendPhoto([
             'chat_id' => $request->input('chat_id', ''),
             'photo' => $imgpath.$fileName.'.'.$extension,
             'disable_notification' => $request->input('disable_notification', false),
@@ -144,11 +152,12 @@ class TelegramController extends Controller
 
     /**
      * @param Request $request
-     * @return Telegram\Bot\Message
+     * @return Telegram\Bot\Objects\Message
+     * @throws Telegram\Bot\Exceptions\TelegramSDKException
      */
     public function postSendLocation(Request $request)
     {
-        return $send = Telegram::sendLocation([
+        return $this->telegram->sendLocation([
             'chat_id' => $request->input('chat_id', ''),
             'latitude' => $request->input('latitude', ''),
             'longitude' => $request->input('longitude', ''),
@@ -163,7 +172,8 @@ class TelegramController extends Controller
      */
     public function postWebhook(Request $request)
     {
-        $update = Telegram::commandsHandler(true);
+        $update = $this->telegram->commandsHandler(true);
+
         // Commands handler method returns an Update object.
         // So you can further process $update object
         // to however you want.
@@ -219,7 +229,7 @@ class TelegramController extends Controller
         if ( isset($data['message']['new_chat_member']) &&
             !$data['message']['new_chat_member']['is_bot'] &&
             $chatId === $this->MOLiGroupId ) {
-            $welcomeMsg = Telegram::sendMessage([
+            $welcomeMsg = $this->telegram->sendMessage([
                 'chat_id' => $chatId,
                 'reply_to_message_id' => $data['message']['message_id'],
                 'disable_web_page_preview' => true,
@@ -233,7 +243,7 @@ class TelegramController extends Controller
             !isset($data['message']['entities']) &&
             isset($data['message']['text']) &&
             $this->WhoUseWhatCommandModel->where('user-id', '=', $data['message']['from']['id'])->exists()) {
-            $exec = Telegram::getCommandBus();
+            $exec = $this->telegram->getCommandBus();
 
             $cmd_name = $this->WhoUseWhatCommandModel->where('user-id', '=', $data['message']['from']['id'])->first();
 

@@ -13,7 +13,7 @@
         "fideloper/proxy": "^4.0",
         "fukuball/jieba-php": "dev-master",
         "guzzlehttp/guzzle": "^6.2",
-        "irazasyed/telegram-bot-sdk": "^2.2",
+        "irazasyed/telegram-bot-sdk": "3.0.x-dev",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "soapbox/laravel-formatter": "^3.1"
