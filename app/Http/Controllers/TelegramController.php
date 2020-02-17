@@ -14,6 +14,7 @@ use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\RequestException as GuzzleHttpRequestException;
 use MOLiBot\Models\WhoUseWhatCommand;
 use MOLiBot\Services\WelcomeMessageRecordService;
+use MOLiBot\Services\TelegramService;
 
 use Log;
 
@@ -33,6 +34,11 @@ class TelegramController extends Controller
     private $welcomeMessageRecordService;
 
     /**
+     * @var TelegramService
+     */
+    private $telegramService;
+
+    /**
      * @var int
      */
     private $MOLiGroupId;
@@ -45,36 +51,22 @@ class TelegramController extends Controller
     /**
      * TelegramController constructor.
      *
-     *  @param Api $telegram
+     * @param Api $telegram
      * @param WhoUseWhatCommand $WhoUseWhatCommandModel
      * @param WelcomeMessageRecordService $welcomeMessageRecordService
+     * @param TelegramService $telegramService
      *
      * @return void
      */
     public function __construct(Api $telegram,
                                 WhoUseWhatCommand $WhoUseWhatCommandModel,
-                                WelcomeMessageRecordService $welcomeMessageRecordService)
+                                WelcomeMessageRecordService $welcomeMessageRecordService,
+                                TelegramService $telegramService)
     {
         $this->telegram = $telegram;
         $this->WhoUseWhatCommandModel = $WhoUseWhatCommandModel;
         $this->welcomeMessageRecordService = $welcomeMessageRecordService;
-        $this->MOLiGroupId = -1001029969071;
-        $this->MOLiWelcomeMsg =
-            '歡迎來到 MOLi（創新自造者開放實驗室），這裡是讓大家一起創造、分享、實踐的開放空間。' . PHP_EOL . PHP_EOL .
-            '以下是一些資訊連結：' . PHP_EOL . PHP_EOL .
-            '/* MOLi 相關 */' . PHP_EOL .
-            '- MOLi 聊天群 @MOLi_Rocks' . PHP_EOL .
-            '- MOLi Bot @MOLiRocks_bot' . PHP_EOL .
-            '- MOLi 廣播頻道 @MOLi_Channel' . PHP_EOL .
-            '- MOLi 天氣廣播台 @MOLi_Weather'  . PHP_EOL .
-            '- MOLi 知識中心 http://hackfoldr.org/MOLi/' . PHP_EOL .
-            '- MOLi 首頁 https://MOLi.Rocks' . PHP_EOL .
-            '- MOLi Blog https://blog.moli.rocks' . PHP_EOL . PHP_EOL .
-            '/* NCNU 相關 */' . PHP_EOL .
-            '- 暨大最新公告 @NCNU_NEWS'  . PHP_EOL .
-            '- 暨大最新公告 Line 通知申請 https://bot.moli.rocks/line-notify-auth'  . PHP_EOL . PHP_EOL .
-            '/* Telegram 相關 */' . PHP_EOL .
-            '- Telegram 非官方中文站 https://telegram.how';
+        $this->telegramService = $telegramService;
     }
 
     /**
@@ -180,70 +172,25 @@ class TelegramController extends Controller
         if ( config('logging.log_input') ) {
             Log::info($update);
         }
-        /*
-        {
-            "update_id":(number),
-            "message":{
-                "message_id":(number),
-                "from":{
-                    "id":(number),
-                    "first_name":"",
-                    "username":""
-                },
-                "chat":{
-                    "id":(number),
-                    "title":"",
-                    "username":"",
-                    "type":""
-                },
-                "date":(number),
-                "new_chat_participant":{
-                    "id":(number),
-                    "first_name":"",
-                    "username":""
-                },
-                "new_chat_member":{
-                    "id":(number),
-                    "first_name":"",
-                    "username":""
-                },
-                "new_chat_members":[
-                {
-                    "id":(number),
-                    "first_name":"",
-                    "username":""
-                },
-                {
-                    "id":(number),
-                    "first_name":"",
-                    "username":""
-                }
-                ]
-            }
+
+        $message = $update->getMessage();
+
+        $chatId = $message->getChat()->getId();
+        $chatType = $message->getChat()->getType();
+
+        $newChatMember = $message->getNewChatMember() ?? null;
+
+        if (!empty($newChatMember)) {
+            $this->telegramService->sendWelcomeMsg($message);
+        } elseif ($chatType === 'private') {
+
         }
-        */
-        $data = $update->all();
-        $chatId = $data['message']['chat']['id'];
-        $chatType = $data['message']['chat']['type'];
 
-        if ( isset($data['message']['new_chat_member']) &&
-            !$data['message']['new_chat_member']['is_bot'] &&
-            $chatId === $this->MOLiGroupId ) {
-            $welcomeMsg = $this->telegram->sendMessage([
-                'chat_id' => $chatId,
-                'reply_to_message_id' => $data['message']['message_id'],
-                'disable_web_page_preview' => true,
-                'text' => $this->MOLiWelcomeMsg
-            ]);
 
-            $newChatMemberId = $data['message']['new_chat_member']['id'];
-            $welcomeMsgId = $welcomeMsg->getMessageId();
-            $this->welcomeMessageRecordService->addNewRecord($chatId, $newChatMemberId, $welcomeMsgId);
-        } else if ($chatType === 'private' &&
+        if ($chatType === 'private' &&
             !isset($data['message']['entities']) &&
             isset($data['message']['text']) &&
             $this->WhoUseWhatCommandModel->where('user-id', '=', $data['message']['from']['id'])->exists()) {
-            $exec = $this->telegram->getCommandBus();
 
             $cmd_name = $this->WhoUseWhatCommandModel->where('user-id', '=', $data['message']['from']['id'])->first();
 
@@ -253,7 +200,7 @@ class TelegramController extends Controller
                 $arguments = $data['message']['text'];
             }
 
-            $exec->execute($cmd_name->command, $arguments, $update);
+            $this->telegram->getCommandBus()->execute($cmd_name->command, $arguments, $update);
         }
 
         return response('Controller OK', 200);
