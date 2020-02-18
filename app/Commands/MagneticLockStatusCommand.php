@@ -62,7 +62,6 @@ class MagneticLockStatusCommand extends Command
         }
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
-
         $send = $this->replyWithMessage(['text' => $reply]);
         
         if ( $update->all()['message']['chat']['type'] == 'private' ) {

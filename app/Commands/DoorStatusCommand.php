@@ -5,7 +5,6 @@ namespace MOLiBot\Commands;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
-use Telegram;
 use Storage;
 use Exception;
 use MOLiBot\DataSources\MoliDoorStatus;
@@ -49,14 +48,12 @@ class DoorStatusCommand extends Command
                     $reply = '門鎖狀態不明，猴子們正努力維修中！';
             }
 
-            //get text use $update->all()['message']['text']
-            $update = Telegram::getWebhookUpdates();
+            $chatType = $this->getUpdate()->getMessage()->getChat()->getType();
 
             $this->replyWithChatAction(['action' => Actions::TYPING]);
-
             $send = $this->replyWithMessage(['text' => $reply]);
 
-            if ( $update->all()['message']['chat']['type'] == 'private' ) {
+            if ($chatType === 'private') {
                 $client = new GuzzleHttpClient([
                     'headers' => [
                         'User-Agent' => 'MOLi Bot'
@@ -79,10 +76,10 @@ class DoorStatusCommand extends Command
 
                     Storage::disk('local')->put($fileName . '.' . $type[1], $response->getBody());
 
-                    Telegram::sendPhoto([
-                        'chat_id' => $update->all()['message']['chat']['id'],
+                    $this->replyWithChatAction(['action' => Actions::UPLOAD_PHOTO]);
+                    $this->replyWithPhoto([
                         'reply_to_message_id' => $send->getMessageId(),
-                        'photo' => $imgpath.$fileName . '.' . $type[1],
+                        'photo' => $imgpath . $fileName . '.' . $type[1],
                     ]);
 
                     Storage::disk('local')->delete($fileName . '.' . $type[1]);
