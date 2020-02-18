@@ -29,6 +29,5 @@ class WhoUseWhatCommandRepository
         return $this->whoUseWhatCommandModel
             ->where('user-id', '=', $userId)
             ->delete();
-
     }
 }

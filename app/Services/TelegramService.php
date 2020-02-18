@@ -2,9 +2,11 @@
 
 namespace MOLiBot\Services;
 
+use MOLiBot\Repositories\WelcomeMessageRecordRepository;
+use MOLiBot\Repositories\WhoUseWhatCommandRepository;
 use Telegram\Bot\Api;
-use MOLiBot\Services\WelcomeMessageRecordService;
 use Telegram\Bot\Objects\Message;
+use Telegram\Bot\Objects\Update;
 
 class TelegramService
 {
@@ -22,45 +24,100 @@ class TelegramService
     private $MOLiGroupId;
 
     /**
-     * @var WelcomeMessageRecordService
+     * @var WelcomeMessageRecordRepository
      */
-    private $welcomeMessageRecordService;
+    private $welcomeMessageRecordRepository;
+
+    /**
+     * @var WhoUseWhatCommandRepository
+     */
+    private $whoUseWhatCommandRepository;
 
     /**
      * TelegramService constructor.
      *
      * @param Api $telegram
-     * @param WelcomeMessageRecordService $welcomeMessageRecordService
+     * @param WelcomeMessageRecordRepository $welcomeMessageRecordRepository
+     * @param WhoUseWhatCommandRepository $whoUseWhatCommandRepository
      */
     public function __construct(Api $telegram,
-                                WelcomeMessageRecordService $welcomeMessageRecordService)
+                                WelcomeMessageRecordRepository $welcomeMessageRecordRepository,
+                                WhoUseWhatCommandRepository $whoUseWhatCommandRepository)
     {
         $this->telegram = $telegram;
-        $this->welcomeMessageRecordService = $welcomeMessageRecordService;
+        $this->welcomeMessageRecordRepository = $welcomeMessageRecordRepository;
+        $this->whoUseWhatCommandRepository = $whoUseWhatCommandRepository;
         $this->MOLiGroupId = config('moli.telegram.group_id');
         $this->MOLiWelcomeMsg = config('moli.telegram.group_welcome_msg');
     }
 
     /**
      * @param Message $hook
-     * @throws \Telegram\Bot\Exceptions\TelegramSDKException
+     * @return bool
      */
     public function sendWelcomeMsg(Message $hook)
     {
-        $chatId = $hook->getChat()->getId();
-        $memberIsBot = $hook->getNewChatMember()->getIsBot();
+        $status = false;
 
-        if ($chatId === $this->MOLiGroupId && !$memberIsBot) {
-            $welcomeMsg = $this->telegram->sendMessage([
-                'chat_id' => $this->MOLiGroupId,
-                'reply_to_message_id' => $hook->getMessageId(),
-                'disable_web_page_preview' => true,
-                'text' => $this->MOLiWelcomeMsg
-            ]);
+        try {
+            $chatId = $hook->getChat()->getId();
+            $memberIsBot = $hook->getNewChatMember()->getIsBot();
 
-            $newChatMemberId = $hook->getNewChatMember()->getId();
-            $welcomeMsgId = $welcomeMsg->getMessageId();
-            $this->welcomeMessageRecordService->addNewRecord($chatId, $newChatMemberId, $welcomeMsgId);
+            if ($chatId === $this->MOLiGroupId && !$memberIsBot) {
+                $welcomeMsg = $this->telegram->sendMessage([
+                    'chat_id' => $this->MOLiGroupId,
+                    'reply_to_message_id' => $hook->getMessageId(),
+                    'disable_web_page_preview' => true,
+                    'text' => $this->MOLiWelcomeMsg
+                ]);
+
+                $newChatMemberId = $hook->getNewChatMember()->getId();
+                $welcomeMsgId = $welcomeMsg->getMessageId();
+
+                $joinTimestamp = time();
+                $checked = false;
+
+                $this->welcomeMessageRecordRepository->createRecord(
+                    $chatId, $newChatMemberId, $welcomeMsgId, $joinTimestamp, $checked
+                );
+            }
+
+            $status = true;
+            return $status;
+        } catch (\Exception $e) {
+            \Log::error($e);
+            return $status;
+        }
+    }
+
+    /**
+     * @param Message $message
+     * @return bool
+     */
+    public function continuousCommand(Message $message)
+    {
+        $status = false;
+
+        try {
+            $userId = $message->getFrom()->getId();
+            $cmdInUse = $this->whoUseWhatCommandRepository->getCommand($userId);
+
+            if (!empty($cmdInUse)) {
+                $command = $cmdInUse->command;
+                $arguments = '';
+
+                if ($message->getText() != '/' . $command) {
+                    $arguments =$message->getText();
+                }
+
+                $this->telegram->getCommandBus()->execute($command, $arguments, $message);
+            }
+
+            $status = true;
+            return $status;
+        } catch (\Exception $e) {
+            \Log::error($e);
+            return $status;
         }
     }
 }

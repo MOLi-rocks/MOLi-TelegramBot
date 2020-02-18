@@ -160,7 +160,7 @@ class TelegramController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function postWebhook(Request $request)
     {
@@ -174,33 +174,12 @@ class TelegramController extends Controller
         }
 
         $message = $update->getMessage();
-
-        $chatId = $message->getChat()->getId();
         $chatType = $message->getChat()->getType();
 
-        $newChatMember = $message->getNewChatMember() ?? null;
-
-        if (!empty($newChatMember)) {
+        if ($message->has('new_chat_member')) {
             $this->telegramService->sendWelcomeMsg($message);
-        } elseif ($chatType === 'private') {
-
-        }
-
-
-        if ($chatType === 'private' &&
-            !isset($data['message']['entities']) &&
-            isset($data['message']['text']) &&
-            $this->WhoUseWhatCommandModel->where('user-id', '=', $data['message']['from']['id'])->exists()) {
-
-            $cmd_name = $this->WhoUseWhatCommandModel->where('user-id', '=', $data['message']['from']['id'])->first();
-
-            if ($data['message']['text'] == '/'.$cmd_name->command) {
-                $arguments = '';
-            } else {
-                $arguments = $data['message']['text'];
-            }
-
-            $this->telegram->getCommandBus()->execute($cmd_name->command, $arguments, $update);
+        } elseif ($chatType === 'private' && $message->has('text') && !$message->has('entities')) {
+            $this->telegramService->continuousCommand($message);
         }
 
         return response('Controller OK', 200);
