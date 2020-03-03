@@ -71,7 +71,7 @@ class Handler extends ExceptionHandler
                     $e->getHttpStatusCode(),
                     -1,
                     $e->getErrorType(),
-                    $e->getResponseData();
+                    $e->getResponseData()
                 );
             }
 
