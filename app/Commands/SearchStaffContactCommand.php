@@ -6,7 +6,6 @@ use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
 use DB;
-use Telegram;
 use MOLiBot\Models\WhoUseWhatCommand;
 
 class SearchStaffContactCommand extends Command

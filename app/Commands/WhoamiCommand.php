@@ -5,8 +5,6 @@ namespace MOLiBot\Commands;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
-use Telegram;
-
 class WhoamiCommand extends Command
 {
     /**
@@ -24,26 +22,23 @@ class WhoamiCommand extends Command
      */
     public function handle($arguments)
     {
-        $update = Telegram::getWebhookUpdates();
+        $msg = $this->getUpdate()->getMessage();
 
-        $data = $update->all();
+        $userid = $msg->getFrom()->getId();
 
-        $userid = $data['message']['from']['id'];
+        $username = $msg->getFrom()->getUsername();
 
-        $username = $data['message']['from']['username'];
+        $first_name = $msg->getFrom()->getFirstName();
 
-        $first_name = $data['message']['from']['first_name'];
-
-        $chatid = $data['message']['chat']['id'];
+        $chatid = $msg->getChat()->getId();
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
-
         $this->replyWithMessage([
-            'text' => '您是 '.$first_name.PHP_EOL.
-                '您所設定的 username 為 @'.$username.PHP_EOL.
-                '您的 Telegram user ID 為 '.$userid.PHP_EOL.
-                '目前所在的頻道 ID 為 '.$chatid,
-            'reply_to_message_id' => $data['message']['message_id']
+            'text' => '您是 ' . $first_name . PHP_EOL .
+                '您所設定的 username 為 @' . $username . PHP_EOL .
+                '您的 Telegram user ID 為 ' . $userid . PHP_EOL .
+                '目前所在的頻道 ID 為 ' . $chatid,
+            'reply_to_message_id' => $msg->getMessageId()
         ]);
 
         return response('OK', 200);
