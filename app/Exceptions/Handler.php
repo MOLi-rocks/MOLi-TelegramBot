@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
         $res = new Response();
 
         if (config('app.env') === 'production') {
-            if ( $request->is( config('telegram.bot_token') ) ) {
+            if ( $request->is( config('moli.telegram.bot_token') ) ) {
                 Log:info($e);
                 return $res->jsonResponse(200, -1);
             }
