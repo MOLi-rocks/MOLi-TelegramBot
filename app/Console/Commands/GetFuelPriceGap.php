@@ -78,7 +78,8 @@ class GetFuelPriceGap extends Command
         return $this->telegramService->sendMessage(
             $chatId,
             $text,
-            'HTML'
+            'HTML',
+            true
         );
     }
 }

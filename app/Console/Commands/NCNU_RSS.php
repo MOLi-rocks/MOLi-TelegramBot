@@ -101,7 +101,9 @@ class NCNU_RSS extends Command
                         // send to Telegram Channel
                         $this->telegramService->sendMessage(
                             config('telegram-channel.ncnu_news'),
-                            $rawMsg . PHP_EOL . PHP_EOL . $hashtag
+                            $rawMsg . PHP_EOL . PHP_EOL . $hashtag,
+                            null,
+                            true
                         );
 
                         // send to LINE Notify

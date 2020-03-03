@@ -137,7 +137,9 @@ class MOLi_Blog_Article extends Command
 
                 $this->telegramService->sendMessage(
                     $chatId,
-                    $text
+                    $text,
+                    null,
+                    true
                 );
 
                 $this->MOLiBlogArticleService->storePublishedArticle($post);

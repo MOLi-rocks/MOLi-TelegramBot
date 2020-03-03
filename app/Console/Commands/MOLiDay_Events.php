@@ -95,7 +95,9 @@ class MOLiDay_Events extends Command
 
                         $this->telegramService->sendMessage(
                             $chatId,
-                            $text
+                            $text,
+                            null,
+                            true
                         );
 
                         $this->MOLiDayService->storePublishedEvent($event);

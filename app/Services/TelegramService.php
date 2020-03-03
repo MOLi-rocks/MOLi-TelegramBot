@@ -6,7 +6,6 @@ use MOLiBot\Repositories\WelcomeMessageRecordRepository;
 use MOLiBot\Repositories\WhoUseWhatCommandRepository;
 use Telegram\Bot\Api;
 use Telegram\Bot\Objects\Message;
-use Telegram\Bot\Objects\Update;
 
 class TelegramService
 {
@@ -62,15 +61,13 @@ class TelegramService
      * @return Message
      * @throws \Telegram\Bot\Exceptions\TelegramSDKException
      */
-    public function sendMessage(
-        $chatId,
-        $text = '',
-        $parseMode = null,
-        $disableWebPagePreview = false,
-        $disableNotification = false,
-        $replyToMessageId = null,
-        $replyMarkup = null
-    )
+    public function sendMessage($chatId,
+                                $text = '',
+                                $parseMode = null,
+                                $disableWebPagePreview = false,
+                                $disableNotification = false,
+                                $replyToMessageId = null,
+                                $replyMarkup = null)
     {
         return $this->telegram->sendMessage([
             'chat_id' => $chatId,

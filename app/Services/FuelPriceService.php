@@ -38,7 +38,7 @@ class FuelPriceService
         foreach ($priceContents as $data) {
             $lastRecord = $this->fuelPriceRepository->getNewestRecordByName($data['產品名稱']);
 
-            if ($lastRecord->start_at == $data['牌價生效時間']) {
+            if (!empty($lastRecord) && $lastRecord->start_at === $data['牌價生效時間']) {
                 $result += [
                     $data['產品名稱'] => ' 將 不調整 (' . (float)$data['參考牌價'] . ')'
                 ];

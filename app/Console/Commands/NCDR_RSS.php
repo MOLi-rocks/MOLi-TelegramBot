@@ -106,7 +106,9 @@ class NCDR_RSS extends Command
                     if ($this->NCDR_to_BOTChannel_list->contains($category)) {
                         $this->telegramService->sendMessage(
                             $chatId,
-                            trim($item['summary']['#text']) . PHP_EOL . '#' . $category
+                            trim($item['summary']['#text']) . PHP_EOL . '#' . $category,
+                            null,
+                            true
                         );
                     }
 
