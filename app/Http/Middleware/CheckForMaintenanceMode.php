@@ -51,7 +51,7 @@ class CheckForMaintenanceMode
         }
 
         if ($this->app->isDownForMaintenance()) {
-            if ($request->is( config('telegram.bot_token') )) {
+            if ($request->is( config('moli.telegram.bot_token') )) {
                 $msgfrom = $request->all()['message']['chat']['id'];
                 $this->telegramService->sendMessage(
                     $msgfrom,
