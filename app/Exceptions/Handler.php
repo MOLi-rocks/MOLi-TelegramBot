@@ -9,6 +9,7 @@ use MOLiBot\Http\Responses\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Telegram\Bot\Exceptions\TelegramResponseException;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class Handler extends ExceptionHandler
@@ -65,11 +66,12 @@ class Handler extends ExceptionHandler
                 return $res->jsonResponse(200, -1);
             }
 
-            if ($e instanceof TelegramSDKException) {
+            if ($e instanceof TelegramResponseException) {
                 return $res->jsonResponse(
-                    $e->getCode(),
+                    $e->getHttpStatusCode(),
                     -1,
-                    $e->getMessage()
+                    $e->getErrorType(),
+                    $e->getResponseData();
                 );
             }
 
