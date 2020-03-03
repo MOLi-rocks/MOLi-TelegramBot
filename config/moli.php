@@ -3,6 +3,8 @@
 return [
     'telegram' => [
 
+        'bot_token' => env('TELEGRAM_BOT_TOKEN', 'YOUR-BOT-TOKEN'),
+
         'group_id' => env('MOLI_GROUP_ID'),
 
         'group_welcome_msg' =>
