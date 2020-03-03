@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\Foundation\Application;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-use Telegram;
+use MOLiBot\Services\TelegramService;
 
 class CheckForMaintenanceMode
 {
@@ -18,14 +18,22 @@ class CheckForMaintenanceMode
     protected $app;
 
     /**
+     * @var telegramService
+     */
+    private $telegramService;
+
+    /**
      * Create a new middleware instance.
      *
      * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param TelegramService $telegramService
      * @return void
      */
-    public function __construct(Application $app)
+    public function __construct(Application $app,
+                                TelegramService $telegramService)
     {
         $this->app = $app;
+        $this->telegramService = $telegramService;
     }
 
     /**
@@ -33,6 +41,7 @@ class CheckForMaintenanceMode
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     * @throws
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -44,10 +53,10 @@ class CheckForMaintenanceMode
         if ($this->app->isDownForMaintenance()) {
             if ($request->is( config('telegram.bot_token') )) {
                 $msgfrom = $request->all()['message']['chat']['id'];
-                Telegram::sendMessage([
-                    'chat_id' => $msgfrom,
-                    'text' => 'Bot is under Maintenance'
-                ]);
+                $this->telegramService->sendMessage(
+                    $msgfrom,
+                    'Bot is under Maintenance'
+                );
                 return response('OK', 200);
             }
 
