@@ -43,17 +43,14 @@ class MagneticLockStatusCommand extends Command
             $message = json_decode($response->getBody())->{'message'};
         } else {
             $status = -3;// 隨便設定一個非 0 或 1 的值就當作壞掉了
+            $message = '';
         }
 
-        //get text use $update->all()['message']['text']
-        $update = Telegram::getWebhookUpdates();
+        $chatType = $this->getUpdate()->getMessage()->getChat()->getType();
 
         switch ($status){
-            case "1":
-                $reply = $message;
-            break;
-
-            case "0":
+            case '1':
+            case '0':
                 $reply = $message;
             break;
 
@@ -64,7 +61,7 @@ class MagneticLockStatusCommand extends Command
         $this->replyWithChatAction(['action' => Actions::TYPING]);
         $send = $this->replyWithMessage(['text' => $reply]);
         
-        if ( $update->all()['message']['chat']['type'] == 'private' ) {
+        if ( $chatType === 'private' ) {
             $client = new GuzzleHttpClient([
                 'headers' => [
                     'User-Agent' => 'MOLi Bot'
@@ -78,19 +75,19 @@ class MagneticLockStatusCommand extends Command
                 return response('OK', 200);// 強制結束 command
             }
 
-            $type = explode("/",$response->getHeader('Content-Type')[0]);
+            $type = explode('/', $response->getHeader('Content-Type')[0]);
 
             $imgpath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
 
-            if ($type[0] == 'image') {
-                $fileName = 'DoorStatusCommand'.rand(11111,99999);
+            if ($type[0] === 'image') {
+                $fileName = 'MagneticLockStatusCommand' . rand(11111,99999);
 
-                Storage::disk('local')->put($fileName.'.'.$type[1], $response->getBody());
+                Storage::disk('local')->put($fileName . '.' . $type[1], $response->getBody());
 
-                $send = Telegram::sendPhoto([
-                    'chat_id' => $update->all()['message']['chat']['id'],
+                $this->replyWithChatAction(['action' => Actions::UPLOAD_PHOTO]);
+                $this->replyWithPhoto([
                     'reply_to_message_id' => $send->getMessageId(),
-                    'photo' => $imgpath.$fileName.'.'.$type[1],
+                    'photo' => $imgpath . $fileName . '.' . $type[1],
                 ]);
 
                 Storage::disk('local')->delete($fileName.'.'.$type[1]);
