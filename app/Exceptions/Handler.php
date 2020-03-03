@@ -67,10 +67,9 @@ class Handler extends ExceptionHandler
 
             if ($e instanceof TelegramSDKException) {
                 return $res->jsonResponse(
-                    $e->getHttpStatusCode(),
+                    $e->getCode(),
                     -1,
-                    $e->getErrorType(),
-                    $e->getResponseData()
+                    $e->getMessage()
                 );
             }
 
