@@ -54,18 +54,32 @@ class TelegramService
     /**
      * @param $chatId
      * @param string $text
+     * @param null $parseMode
+     * @param bool $disableWebPagePreview
      * @param bool $disableNotification
      * @param null $replyToMessageId
+     * @param null $replyMarkup
      * @return Message
      * @throws \Telegram\Bot\Exceptions\TelegramSDKException
      */
-    public function sendMessage($chatId, $text = '', $disableNotification = false, $replyToMessageId = null)
+    public function sendMessage(
+        $chatId,
+        $text = '',
+        $parseMode = null,
+        $disableWebPagePreview = false,
+        $disableNotification = false,
+        $replyToMessageId = null,
+        $replyMarkup = null
+    )
     {
         return $this->telegram->sendMessage([
             'chat_id' => $chatId,
             'text' => $text,
+            'parse_mode' => $parseMode,
+            'disable_web_page_preview' => $disableWebPagePreview,
             'disable_notification' => $disableNotification,
-            'reply_to_message_id' => $replyToMessageId
+            'reply_to_message_id' => $replyToMessageId,
+            'reply_markup' => $replyMarkup
         ]);
     }
 
@@ -85,6 +99,7 @@ class TelegramService
                 $welcomeMsg = $this->sendMessage(
                     $this->MOLiGroupId,
                     $this->MOLiWelcomeMsg,
+                    null,
                     true,
                     $hook->getMessageId()
                 );

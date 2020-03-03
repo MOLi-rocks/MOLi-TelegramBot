@@ -4,9 +4,9 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Telegram;
 use Exception;
 use MOLiBot\Services\MOLiDayService;
+use MOLiBot\Services\TelegramService;
 
 class MOLiDay_Events extends Command
 {
@@ -28,19 +28,27 @@ class MOLiDay_Events extends Command
      * @var MOLiDayService
      */
     private $MOLiDayService;
+
+    /**
+     * @var telegramService
+     */
+    private $telegramService;
     
     /**
      * Create a new command instance.
      *
      * @param MOLiDayService $MOLiDayService
+     * @param TelegramService $telegramService
      * 
      * @return void
      */
-    public function __construct(MOLiDayService $MOLiDayService)
+    public function __construct(MOLiDayService $MOLiDayService,
+                                TelegramService $telegramService)
     {
         parent::__construct();
         
         $this->MOLiDayService = $MOLiDayService;
+        $this->telegramService = $telegramService;
     }
 
     /**
@@ -75,18 +83,20 @@ class MOLiDay_Events extends Command
                 foreach ($events as $event) {
                     if (!$this->MOLiDayService->checkEventPublished($event['url'])) {
                         if ($this->option('init')) {
-                            $chat_id = config('telegram-channel.test');
+                            $chatId = config('telegram-channel.test');
                         } else {
-                            $chat_id = config('telegram-channel.MOLi');
+                            $chatId = config('telegram-channel.MOLi');
                         }
 
-                        Telegram::sendMessage([
-                            'chat_id' => $chat_id,
-                            'text'    => 'MOLiDay 新活動：' . PHP_EOL . $event['title'] . PHP_EOL . PHP_EOL .
-                                '活動簡介：' . PHP_EOL . $event['summary'] . PHP_EOL . PHP_EOL .
-                                '活動地點：' . PHP_EOL . $event['content'] . PHP_EOL . PHP_EOL .
-                                '報名網址：' . PHP_EOL . $event['url'] . PHP_EOL . PHP_EOL
-                        ]);
+                        $text = 'MOLiDay 新活動：' . PHP_EOL . $event['title'] . PHP_EOL . PHP_EOL .
+                            '活動簡介：' . PHP_EOL . $event['summary'] . PHP_EOL . PHP_EOL .
+                            '活動地點：' . PHP_EOL . $event['content'] . PHP_EOL . PHP_EOL .
+                            '報名網址：' . PHP_EOL . $event['url'] . PHP_EOL . PHP_EOL;
+
+                        $this->telegramService->sendMessage(
+                            $chatId,
+                            $text
+                        );
 
                         $this->MOLiDayService->storePublishedEvent($event);
 
