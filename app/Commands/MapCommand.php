@@ -22,7 +22,7 @@ class MapCommand extends Command
      */
     public function handle($arguments)
     {
-        $this->replyWithChatAction(['action' => Actions::TYPING]);
+        $this->replyWithChatAction(['action' => Actions::FIND_LOCATION]);
 
         $this->replyWithMessage(['text' => '我們在這裡呦～']);
         // This will send a message using `sendMessage` method behind the scenes to
