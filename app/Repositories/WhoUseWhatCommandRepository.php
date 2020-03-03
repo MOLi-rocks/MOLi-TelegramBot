@@ -16,4 +16,18 @@ class WhoUseWhatCommandRepository
     {
         $this->whoUseWhatCommandModel = $whoUseWhatCommandModel;
     }
+
+    public function getCommand($userId)
+    {
+        return $this->whoUseWhatCommandModel
+            ->where('user-id', '=', $userId)
+            ->first();
+    }
+
+    public function deleteCommands($userId)
+    {
+        return $this->whoUseWhatCommandModel
+            ->where('user-id', '=', $userId)
+            ->delete();
+    }
 }

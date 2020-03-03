@@ -3,10 +3,10 @@
 namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
-use Telegram;
 
 use Carbon\Carbon;
 use MOLiBot\Services\FuelPriceService;
+use MOLiBot\Services\TelegramService;
 
 class GetFuelPriceGap extends Command
 {
@@ -30,23 +30,32 @@ class GetFuelPriceGap extends Command
     private $fuelPriceService;
 
     /**
+     * @var telegramService
+     */
+    private $telegramService;
+
+    /**
      * Create a new command instance.
      *
      * @param FuelPriceService $fuelPriceService
+     * @param TelegramService $telegramService
      *
      * @return void
      */
-    public function __construct(FuelPriceService $fuelPriceService)
+    public function __construct(FuelPriceService $fuelPriceService,
+                                TelegramService $telegramService)
     {
         parent::__construct();
 
         $this->fuelPriceService = $fuelPriceService;
+        $this->telegramService = $telegramService;
     }
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return \Telegram\Bot\Objects\Message
+     * @throws \Telegram\Bot\Exceptions\TelegramSDKException
      */
     public function handle()
     {
@@ -55,19 +64,22 @@ class GetFuelPriceGap extends Command
         $tomorrow = Carbon::tomorrow();
 
         if ($this->option('init')) {
-            $chat_id = config('telegram-channel.test');
+            $chatId = config('telegram-channel.test');
         } else {
-            $chat_id = config('telegram-channel.MOLi');
+            $chatId = config('telegram-channel.MOLi');
         }
 
-        Telegram::sendMessage([
-            'chat_id' => $chat_id,
-            'parse_mode' => 'HTML',
-            'text' => '中油已公告新油價，' . $tomorrow . ' 起：' . PHP_EOL . PHP_EOL .
-                '98無鉛汽油' . $result['98無鉛汽油'] . PHP_EOL . PHP_EOL .
-                '95無鉛汽油' . $result['95無鉛汽油'] . PHP_EOL . PHP_EOL .
-                '92無鉛汽油' . $result['92無鉛汽油'] . PHP_EOL . PHP_EOL .
-                '超級柴油' . $result['超級柴油']
-        ]);
+        $text = '中油已公告新油價，' . $tomorrow . ' 起：' . PHP_EOL . PHP_EOL .
+            '98無鉛汽油' . $result['98無鉛汽油'] . PHP_EOL . PHP_EOL .
+            '95無鉛汽油' . $result['95無鉛汽油'] . PHP_EOL . PHP_EOL .
+            '92無鉛汽油' . $result['92無鉛汽油'] . PHP_EOL . PHP_EOL .
+            '超級柴油' . $result['超級柴油'];
+
+        return $this->telegramService->sendMessage(
+            $chatId,
+            $text,
+            'HTML',
+            true
+        );
     }
 }

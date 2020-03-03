@@ -4,9 +4,9 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Telegram;
 use Exception;
 use MOLiBot\Services\MOLiBlogArticleService;
+use MOLiBot\Services\TelegramService;
 
 class MOLi_Blog_Article extends Command
 {
@@ -30,17 +30,25 @@ class MOLi_Blog_Article extends Command
     private $MOLiBlogArticleService;
 
     /**
+     * @var telegramService
+     */
+    private $telegramService;
+
+    /**
      * Create a new command instance.
      *
      * @param MOLiBlogArticleService $MOLiBlogArticleService
+     * @param TelegramService $telegramService
      *
      * @return void
      */
-    public function __construct(MOLiBlogArticleService $MOLiBlogArticleService)
+    public function __construct(MOLiBlogArticleService $MOLiBlogArticleService,
+                                TelegramService $telegramService)
     {
         parent::__construct();
 
         $this->MOLiBlogArticleService = $MOLiBlogArticleService;
+        $this->telegramService = $telegramService;
     }
 
     /**
@@ -92,8 +100,9 @@ class MOLi_Blog_Article extends Command
     }
 
     /**
-     * @param $posts array
+     * @param $posts
      * @return array
+     * @throws \Telegram\Bot\Exceptions\TelegramSDKException
      */
     private function postHandler($posts)
     {
@@ -116,18 +125,22 @@ class MOLi_Blog_Article extends Command
                 }
 
                 if ($this->option('init')) {
-                    $chat_id = config('telegram-channel.test');
+                    $chatId = config('telegram-channel.test');
                 } else {
-                    $chat_id = config('telegram-channel.MOLi');
+                    $chatId = config('telegram-channel.MOLi');
                 }
 
-                Telegram::sendMessage([
-                    'chat_id' => $chat_id,
-                    'text'    => 'MOLi Blog 新文快報：' . PHP_EOL .
-                        $post['title'] . ' By ' . $post['authors'][0]['name'] . PHP_EOL .
-                        $post['url'] . PHP_EOL . PHP_EOL .
-                        $tags
-                ]);
+                $text = 'MOLi Blog 新文快報：' . PHP_EOL .
+                    $post['title'] . ' By ' . $post['authors'][0]['name'] . PHP_EOL .
+                    $post['url'] . PHP_EOL . PHP_EOL .
+                    $tags;
+
+                $this->telegramService->sendMessage(
+                    $chatId,
+                    $text,
+                    null,
+                    true
+                );
 
                 $this->MOLiBlogArticleService->storePublishedArticle($post);
 

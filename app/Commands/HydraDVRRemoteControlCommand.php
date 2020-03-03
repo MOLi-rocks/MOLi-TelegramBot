@@ -6,7 +6,7 @@ use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
 use DB;
-use Telegram;
+use Telegram\Bot\Keyboard\Keyboard as TelegramKeyboard;
 use Storage;
 use \GuzzleHttp\Client as GuzzleHttpClient;
 use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
@@ -30,35 +30,31 @@ class HydraDVRRemoteControlCommand extends Command
      */
     public function handle($arguments)
     {
-        $update = Telegram::getWebhookUpdates();
+        $message = $this->getUpdate()->getMessage();
+        $chatType = $message->getChat()->getType();
+        $messageId = $message->getMessageId();
+        $messageFromId = $message->getFrom()->getId();
 
-        if ( $update->all()['message']['chat']['type'] == 'private' ) {
+        if ( $chatType === 'private' ) {
             if (empty($arguments)) {
-                $keyboard = [
+                $keyboard = TelegramKeyboard::make([
                     ['Up'],
                     ['Left', 'Right'],
                     ['Down'],
                     ['Zoom In', 'ESC', 'Zoom Out']
-                ];
-
-                $reply_markup = Telegram::replyKeyboardMarkup([
-                    'keyboard' => $keyboard,
-                    'resize_keyboard' => true,
-                    'one_time_keyboard' => false
                 ]);
 
-                Telegram::sendMessage([
-                    'chat_id' => $update->all()['message']['chat']['id'],
+                $this->replyWithMessage([
                     'text' => '歡迎使用遙控器 XD',
-                    'reply_to_message_id' => $update->all()['message']['message_id'],
-                    'reply_markup' => $reply_markup
+                    'reply_to_message_id' => $messageId,
+                    'reply_markup' => $keyboard
                 ]);
 
-                DB::transaction(function () use ($update) {
-                    WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
+                DB::transaction(function () use ($messageFromId) {
+                    WhoUseWhatCommand::where('user-id', '=', $messageFromId)->delete();
 
                     WhoUseWhatCommand::create([
-                        'user-id' => $update->all()['message']['from']['id'],
+                        'user-id' => $messageFromId,
                         'command' => $this->name
                     ]);
                 });
@@ -82,60 +78,58 @@ class HydraDVRRemoteControlCommand extends Command
 
             switch ($arguments) {
                 case 'ESC':
-                    $reply_markup = Telegram::replyKeyboardHide();
+                    $keyboard = TelegramKeyboard::hide();
 
-                    Telegram::sendMessage([
-                        'chat_id' => $update->all()['message']['chat']['id'],
+                    $this->replyWithChatAction(['action' => Actions::TYPING]);
+                    $this->replyWithMessage([
                         'text' => '感謝使用遙控器 XD',
-                        'reply_markup' => $reply_markup
+                        'reply_markup' => $keyboard
                     ]);
 
-                    $this->control('door', $update);
+                    $this->control('door');
 
-                    WhoUseWhatCommand::where('user-id', '=', $update->all()['message']['from']['id'])->delete();
+                    WhoUseWhatCommand::where('user-id', '=', $messageFromId)->delete();
 
                     break;
 
                 case 'Up':
-                    $this->control('up', $update);
+                    $this->control('up');
                     break;
 
                 case 'Down':
-                    $this->control('down', $update);
+                    $this->control('down');
                     break;
 
                 case 'Left':
-                    $this->control('left', $update);
+                    $this->control('left');
                     break;
 
                 case 'Right':
-                    $this->control('right', $update);
+                    $this->control('right');
                     break;
 
                 case 'Zoom In':
-                    $this->control('zoomin', $update);
+                    $this->control('zoomin');
                     break;
 
                 case 'Zoom Out':
-                    $pic = $this->control('zoomout', $update);
+                    $pic = $this->control('zoomout');
                     break;
 
                 default:
-                    Telegram::sendMessage([
-                        'chat_id' => $update->all()['message']['chat']['id'],
+                    $this->replyWithChatAction(['action' => Actions::TYPING]);
+                    $this->replyWithMessage([
                         'text' => '不懂 QQ',
-                        'reply_to_message_id' => $update->all()['message']['message_id']
+                        'reply_to_message_id' => $messageId,
                     ]);
 
                     break;
             }
         } else {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
-
-            Telegram::sendMessage([
-                'chat_id' => $update->all()['message']['chat']['id'],
+            $this->replyWithMessage([
                 'text' => '此功能限一對一對話',
-                'reply_to_message_id' => $update->all()['message']['message_id']
+                'reply_to_message_id' => $messageId,
             ]);
 
             return response('OK', 200); // 強制結束 command
@@ -144,10 +138,10 @@ class HydraDVRRemoteControlCommand extends Command
         return response('OK', 200);
     }
 
-    private function control($position, $update) {
-        $client = new GuzzleHttpClient();
-
+    private function control($position) {
         try {
+            $client = new GuzzleHttpClient();
+
             $client->request('GET', config('moli.dvr.control_url') . $position, [
                 'headers' => [
                     'User-Agent' => 'MOLi Bot',
@@ -165,7 +159,7 @@ class HydraDVRRemoteControlCommand extends Command
                     'timeout' => 10
                 ]);
 
-                $type = explode("/", $response->getHeader('Content-Type')[0]);
+                $type = explode('/', $response->getHeader('Content-Type')[0]);
 
                 $imgpath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
 
@@ -174,9 +168,8 @@ class HydraDVRRemoteControlCommand extends Command
 
                     Storage::disk('local')->put($fileName . '.' . $type[1], $response->getBody());
 
-                    Telegram::sendPhoto([
-                        'chat_id' => $update->all()['message']['chat']['id'],
-                        'reply_to_message_id' => $update->all()['message']['message_id'],
+                    $this->replyWithPhoto([
+                        'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
                         'photo' => $imgpath . $fileName . '.' . $type[1],
                     ]);
 
@@ -187,9 +180,7 @@ class HydraDVRRemoteControlCommand extends Command
             return 'done';
         } catch (GuzzleHttpTransferException $e) {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
-
             $this->replyWithMessage(['text' => '網路連線異常 QAQ']);
-
             return 'QQ';
         }
     }

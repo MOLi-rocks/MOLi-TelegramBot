@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.8.36 on 2020-02-07 14:38:51.
+ * Generated for Laravel 5.8.37 on 2020-02-17 15:33:48.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -16184,780 +16184,120 @@ namespace Telegram\Bot\Laravel\Facades {
     class Telegram {
         
         /**
-         * Returns the TelegramClient service.
-         *
-         * @return \Telegram\Bot\TelegramClient 
-         * @static 
-         */ 
-        public static function getClient()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getClient();
-        }
-        
-        /**
-         * Returns Telegram Bot API Access Token.
-         *
-         * @return string 
-         * @static 
-         */ 
-        public static function getAccessToken()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getAccessToken();
-        }
-        
-        /**
-         * Returns the last response returned from API request.
-         *
-         * @return \Telegram\Bot\TelegramResponse 
-         * @static 
-         */ 
-        public static function getLastResponse()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getLastResponse();
-        }
-        
-        /**
-         * Sets the bot access token to use with API requests.
-         *
-         * @param string $accessToken The bot access token to save.
-         * @throws \InvalidArgumentException
-         * @return \Telegram\Bot\Api 
-         * @static 
-         */ 
-        public static function setAccessToken($accessToken)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->setAccessToken($accessToken);
-        }
-        
-        /**
-         * Make this request asynchronous (non-blocking).
-         *
-         * @param bool $isAsyncRequest
-         * @return \Telegram\Bot\Api 
-         * @static 
-         */ 
-        public static function setAsyncRequest($isAsyncRequest)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->setAsyncRequest($isAsyncRequest);
-        }
-        
-        /**
-         * Check if this is an asynchronous request (non-blocking).
-         *
-         * @return bool 
-         * @static 
-         */ 
-        public static function isAsyncRequest()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->isAsyncRequest();
-        }
-        
-        /**
-         * Returns SDK's Command Bus.
-         *
-         * @return \Telegram\Bot\CommandBus 
-         * @static 
-         */ 
-        public static function getCommandBus()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getCommandBus();
-        }
-        
-        /**
-         * Add Telegram Command to the Command Bus.
-         *
-         * @param \Telegram\Bot\CommandInterface|string $command
-         * @return \Telegram\Bot\CommandBus 
-         * @static 
-         */ 
-        public static function addCommand($command)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->addCommand($command);
-        }
-        
-        /**
-         * Add Telegram Commands to the Command Bus.
-         *
-         * @param array $commands
-         * @return \Telegram\Bot\CommandBus 
-         * @static 
-         */ 
-        public static function addCommands($commands)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->addCommands($commands);
-        }
-        
-        /**
-         * Remove Telegram Command to the Command Bus.
-         *
-         * @param string $name
-         * @return \Telegram\Bot\CommandBus 
-         * @static 
-         */ 
-        public static function removeCommand($name)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->removeCommand($name);
-        }
-        
-        /**
-         * Remove Telegram Commands from the Command Bus.
-         *
-         * @param array $names
-         * @return \Telegram\Bot\CommandBus 
-         * @static 
-         */ 
-        public static function removeCommands($names)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->removeCommands($names);
-        }
-        
-        /**
-         * Returns list of available commands.
-         *
-         * @return \Telegram\Bot\Commands\Command[] 
-         * @static 
-         */ 
-        public static function getCommands()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getCommands();
-        }
-        
-        /**
-         * A simple method for testing your bot's auth token.
-         * 
-         * Returns basic information about the bot in form of a User object.
-         *
-         * @link https://core.telegram.org/bots/api#getme
-         * @return \Telegram\Bot\User 
-         * @static 
-         */ 
-        public static function getMe()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getMe();
-        }
-        
-        /**
-         * Send text messages.
-         * 
-         * <code>
-         * $params = [
-         *   'chat_id'                  => '',
-         *   'text'                     => '',
-         *   'parse_mode'               => '',
-         *   'disable_web_page_preview' => '',
-         *   'reply_to_message_id'      => '',
-         *   'reply_markup'             => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#sendmessage
-         * @param array $params
-         * @var int|string $params ['chat_id']
-         * @var string     $params ['text']
-         * @var string     $params ['parse_mode']
-         * @var bool       $params ['disable_web_page_preview']
-         * @var int        $params ['reply_to_message_id']
-         * @var string     $params ['reply_markup']
-         * @return \Telegram\Bot\Message 
-         * @static 
-         */ 
-        public static function sendMessage($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->sendMessage($params);
-        }
-        
-        /**
-         * Forward messages of any kind.
-         * 
-         * <code>
-         * $params = [
-         *   'chat_id'      => '',
-         *   'from_chat_id' => '',
-         *   'message_id'   => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#forwardmessage
-         * @param array $params
-         * @var int|string $params ['chat_id']
-         * @var int        $params ['from_chat_id']
-         * @var int        $params ['message_id']
-         * @return \Telegram\Bot\Message 
-         * @static 
-         */ 
-        public static function forwardMessage($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->forwardMessage($params);
-        }
-        
-        /**
-         * Send Photos.
-         * 
-         * <code>
-         * $params = [
-         *   'chat_id'             => '',
-         *   'photo'               => '',
-         *   'caption'             => '',
-         *   'reply_to_message_id' => '',
-         *   'reply_markup'        => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#sendphoto
-         * @param array $params
-         * @var int|string $params ['chat_id']
-         * @var string     $params ['photo']
-         * @var string     $params ['caption']
-         * @var int        $params ['reply_to_message_id']
-         * @var string     $params ['reply_markup']
-         * @return \Telegram\Bot\Message 
-         * @static 
-         */ 
-        public static function sendPhoto($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->sendPhoto($params);
-        }
-        
-        /**
-         * Send regular audio files.
-         * 
-         * <code>
-         * $params = [
-         *   'chat_id'             => '',
-         *   'audio'               => '',
-         *   'duration'            => '',
-         *   'performer'           => '',
-         *   'title'               => '',
-         *   'reply_to_message_id' => '',
-         *   'reply_markup'        => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#sendaudio
-         * @param array $params
-         * @var int|string $params ['chat_id']
-         * @var string     $params ['audio']
-         * @var int        $params ['duration']
-         * @var string     $params ['performer']
-         * @var string     $params ['title']
-         * @var int        $params ['reply_to_message_id']
-         * @var string     $params ['reply_markup']
-         * @return \Telegram\Bot\Message 
-         * @static 
-         */ 
-        public static function sendAudio($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->sendAudio($params);
-        }
-        
-        /**
-         * Send general files.
-         * 
-         * <code>
-         * $params = [
-         *   'chat_id'             => '',
-         *   'document'            => '',
-         *   'reply_to_message_id' => '',
-         *   'reply_markup'        => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#senddocument
-         * @param array $params
-         * @var int|string $params ['chat_id']
-         * @var string     $params ['document']
-         * @var int        $params ['reply_to_message_id']
-         * @var string     $params ['reply_markup']
-         * @return \Telegram\Bot\Message 
-         * @static 
-         */ 
-        public static function sendDocument($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->sendDocument($params);
-        }
-        
-        /**
-         * Send .webp stickers.
-         * 
-         * <code>
-         * $params = [
-         *   'chat_id' => '',
-         *   'sticker' => '',
-         *   'reply_to_message_id' => '',
-         *   'reply_markup' => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#sendsticker
-         * @param array $params
-         * @var int|string $params ['chat_id']
-         * @var string     $params ['sticker']
-         * @var int        $params ['reply_to_message_id']
-         * @var string     $params ['reply_markup']
-         * @throws TelegramSDKException
-         * @return \Telegram\Bot\Message 
-         * @static 
-         */ 
-        public static function sendSticker($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->sendSticker($params);
-        }
-        
-        /**
-         * Send Video File, Telegram clients support mp4 videos (other formats may be sent as Document).
-         * 
-         * <code>
-         * $params = [
-         *   'chat_id'             => '',
-         *   'video'               => '',
-         *   'duration'            => '',
-         *   'caption'             => '',
-         *   'reply_to_message_id' => '',
-         *   'reply_markup'        => '',
-         * ];
-         * </code>
-         *
-         * @see sendDocument
-         * @link https://core.telegram.org/bots/api#sendvideo
-         * @param array $params
-         * @var int|string $params ['chat_id']
-         * @var string     $params ['video']
-         * @var int        $params ['duration']
-         * @var string     $params ['caption']
-         * @var int        $params ['reply_to_message_id']
-         * @var string     $params ['reply_markup']
-         * @return \Telegram\Bot\Message 
-         * @static 
-         */ 
-        public static function sendVideo($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->sendVideo($params);
-        }
-        
-        /**
-         * Send voice audio files.
-         * 
-         * <code>
-         * $params = [
-         *   'chat_id'             => '',
-         *   'voice'               => '',
-         *   'duration'            => '',
-         *   'reply_to_message_id' => '',
-         *   'reply_markup'        => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#sendaudio
-         * @param array $params
-         * @var int|string $params ['chat_id']
-         * @var string     $params ['voice']
-         * @var int        $params ['duration']
-         * @var int        $params ['reply_to_message_id']
-         * @var string     $params ['reply_markup']
-         * @return \Telegram\Bot\Message 
-         * @static 
-         */ 
-        public static function sendVoice($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->sendVoice($params);
-        }
-        
-        /**
-         * Send point on the map.
-         * 
-         * <code>
-         * $params = [
-         *   'chat_id'             => '',
-         *   'latitude'            => '',
-         *   'longitude'           => '',
-         *   'reply_to_message_id' => '',
-         *   'reply_markup'        => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#sendlocation
-         * @param array $params
-         * @var int|string $params ['chat_id']
-         * @var float      $params ['latitude']
-         * @var float      $params ['longitude']
-         * @var int        $params ['reply_to_message_id']
-         * @var string     $params ['reply_markup']
-         * @return \Telegram\Bot\Message 
-         * @static 
-         */ 
-        public static function sendLocation($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->sendLocation($params);
-        }
-        
-        /**
-         * Broadcast a Chat Action.
-         * 
-         * <code>
-         * $params = [
-         *   'chat_id' => '',
-         *   'action'  => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#sendchataction
-         * @param array $params
-         * @var int|string $params ['chat_id']
-         * @var string     $params ['action']
-         * @throws TelegramSDKException
-         * @return \Telegram\Bot\TelegramResponse 
-         * @static 
-         */ 
-        public static function sendChatAction($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->sendChatAction($params);
-        }
-        
-        /**
-         * Returns a list of profile pictures for a user.
-         * 
-         * <code>
-         * $params = [
-         *   'user_id' => '',
-         *   'offset'  => '',
-         *   'limit'   => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#getuserprofilephotos
-         * @param array $params
-         * @var int     $params ['user_id']
-         * @var int     $params ['offset']
-         * @var int     $params ['limit']
-         * @return \Telegram\Bot\UserProfilePhotos 
-         * @static 
-         */ 
-        public static function getUserProfilePhotos($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getUserProfilePhotos($params);
-        }
-        
-        /**
-         * Returns basic info about a file and prepare it for downloading.
-         * 
-         * <code>
-         * $params = [
-         *   'file_id' => '',
-         * ];
-         * </code>
-         * 
-         * The file can then be downloaded via the link
-         * https://api.telegram.org/file/bot<token>/<file_path>,
-         * where <file_path> is taken from the response.
-         *
-         * @link https://core.telegram.org/bots/api#getFile
-         * @param array $params
-         * @var string  $params ['file_id']
-         * @return \File 
-         * @static 
-         */ 
-        public static function getFile($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getFile($params);
-        }
-        
-        /**
-         * Set a Webhook to receive incoming updates via an outgoing webhook.
-         * 
-         * <code>
-         * $params = [
-         *   'url'         => '',
-         *   'certificate' => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#setwebhook
-         * @param array $params
-         * @var string  $params ['url']         HTTPS url to send updates to.
-         * @var string  $params ['certificate'] Upload your public key certificate so that the root certificate in
-         *                                      use can be checked.
-         * @throws TelegramSDKException
-         * @return \Telegram\Bot\TelegramResponse 
-         * @static 
-         */ 
-        public static function setWebhook($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->setWebhook($params);
-        }
-        
-        /**
-         * Returns webhook updates sent by Telegram.
-         * 
-         * Works only if you set a webhook.
-         *
-         * @see setWebhook
-         * @return \Telegram\Bot\Update 
-         * @static 
-         */ 
-        public static function getWebhookUpdates()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getWebhookUpdates();
-        }
-        
-        /**
-         * Removes the outgoing webhook (if any).
-         *
-         * @return \Telegram\Bot\TelegramResponse 
-         * @static 
-         */ 
-        public static function removeWebhook()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->removeWebhook();
-        }
-        
-        /**
-         * Use this method to receive incoming updates using long polling.
-         * 
-         * <code>
-         * $params = [
-         *   'offset'  => '',
-         *   'limit'   => '',
-         *   'timeout' => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#getupdates
-         * @param array $params
-         * @var int|null $params ['offset']
-         * @var int|null $params ['limit']
-         * @var int|null $params ['timeout']
-         * @return \Telegram\Bot\Update[] 
-         * @static 
-         */ 
-        public static function getUpdates($params = [])
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getUpdates($params);
-        }
-        
-        /**
-         * Builds a custom keyboard markup.
-         * 
-         * <code>
-         * $params = [
-         *   'keyboard'          => '',
-         *   'resize_keyboard'   => '',
-         *   'one_time_keyboard' => '',
-         *   'selective'         => '',
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#replykeyboardmarkup
-         * @param array $params
-         * @var array   $params ['keyboard']
-         * @var bool    $params ['resize_keyboard']
-         * @var bool    $params ['one_time_keyboard']
-         * @var bool    $params ['selective']
-         * @return string 
-         * @static 
-         */ 
-        public static function replyKeyboardMarkup($params)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->replyKeyboardMarkup($params);
-        }
-        
-        /**
-         * Hide the current custom keyboard and display the default letter-keyboard.
-         * 
-         * <code>
-         * $params = [
-         *   'hide_keyboard' => true,
-         *   'selective'     => false,
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#replykeyboardhide
-         * @param array $params
-         * @var bool    $params ['hide_keyboard']
-         * @var bool    $params ['selective']
-         * @return string 
-         * @static 
-         */ 
-        public static function replyKeyboardHide($params = [])
-        {
-                        return \Telegram\Bot\Api::replyKeyboardHide($params);
-        }
-        
-        /**
-         * Display a reply interface to the user (act as if the user has selected the bot‘s message and tapped ’Reply').
-         * 
-         * <code>
-         * $params = [
-         *   'force_reply' => true,
-         *   'selective'   => false,
-         * ];
-         * </code>
-         *
-         * @link https://core.telegram.org/bots/api#forcereply
-         * @param array $params
-         * @var bool    $params ['force_reply']
-         * @var bool    $params ['selective']
-         * @return string 
-         * @static 
-         */ 
-        public static function forceReply($params = [])
-        {
-                        return \Telegram\Bot\Api::forceReply($params);
-        }
-        
-        /**
-         * Processes Inbound Commands.
-         *
-         * @param bool $webhook
-         * @return \Telegram\Bot\Update|\Telegram\Bot\Update[] 
-         * @static 
-         */ 
-        public static function commandsHandler($webhook = false)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->commandsHandler($webhook);
-        }
-        
-        /**
-         * Determine if a given type is the message.
-         *
-         * @param string $type
-         * @param \Telegram\Bot\Update|\Telegram\Bot\Message $object
-         * @return bool 
-         * @static 
-         */ 
-        public static function isMessageType($type, $object)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->isMessageType($type, $object);
-        }
-        
-        /**
-         * Detect Message Type Based on Update or Message Object.
-         *
-         * @param \Telegram\Bot\Update|\Telegram\Bot\Message $object
-         * @return string|null 
-         * @static 
-         */ 
-        public static function detectMessageType($object)
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->detectMessageType($object);
-        }
-        
-        /**
          * Set the IoC Container.
          *
          * @param $container Container instance
-         * @return void 
+         * @return \Telegram\Bot\BotsManager 
          * @static 
          */ 
         public static function setContainer($container)
         {
-                        \Telegram\Bot\Api::setContainer($container);
+                        /** @var \Telegram\Bot\BotsManager $instance */
+                        return $instance->setContainer($container);
         }
         
         /**
-         * Get the IoC Container.
+         * Get the configuration for a bot.
          *
-         * @return \Telegram\Bot\Container 
+         * @param string|null $name
+         * @throws \InvalidArgumentException
+         * @return array 
          * @static 
          */ 
-        public static function getContainer()
+        public static function getBotConfig($name = null)
         {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getContainer();
+                        /** @var \Telegram\Bot\BotsManager $instance */
+                        return $instance->getBotConfig($name);
         }
         
         /**
-         * Check if IoC Container has been set.
+         * Get a bot instance.
          *
-         * @return boolean 
-         * @static 
-         */ 
-        public static function hasContainer()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->hasContainer();
-        }
-        
-        /**
-         * 
-         *
-         * @return int 
-         * @static 
-         */ 
-        public static function getTimeOut()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getTimeOut();
-        }
-        
-        /**
-         * 
-         *
-         * @param int $timeOut
+         * @param string $name
          * @return \Telegram\Bot\Api 
          * @static 
          */ 
-        public static function setTimeOut($timeOut)
+        public static function bot($name = null)
         {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->setTimeOut($timeOut);
+                        /** @var \Telegram\Bot\BotsManager $instance */
+                        return $instance->bot($name);
         }
         
         /**
-         * 
+         * Reconnect to the given bot.
          *
-         * @return int 
-         * @static 
-         */ 
-        public static function getConnectTimeOut()
-        {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->getConnectTimeOut();
-        }
-        
-        /**
-         * 
-         *
-         * @param int $connectTimeOut
+         * @param string $name
          * @return \Telegram\Bot\Api 
          * @static 
          */ 
-        public static function setConnectTimeOut($connectTimeOut)
+        public static function reconnect($name = null)
         {
-                        /** @var \Telegram\Bot\Api $instance */
-                        return $instance->setConnectTimeOut($connectTimeOut);
+                        /** @var \Telegram\Bot\BotsManager $instance */
+                        return $instance->reconnect($name);
+        }
+        
+        /**
+         * Disconnect from the given bot.
+         *
+         * @param string $name
+         * @return void 
+         * @static 
+         */ 
+        public static function disconnect($name = null)
+        {
+                        /** @var \Telegram\Bot\BotsManager $instance */
+                        $instance->disconnect($name);
+        }
+        
+        /**
+         * Get the specified configuration value for Telegram.
+         *
+         * @param string $key
+         * @param mixed $default
+         * @return mixed 
+         * @static 
+         */ 
+        public static function getConfig($key, $default = null)
+        {
+                        /** @var \Telegram\Bot\BotsManager $instance */
+                        return $instance->getConfig($key, $default);
+        }
+        
+        /**
+         * Get the default bot name.
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getDefaultBot()
+        {
+                        /** @var \Telegram\Bot\BotsManager $instance */
+                        return $instance->getDefaultBot();
+        }
+        
+        /**
+         * Set the default bot name.
+         *
+         * @param string $name
+         * @return \Telegram\Bot\BotsManager 
+         * @static 
+         */ 
+        public static function setDefaultBot($name)
+        {
+                        /** @var \Telegram\Bot\BotsManager $instance */
+                        return $instance->setDefaultBot($name);
+        }
+        
+        /**
+         * Return all of the created bots.
+         *
+         * @return \Telegram\Bot\Api[] 
+         * @static 
+         */ 
+        public static function getBots()
+        {
+                        /** @var \Telegram\Bot\BotsManager $instance */
+                        return $instance->getBots();
         }
          
     }

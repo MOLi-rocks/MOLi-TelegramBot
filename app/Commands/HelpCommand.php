@@ -33,7 +33,6 @@ class HelpCommand extends Command
         $text = $this->helptext();
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
-
         $this->replyWithMessage(compact('text'));
 
         return response('OK', 200);

@@ -4,10 +4,10 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Telegram;
 use Exception;
 use MOLiBot\Services\LINENotifyService;
 use MOLiBot\Services\NcnuService;
+use MOLiBot\Services\TelegramService;
 use Fukuball\Jieba\Jieba;
 use Fukuball\Jieba\Finalseg;
 
@@ -36,21 +36,29 @@ class NCNU_RSS extends Command
      * @var LINENotifyService
      */
     private $LINENotifyService;
+
+    /**
+     * @var telegramService
+     */
+    private $telegramService;
     
     /**
      * Create a new command instance.
      *
      * @param NcnuService $ncnuService
      * @param LINENotifyService $LINENotifyService
+     * @param TelegramService $telegramService
      * @return void
      */
-    public function __construct(NcnuService $ncnuService, LINENotifyService $LINENotifyService)
+    public function __construct(NcnuService $ncnuService,
+                                LINENotifyService $LINENotifyService,
+                                TelegramService $telegramService)
     {
         parent::__construct();
         
         $this->ncnuService = $ncnuService;
-
         $this->LINENotifyService = $LINENotifyService;
+        $this->telegramService = $telegramService;
     }
 
     /**
@@ -91,10 +99,12 @@ class NCNU_RSS extends Command
                         $rawMsg = $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'];
 
                         // send to Telegram Channel
-                        Telegram::sendMessage([
-                            'chat_id' => config('telegram-channel.ncnu_news'),
-                            'text'    => $rawMsg . PHP_EOL . PHP_EOL . $hashtag
-                        ]);
+                        $this->telegramService->sendMessage(
+                            config('telegram-channel.ncnu_news'),
+                            $rawMsg . PHP_EOL . PHP_EOL . $hashtag,
+                            null,
+                            true
+                        );
 
                         // send to LINE Notify
                         $lineMsg = PHP_EOL . $rawMsg;

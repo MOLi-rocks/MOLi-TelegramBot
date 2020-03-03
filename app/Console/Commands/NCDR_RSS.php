@@ -4,9 +4,9 @@ namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Telegram;
 use Exception;
 use MOLiBot\Services\NcdrService;
+use MOLiBot\Services\TelegramService;
 
 class NCDR_RSS extends Command
 {
@@ -29,6 +29,11 @@ class NCDR_RSS extends Command
      */
     private $ncdrService;
 
+    /**
+     * @var telegramService
+     */
+    private $telegramService;
+
     /** @var \Illuminate\Support\Collection NCDR_to_BOTChannel_list */
     private $NCDR_to_BOTChannel_list;
 
@@ -39,14 +44,17 @@ class NCDR_RSS extends Command
      * Create a new command instance.
      *
      * @param NcdrService $ncdrService
+     * @param TelegramService $telegramService
      * 
      * @return void
      */
-    public function __construct(NcdrService $ncdrService)
+    public function __construct(NcdrService $ncdrService,
+                                TelegramService $telegramService)
     {
         parent::__construct();
         
         $this->ncdrService = $ncdrService;
+        $this->telegramService = $telegramService;
 
         // 哪些類別的 NCDR 訊息要推到 MOLi 廣播頻道
         $this->NCDR_to_BOTChannel_list = collect([
@@ -88,18 +96,20 @@ class NCDR_RSS extends Command
 
                 if (!$this->ncdrService->checkRssPublished($itemId)) {
                     if ($this->option('init')) {
-                        $chat_id = config('telegram-channel.test');
+                        $chatId = config('telegram-channel.test');
                     } else {
-                        $chat_id = config('telegram-channel.weather');
+                        $chatId = config('telegram-channel.weather');
                     }
 
                     $category = $item['category']['@term'];
 
                     if ($this->NCDR_to_BOTChannel_list->contains($category)) {
-                        Telegram::sendMessage([
-                            'chat_id' => $chat_id,
-                            'text'    => trim($item['summary']['#text']) . PHP_EOL . '#' . $category
-                        ]);
+                        $this->telegramService->sendMessage(
+                            $chatId,
+                            trim($item['summary']['#text']) . PHP_EOL . '#' . $category,
+                            null,
+                            true
+                        );
                     }
 
                     $this->ncdrService->storePublishedRss($itemId, $category);

@@ -2,12 +2,8 @@
 
 namespace MOLiBot\Commands;
 
-use MOLiBot\Services\NcdrService;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
-
-use \GuzzleHttp\Client as GuzzleHttpClient;
-use \GuzzleHttp\Exception\TransferException as GuzzleHttpTransferException;
 
 class StopWorkingInfoCommand extends Command
 {
@@ -23,6 +19,9 @@ class StopWorkingInfoCommand extends Command
 
     /**
      * @inheritdoc
+     * @param $arguments
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function handle($arguments)
     {
