@@ -52,6 +52,24 @@ class TelegramService
     }
 
     /**
+     * @param $chatId
+     * @param string $text
+     * @param bool $disableNotification
+     * @param null $replyToMessageId
+     * @return Message
+     * @throws \Telegram\Bot\Exceptions\TelegramSDKException
+     */
+    public function sendMessage($chatId, $text = '', $disableNotification = false, $replyToMessageId = null)
+    {
+        return $this->telegram->sendMessage([
+            'chat_id' => $chatId,
+            'text' => $text,
+            'disable_notification' => $disableNotification,
+            'reply_to_message_id' => $replyToMessageId
+        ]);
+    }
+
+    /**
      * @param Message $hook
      * @return bool
      */
@@ -64,12 +82,12 @@ class TelegramService
             $memberIsBot = $hook->getNewChatMember()->getIsBot();
 
             if ($chatId === $this->MOLiGroupId && !$memberIsBot) {
-                $welcomeMsg = $this->telegram->sendMessage([
-                    'chat_id' => $this->MOLiGroupId,
-                    'reply_to_message_id' => $hook->getMessageId(),
-                    'disable_web_page_preview' => true,
-                    'text' => $this->MOLiWelcomeMsg
-                ]);
+                $welcomeMsg = $this->sendMessage(
+                    $this->MOLiGroupId,
+                    $this->MOLiWelcomeMsg,
+                    true,
+                    $hook->getMessageId()
+                );
 
                 $newChatMemberId = $hook->getNewChatMember()->getId();
                 $welcomeMsgId = $welcomeMsg->getMessageId();

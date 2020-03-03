@@ -76,12 +76,12 @@ class TelegramController extends Controller
      */
     public function postSendMessage(Request $request)
     {
-        return $this->telegram->sendMessage([
-            'chat_id' => $request->input('chat_id', ''),
-            'text' => $request->input('text', ''),
-            'disable_notification' => $request->input('disable_notification', false),
-            'reply_to_message_id' => $request->input('reply_to_message_id', NULL),
-        ]);
+        return $this->telegramService->sendMessage(
+            $request->input('chat_id', ''),
+            $request->input('text', ''),
+            $request->input('disable_notification', false),
+            $request->input('reply_to_message_id', null)
+        );
     }
 
     /**
