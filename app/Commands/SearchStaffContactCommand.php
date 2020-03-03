@@ -28,24 +28,25 @@ class SearchStaffContactCommand extends Command
      */
     public function handle($arguments)
     {
-        $update = Telegram::getWebhookUpdates();
-        $input = $update->all();
+        $update = $this->getUpdate();
 
-        if ( $input['message']['chat']['type'] == 'private' ) {
+        $chatType = $update->getMessage()->getChat()->getType();
+        $messageFrom = $update->getMessage()->getFrom()->getId();
+        $messageId = $update->getMessage()->getMessageId();
+
+        if ( $chatType === 'private' ) {
             if (empty($arguments)) {
                 $this->replyWithChatAction(['action' => Actions::TYPING]);
-
-                Telegram::sendMessage([
-                    'chat_id' => $input['message']['chat']['id'],
+                $this->replyWithMessage([
                     'text' => '請回覆想查詢的關鍵字(不支援多條件搜尋)',
-                    'reply_to_message_id' => $input['message']['message_id']
+                    'reply_to_message_id' => $messageId
                 ]);
 
-                DB::transaction(function () use ($input) {
-                    WhoUseWhatCommand::where('user-id', '=', $input['message']['from']['id'])->delete();
+                DB::transaction(function () use ($messageFrom) {
+                    WhoUseWhatCommand::where('user-id', '=', $messageFrom)->delete();
 
                     WhoUseWhatCommand::create([
-                        'user-id' => $input['message']['from']['id'],
+                        'user-id' => $messageFrom,
                         'command' => $this->name
                     ]);
                 });
@@ -63,14 +64,12 @@ class SearchStaffContactCommand extends Command
 
             if (count($json) <= 1) {
                 $this->replyWithChatAction(['action' => Actions::TYPING]);
-
-                Telegram::sendMessage([
-                    'chat_id' => $input['message']['chat']['id'],
+                $this->replyWithMessage([
                     'text' => '查無資料 QQ',
-                    'reply_to_message_id' => $input['message']['message_id']
+                    'reply_to_message_id' => $messageId
                 ]);
 
-                WhoUseWhatCommand::where('user-id', '=', $input['message']['from']['id'])->delete();
+                WhoUseWhatCommand::where('user-id', '=', $messageFrom)->delete();
 
                 return response('OK', 200);
             }
@@ -92,21 +91,17 @@ class SearchStaffContactCommand extends Command
             }
 
             $this->replyWithChatAction(['action' => Actions::TYPING]);
-
-            Telegram::sendMessage([
-                'chat_id' => $input['message']['chat']['id'],
+            $this->replyWithMessage([
                 'text' => $text,
-                'reply_to_message_id' => $input['message']['message_id']
+                'reply_to_message_id' => $messageId
             ]);
 
-            WhoUseWhatCommand::where('user-id', '=', $input['message']['from']['id'])->delete();
+            WhoUseWhatCommand::where('user-id', '=', $messageFrom)->delete();
         } else {
             $this->replyWithChatAction(['action' => Actions::TYPING]);
-
-            Telegram::sendMessage([
-                'chat_id' => $input['message']['chat']['id'],
+            $this->replyWithMessage([
                 'text' => '此功能限一對一對話',
-                'reply_to_message_id' => $input['message']['message_id']
+                'reply_to_message_id' => $messageId
             ]);
 
             return response('OK', 200); // 強制結束 command

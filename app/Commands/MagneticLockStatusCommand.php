@@ -37,7 +37,6 @@ class MagneticLockStatusCommand extends Command
             return response('OK', 200); // 強制結束 command
         }
 
-
         if (isset(json_decode($response->getBody())->{'status'})) {
             $status = json_decode($response->getBody())->{'status'};
             $message = json_decode($response->getBody())->{'message'};
@@ -45,8 +44,6 @@ class MagneticLockStatusCommand extends Command
             $status = -3;// 隨便設定一個非 0 或 1 的值就當作壞掉了
             $message = '';
         }
-
-        $chatType = $this->getUpdate()->getMessage()->getChat()->getType();
 
         switch ($status){
             case '1':
@@ -60,7 +57,9 @@ class MagneticLockStatusCommand extends Command
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
         $send = $this->replyWithMessage(['text' => $reply]);
-        
+
+        $chatType = $this->getUpdate()->getMessage()->getChat()->getType();
+
         if ( $chatType === 'private' ) {
             $client = new GuzzleHttpClient([
                 'headers' => [
