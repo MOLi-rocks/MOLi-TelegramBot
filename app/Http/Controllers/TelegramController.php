@@ -79,6 +79,7 @@ class TelegramController extends Controller
         return $this->telegramService->sendMessage(
             $request->input('chat_id', ''),
             $request->input('text', ''),
+            $request->input('disable_web_page_preview', false),
             $request->input('disable_notification', false),
             $request->input('reply_to_message_id', null)
         );
@@ -108,8 +109,11 @@ class TelegramController extends Controller
             //Ex: hydra DVR
             $client = new GuzzleHttpClient([
                 'headers' => [
-                    'User-Agent' => 'MOLi Bot'
-                ]
+                    'User-Agent'      => 'MOLi Bot',
+                    'Accept-Encoding' => 'gzip',
+                    'cache-control'   => 'no-cache'
+                ],
+                'timeout' => 10
             ]);
 
             try {

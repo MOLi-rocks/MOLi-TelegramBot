@@ -62,8 +62,11 @@ class MagneticLockStatusCommand extends Command
         if ( $chatType === 'private' ) {
             $client = new GuzzleHttpClient([
                 'headers' => [
-                    'User-Agent' => 'MOLi Bot'
-                ]
+                    'User-Agent'      => 'MOLi Bot',
+                    'Accept-Encoding' => 'gzip',
+                    'cache-control'   => 'no-cache'
+                ],
+                'timeout' => 10
             ]);
 
             try {
