@@ -2,7 +2,7 @@
 
 namespace MOLiBot\Http\Controllers\Auth;
 
-use MOLiBot\User;
+use MOLiBot\Models\User;
 use Validator;
 use MOLiBot\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
