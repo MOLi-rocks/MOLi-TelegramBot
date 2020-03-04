@@ -6,6 +6,7 @@ use MOLiBot\Repositories\WelcomeMessageRecordRepository;
 use MOLiBot\Repositories\WhoUseWhatCommandRepository;
 use Telegram\Bot\Api;
 use Telegram\Bot\Objects\Message;
+use Telegram\Bot\Objects\Update;
 
 class TelegramService
 {
@@ -121,14 +122,15 @@ class TelegramService
     }
 
     /**
-     * @param Message $message
+     * @param Update $update
      * @return bool
      */
-    public function continuousCommand(Message $message)
+    public function continuousCommand(Update $update)
     {
         $status = false;
 
         try {
+            $message = $update->getMessage();
             $userId = $message->getFrom()->getId();
             $cmdInUse = $this->whoUseWhatCommandRepository->getCommand($userId);
 
@@ -140,7 +142,7 @@ class TelegramService
                     $arguments =$message->getText();
                 }
 
-                $this->telegram->getCommandBus()->execute($command, $arguments, $message);
+                $this->telegram->getCommandBus()->execute($command, $arguments, $update);
             }
 
             $status = true;
