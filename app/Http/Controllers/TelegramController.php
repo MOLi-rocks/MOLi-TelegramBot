@@ -79,9 +79,11 @@ class TelegramController extends Controller
         return $this->telegramService->sendMessage(
             $request->input('chat_id', ''),
             $request->input('text', ''),
+            $request->input('parse_mode', null),
             $request->input('disable_web_page_preview', false),
             $request->input('disable_notification', false),
-            $request->input('reply_to_message_id', null)
+            $request->input('reply_to_message_id', null),
+            $request->input('reply_markup', null)
         );
     }
 
