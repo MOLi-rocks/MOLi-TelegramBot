@@ -144,8 +144,10 @@ class HydraDVRRemoteControlCommand extends Command
 
             $client->request('GET', config('moli.dvr.control_url') . $position, [
                 'headers' => [
-                    'User-Agent' => 'MOLi Bot',
-                    'Accept'     => 'application/json'
+                    'User-Agent'      => 'MOLi Bot',
+                    'Accept'          => 'application/json',
+                    'Accept-Encoding' => 'gzip',
+                    'cache-control'   => 'no-cache'
                 ],
                 'timeout' => 10
             ]);
@@ -153,8 +155,10 @@ class HydraDVRRemoteControlCommand extends Command
             if ($position != 'door') {
                 $response = $client->request('GET', config('moli.dvr.snapshot_url'), [
                     'headers' => [
-                        'User-Agent' => 'MOLi Bot',
-                        'Accept' => 'application/json'
+                        'User-Agent'      => 'MOLi Bot',
+                        'Accept'          => 'application/json',
+                        'Accept-Encoding' => 'gzip',
+                        'cache-control'   => 'no-cache'
                     ],
                     'timeout' => 10
                 ]);
