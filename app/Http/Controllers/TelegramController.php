@@ -179,7 +179,7 @@ class TelegramController extends Controller
         if ($message->has('new_chat_member')) {
             $this->telegramService->sendWelcomeMsg($message);
         } elseif ($chatType === 'private' && $message->has('text') && !$message->has('entities')) {
-            $this->telegramService->continuousCommand($message);
+            $this->telegramService->continuousCommand($update);
         }
 
         return response('Controller OK', 200);
