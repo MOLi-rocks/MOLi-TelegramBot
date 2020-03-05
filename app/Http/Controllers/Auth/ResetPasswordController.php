@@ -3,9 +3,10 @@
 namespace MOLiBot\Http\Controllers\Auth;
 
 use MOLiBot\Http\Controllers\Controller;
+use MOLiBot\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
-class PasswordController extends Controller
+class ResetPasswordController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -21,12 +22,9 @@ class PasswordController extends Controller
     use ResetsPasswords;
 
     /**
-     * Create a new password controller instance.
+     * Where to redirect users after resetting their password.
      *
-     * @return void
+     * @var string
      */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
+    protected $redirectTo = RouteServiceProvider::HOME;
 }

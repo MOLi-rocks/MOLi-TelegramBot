@@ -3,6 +3,7 @@
 namespace MOLiBot\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class DotEnvSet extends Command
 {
@@ -143,7 +144,7 @@ class DotEnvSet extends Command
      */
     protected function isValidKey(string $key): bool
     {
-        if (str_contains($key, '=')) {
+        if (Str::contains($key, '=')) {
             throw new \InvalidArgumentException("Environment key should not contain '='");
         }
 
