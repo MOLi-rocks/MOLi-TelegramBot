@@ -93,7 +93,7 @@ class TelegramService
             $chatId = $hook->getChat()->getId();
             $memberIsBot = $hook->getNewChatMember()->getIsBot();
 
-            if ($chatId === $this->MOLiGroupId && !$memberIsBot) {
+            if (strval($chatId) === strval($this->MOLiGroupId) && !$memberIsBot) {
                 $welcomeMsg = $this->sendMessage(
                     $this->MOLiGroupId,
                     $this->MOLiWelcomeMsg,
