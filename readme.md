@@ -3,6 +3,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.2-orange.svg)
 [![CircleCI](https://circleci.com/gh/MOLi-rocks/MOLi-TelegramBot/tree/master.svg?style=svg)](https://circleci.com/gh/MOLi-rocks/MOLi-TelegramBot/tree/master)
 [![State-of-the-art Shitcode](https://img.shields.io/static/v1?label=State-of-the-art&message=Shitcode&color=7B5804)](https://github.com/trekhleb/state-of-the-art-shitcode)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMOLi-rocks%2FMOLi-TelegramBot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMOLi-rocks%2FMOLi-TelegramBot?ref=badge_shield)
 
 
 ## 開發環境說明
@@ -46,3 +47,7 @@
 1. [Laravel 6.x 官方文件](https://laravel.com/docs/6.x)
 2. [英文影片教學](https://laracasts.com/)
 3. [Laradock](https://laradock.io/)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMOLi-rocks%2FMOLi-TelegramBot.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FMOLi-rocks%2FMOLi-TelegramBot?ref=badge_large)
