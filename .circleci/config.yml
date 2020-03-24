@@ -39,7 +39,7 @@ jobs:
       - run: composer install -n --prefer-dist
 
       - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
+          key: composer-v1-{{ checksum "composer.json" }}
           paths:
             - vendor
 
