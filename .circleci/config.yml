@@ -35,6 +35,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
+      - run: composer config --global github-oauth.github.com $GH_TOKEN
       - run: composer install -n --prefer-dist
 
       - save_cache:
@@ -43,7 +44,6 @@ jobs:
             - vendor
 
       # node cache
-
       - restore_cache:
           keys:
             - node-v4-{{ checksum "package.json" }}
