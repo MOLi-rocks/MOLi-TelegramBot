@@ -24,6 +24,7 @@ jobs:
       - run: sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
       - run: sudo docker-php-ext-install zip bcmath
       - run: sudo composer self-update
+      - run: php -v
 
       # Download and cache dependencies
 
@@ -34,6 +35,7 @@ jobs:
             - composer-{{ checksum "composer.json" }}
             # fallback to using the latest cache if no exact match is found
             - composer
+      - run: composer --version
       - run: composer config --global github-oauth.github.com $GH_TOKEN
       - run: composer install --prefer-dist --optimize-autoloader --no-ansi --no-interaction
       - save_cache:
@@ -46,6 +48,7 @@ jobs:
           keys:
             - npm-{{ checksum "package.json" }}
             - npm
+      - run: node -v && npm -v
       - run: npm install
       - save_cache:
           key: npm-{{ checksum "package.json" }}
