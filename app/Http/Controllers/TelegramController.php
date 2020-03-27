@@ -183,7 +183,7 @@ class TelegramController extends Controller
             $message = $update->getMessage();
 
             if (!$message) {
-                throw new \Exception('Unreachable Message QAQ');
+                return response('No Message', 200);
             }
 
             $chatType = $message->getChat()->getType();
