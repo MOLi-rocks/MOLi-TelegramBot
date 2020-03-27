@@ -2,20 +2,23 @@
 
 namespace MOLiBot\Traits;
 
-use Telegram;
+use Illuminate\Support\Arr;
+use Telegram\Bot\Api as Telegram;
 
 trait GetHelpTrait
 {
     public function helptext()
     {
         //修改此檔案將同步修改 help 及 start 指令所顯示的內容
-        $commands = Telegram::getCommands();
+        $telegram = new Telegram();
+        $commands = $telegram->getCommands();
 
         $text = '';
 
-        $hidden = ['start', 'whoami', 'DVRremoteController', 'ncdrstart', 'MagneticLockStatus', 'fuck'];//不想顯示在 help 及 start 的指令請填在這個陣列
+        //不想顯示在 help 及 start 的指令請填在這個陣列
+        $hidden = ['start', 'whoami', 'DVRremoteController', 'ncdrstart', 'MagneticLockStatus', 'fuck'];
 
-        $commands = array_except($commands, $hidden);
+        $commands = Arr::except($commands, $hidden);
 
         foreach ($commands as $name => $handler) {
             $text .= sprintf('/%s - %s'.PHP_EOL, $name, $handler->getDescription());

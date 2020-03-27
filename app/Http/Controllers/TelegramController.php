@@ -170,24 +170,34 @@ class TelegramController extends Controller
      */
     public function postWebhook(Request $request)
     {
-        $update = $this->telegram->commandsHandler(true);
+        try {
+            $update = $this->telegram->commandsHandler(true);
 
-        // Commands handler method returns an Update object.
-        // So you can further process $update object
-        // to however you want.
-        if ( config('logging.log_input') ) {
-            Log::info($update);
+            // Commands handler method returns an Update object.
+            // So you can further process $update object
+            // to however you want.
+            if ( config('logging.log_input') ) {
+                Log::info($update);
+            }
+
+            $message = $update->getMessage();
+
+            if (!$message) {
+                throw new \Exception('Unreachable Message QAQ');
+            }
+
+            $chatType = $message->getChat()->getType();
+
+            if ($message->has('new_chat_member')) {
+                $this->telegramService->sendWelcomeMsg($message);
+            } elseif ($chatType === 'private' && $message->has('text') && !$message->has('entities')) {
+                $this->telegramService->continuousCommand($update);
+            }
+
+            return response('Controller OK', 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response('Controller Failed!', 200);
         }
-
-        $message = $update->getMessage();
-        $chatType = $message->getChat()->getType();
-
-        if ($message->has('new_chat_member')) {
-            $this->telegramService->sendWelcomeMsg($message);
-        } elseif ($chatType === 'private' && $message->has('text') && !$message->has('entities')) {
-            $this->telegramService->continuousCommand($update);
-        }
-
-        return response('Controller OK', 200);
     }
 }
