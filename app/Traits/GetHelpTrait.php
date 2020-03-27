@@ -3,15 +3,13 @@
 namespace MOLiBot\Traits;
 
 use Illuminate\Support\Arr;
-use Telegram\Bot\Api as Telegram;
 
 trait GetHelpTrait
 {
     public function helptext()
     {
         //修改此檔案將同步修改 help 及 start 指令所顯示的內容
-        $telegram = new Telegram();
-        $commands = $telegram->getCommands();
+        $commands = $this->getTelegram()->getCommands();
 
         $text = '';
 
