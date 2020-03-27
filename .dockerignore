@@ -1,0 +1,13 @@
+.idea/
+.git/
+vendor/
+node_modules/
+public/js/
+public/css/
+
+bootstrap/cache/*
+storage/
+
+.env
+.env.*
+readme.md
