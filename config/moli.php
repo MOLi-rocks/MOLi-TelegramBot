@@ -16,6 +16,7 @@ return [
             '- MOLi 廣播頻道 @MOLi_Channel' . PHP_EOL .
             '- MOLi 天氣廣播台 @MOLi_Weather'  . PHP_EOL .
             '- MOLi 知識中心 http://hackfoldr.org/MOLi/' . PHP_EOL .
+            '- MOLi 大事記 https://hackmd.io/@focaaby/ByeWLqz2JLW' . PHP_EOL .
             '- MOLi 首頁 https://MOLi.Rocks' . PHP_EOL .
             '- MOLi Blog https://blog.moli.rocks' . PHP_EOL . PHP_EOL .
             '/* NCNU 相關 */' . PHP_EOL .
