@@ -2,6 +2,7 @@
 
 namespace MOLiBot\Services;
 
+use MOLiBot\Jobs\DeleteWelcomeMessageJob;
 use MOLiBot\Repositories\WelcomeMessageRecordRepository;
 use MOLiBot\Repositories\WhoUseWhatCommandRepository;
 use Telegram\Bot\Api;
@@ -107,6 +108,9 @@ class TelegramService
 
                 $joinTimestamp = time();
                 $checked = false;
+
+                DeleteWelcomeMessageJob::dispatch($chatId, $newChatMemberId, $welcomeMsgId)
+                    ->delay(now()->addSeconds(62));
 
                 $this->welcomeMessageRecordRepository->createRecord(
                     $chatId, $newChatMemberId, $welcomeMsgId, $joinTimestamp, $checked
