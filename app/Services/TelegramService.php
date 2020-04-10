@@ -100,6 +100,7 @@ class TelegramService
                     $this->MOLiWelcomeMsg,
                     null,
                     true,
+                    false,
                     $hook->getMessageId()
                 );
 
