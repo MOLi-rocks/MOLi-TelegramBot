@@ -47,16 +47,17 @@ class DeleteWelcomeMessageJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws \Telegram\Bot\Exceptions\TelegramSDKException
      */
     public function handle()
     {
+        $telegram = new Api(config('moli.telegram.bot_token'));
+
         $runDelete = false;
 
         $blackList = ['left', 'kicked'];
 
         try {
-            $telegram = new Api(config('moli.telegram.bot_token'));
-
             $memberData = $telegram->getChatMember([
                 'chat_id' => $this->chatId,
                 'user_id' => $this->memberId
