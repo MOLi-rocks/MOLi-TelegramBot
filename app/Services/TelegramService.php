@@ -111,7 +111,7 @@ class TelegramService
                 $checked = false;
 
                 DeleteWelcomeMessageJob::dispatch($chatId, $newChatMemberId, $welcomeMsgId)
-                    ->delay(now()->addSeconds(62));
+                    ->delay(now()->addSeconds());
 
                 $this->welcomeMessageRecordRepository->createRecord(
                     $chatId, $newChatMemberId, $welcomeMsgId, $joinTimestamp, $checked
