@@ -46,11 +46,12 @@ class LINENotifyController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
      */
     public function code(Request $request)
     {
-        $state = $request->input('state', 'NO_STATE');
+        $state = $request->input('state', bin2hex(random_bytes(32)));
 
         $lineCodeUrl = 'https://notify-bot.line.me/oauth/authorize?' .
             'response_type=code' .
