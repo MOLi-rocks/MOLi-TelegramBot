@@ -16,6 +16,7 @@ RUN apk add --update-cache \
   && rm -rf /var/cache/apk/*
 COPY ./dockerize/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./dockerize/nginx/app.conf /etc/nginx/conf.d/default.conf
+COPY ./dockerize/supervisor/supervisord.conf /etc/supervisord.conf
 WORKDIR /app
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --chown=www-data:www-data . /app

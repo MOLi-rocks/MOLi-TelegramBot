@@ -3,6 +3,9 @@
 # Start cron
 crond
 
+# Start supervisor
+supervisord -c /etc/supervisord.conf
+
 # Start Nginx
 /usr/sbin/nginx
 
