@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Start cron
+crond
+
 # Start Nginx
 /usr/sbin/nginx
 
