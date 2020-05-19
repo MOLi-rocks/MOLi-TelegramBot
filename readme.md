@@ -42,7 +42,7 @@
     5. 以上設定完成後可使用 `php artisan migrate` 產生資料庫結構
 6. `php artisan serve` 即可運行，或是將 Web Server root 指向 `{your-project}/public/` 目錄
 
-#### B. Docker（正式環境推薦）
+#### B. Bundled docker image（正式環境推薦）
 1. 安裝 docker engine 及 docker-compose
 2. docker pull image (image 還在做 QAQ)
 3. 建立自己的 docker-compose 檔案 (範例候補)
