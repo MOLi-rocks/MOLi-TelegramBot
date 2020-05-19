@@ -26,8 +26,9 @@
 ##### Mac
 自帶 PHP， 可以透過 brew 安裝 MariaDB。
 
-## Laravel 設定
+## Laravel 設定（A、B 擇一使用）
 
+#### A. 實體安裝
 1. clone 本專案
 2. 使用 `composer install` 安裝依賴套件，有任何問題在此時會跳出通知並暫停（例如：PHP 版本不符）
    > 如在正式環境可加上 `--no-dev` 參數，將只安裝必要套件
@@ -40,6 +41,14 @@
     4. `DB_PASSWORD` 請設定資料庫連線密碼
     5. 以上設定完成後可使用 `php artisan migrate` 產生資料庫結構
 6. `php artisan serve` 即可運行，或是將 Web Server root 指向 `{your-project}/public/` 目錄
+
+#### B. Docker（正式環境推薦）
+1. 安裝 docker engine 及 docker-compose
+2. docker pull image (image 還在做 QAQ)
+3. 建立自己的 docker-compose 檔案 (範例候補)
+4. 將 .env.example 裡的參數設成 docker-compose service 的 environment
+5. docker-compose up
+
 
 ## 教學文件
 
