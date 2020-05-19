@@ -25,7 +25,7 @@ COPY --from=frontend /app/mix-manifest.json /app/mix-manifest.json
 RUN composer install --ignore-platform-reqs --no-interaction --no-plugins --no-scripts --prefer-dist --no-dev --optimize-autoloader
 RUN mkdir /app/storage/app/public
 RUN php artisan storage:link
-RUN crontab -l | { cat; echo "*	*	*	*	*	/usr/local/bin/php /app/artisan schedule:run >> /dev/null 2>&1"; } | crontab -
+RUN { echo "*	*	*	*	*	/usr/local/bin/php /app/artisan schedule:run >> /dev/null 2>&1"; } | crontab -u www-data -
 COPY ./dockerize/start-app.sh /opt/start-app.sh
 CMD ["/bin/sh", "/opt/start-app.sh"]
 EXPOSE 80
