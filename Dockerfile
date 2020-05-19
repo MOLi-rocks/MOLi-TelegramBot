@@ -25,5 +25,5 @@ RUN composer install --ignore-platform-reqs --no-interaction --no-plugins --no-s
 RUN mkdir /app/storage/app/public
 RUN php artisan storage:link
 COPY ./dockerize/start-app.sh /opt/start-app.sh
-CMD ["/opt/start-app.sh"]
+CMD ["/bin/sh", "/opt/start-app.sh"]
 EXPOSE 80
