@@ -1,10 +1,14 @@
 #!/bin/bash
 
-# Start cron
-crond
+if [ "$LARAVEL_SCHEDULE_ENABLE" = true ] ; then
+  # Start cron
+  crond
+fi
 
-# Start supervisor
-supervisord -c /etc/supervisord.conf
+if [ "$LARAVEL_QUEUE_ENABLE" = true ] ; then
+  # Start supervisor
+  supervisord -c /etc/supervisord.conf
+fi
 
 # Start Nginx
 /usr/sbin/nginx

@@ -49,7 +49,6 @@
 4. 將 .env.example 裡的參數設成 docker-compose service 的 environment
 5. docker-compose up
 
-
 ## 教學文件
 
 1. [Laravel 6.x 官方文件](https://laravel.com/docs/6.x)
