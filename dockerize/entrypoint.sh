@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ "$LARAVEL_SCHEDULE_ENABLE" = true ] ; then
   # Start cron

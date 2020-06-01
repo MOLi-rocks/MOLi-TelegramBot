@@ -27,6 +27,7 @@ RUN composer install --ignore-platform-reqs --no-interaction --no-plugins --no-s
 RUN mkdir /app/storage/app/public
 RUN php artisan storage:link
 RUN { echo "*	*	*	*	*	/usr/local/bin/php /app/artisan schedule:run >> /dev/null 2>&1"; } | crontab -u www-data -
-COPY ./dockerize/start-app.sh /opt/start-app.sh
-CMD ["/bin/sh", "/opt/start-app.sh"]
+COPY ./dockerize/entrypoint.sh /opt/entrypoint.sh
+RUN chmod +x /opt/entrypoint.sh
+ENTRYPOINT ["/opt/entrypoint.sh"]
 EXPOSE 80
