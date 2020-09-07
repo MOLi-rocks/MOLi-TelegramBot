@@ -169,13 +169,13 @@
                     <P>南投縣埔里鎮大學路 470 號管理學院 237 室</P>
                 </div>
                 <div class="col-12 col-md-2 center-text">
-                    <a href="https://telegram.me/MOLi_rocks" target="_blank">
+                    <a href="https://telegram.me/MOLi_rocks" target="_blank" rel="noopener">
                         <img class="tg-logo" src="{{ asset('img/telegram_logo.png') }}" alt="Telegram logo">
                     </a>
                     <p>Telegram</p>
                 </div>
                 <div class="col-12 col-md-3 center-text">
-                    <a href="https://www.facebook.com/MOLi.rocks" target="_blank">
+                    <a href="https://www.facebook.com/MOLi.rocks" target="_blank" rel="noopener">
                         <img class="fb-logo" src="{{ asset('img/facebook_logo.png') }}" alt="Facebook logo">
                     </a>
                     <p>Facebook</p>
