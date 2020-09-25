@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,7 +43,7 @@ Route::group(['middleware' => 'bot.token'], function () {
 
 Route::post(config('moli.telegram.bot_token'), 'TelegramController@postWebhook');
 
-Route::post(config('ncdr.url'), 'MOLiBotController@postNCDR');
+//Route::post(config('ncdr.url'), 'MOLiBotController@postNCDR');
 
 // keep this route at bottom of file
 Route::any('/{any?}', 'MOLiBotController@anyRoute');

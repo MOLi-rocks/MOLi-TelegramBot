@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use MOLiBot\Http\Requests\HistoryFuelPriceRequest;
 
-use SoapBox\Formatter\Formatter;
 use Telegram;
 
 use MOLiBot\Services\FuelPriceService;
@@ -71,7 +70,7 @@ class MOLiBotController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function connectTester(Request $request)
     {
@@ -111,8 +110,10 @@ class MOLiBotController extends Controller
     public function postNCDR(Request $request)
     {
         //use $request->getContent() to get raw data
-        $formatter = Formatter::make($request->getContent(), Formatter::XML);
-        $json = $formatter->toArray();
+        $rawData = $request->getContent();
+
+        $simpleXml = simplexml_load_string($rawData, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $json = json_decode(json_encode($simpleXml), 1);
 
         if ( config('logging.log_input') ) {
             Log::info(json_encode($json, JSON_UNESCAPED_UNICODE));

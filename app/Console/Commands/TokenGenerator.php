@@ -53,5 +53,7 @@ class TokenGenerator extends Command
         $data = $this->MOLiBotApiTokenService->createToken($who);
 
         $this->info('Token for ' . $data->user . ' is ' . $data->token);
+
+        return 0;
     }
 }

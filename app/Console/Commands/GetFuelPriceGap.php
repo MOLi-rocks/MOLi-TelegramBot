@@ -54,7 +54,7 @@ class GetFuelPriceGap extends Command
     /**
      * Execute the console command.
      *
-     * @return \Telegram\Bot\Objects\Message
+     * @return integer
      * @throws \Telegram\Bot\Exceptions\TelegramSDKException
      */
     public function handle()
@@ -75,11 +75,13 @@ class GetFuelPriceGap extends Command
             '92無鉛汽油' . $result['92無鉛汽油'] . PHP_EOL . PHP_EOL .
             '超級柴油' . $result['超級柴油'];
 
-        return $this->telegramService->sendMessage(
+        $this->telegramService->sendMessage(
             $chatId,
             $text,
             'HTML',
             true
         );
+
+        return 0;
     }
 }

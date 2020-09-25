@@ -56,8 +56,12 @@ class TokenDelete extends Command
 
                 $this->info('Token Delete Success!');
             }
+
+            return 0;
         } else {
             $this->error('This Token is Not Exist!');
+
+            return 1;
         }
     }
 }

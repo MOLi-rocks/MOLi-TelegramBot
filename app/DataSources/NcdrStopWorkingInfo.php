@@ -37,9 +37,7 @@ class NcdrStopWorkingInfo extends Source
                 $this->baseUrl . '/api/datastore?format=json&capcode=WSC&apikey=' . $apiKey
             );
 
-            $fileContents = json_decode($response->getBody()->getContents(), true);
-
-            return $fileContents;
+            return json_decode($response->getBody()->getContents(), true);
         } catch (Exception $e) {
             throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
         }
