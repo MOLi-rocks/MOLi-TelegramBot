@@ -1,6 +1,6 @@
 # MOLi-TelegramBot
-![Laravel Version](https://img.shields.io/badge/Laravel-6.x-brightgreen.svg)
-![PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.2-orange.svg)
+![Laravel Version](https://img.shields.io/badge/Laravel-7.x-brightgreen.svg)
+![PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.2.5-orange.svg)
 [![CircleCI](https://circleci.com/gh/MOLi-rocks/MOLi-TelegramBot/tree/master.svg?style=svg)](https://circleci.com/gh/MOLi-rocks/MOLi-TelegramBot/tree/master)
 [![State-of-the-art Shitcode](https://img.shields.io/static/v1?label=State-of-the-art&message=Shitcode&color=7B5804)](https://github.com/trekhleb/state-of-the-art-shitcode)
 
@@ -43,6 +43,6 @@
 
 ## 教學文件
 
-1. [Laravel 6.x 官方文件](https://laravel.com/docs/6.x)
+1. [Laravel 7.x 官方文件](https://laravel.com/docs/7.x)
 2. [英文影片教學](https://laracasts.com/)
 3. [Laradock](https://laradock.io/)

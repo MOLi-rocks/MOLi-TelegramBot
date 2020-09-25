@@ -12,13 +12,13 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        // \MOLiBot\Http\Middleware\TrustHosts::class,
         \MOLiBot\Http\Middleware\TrustProxies::class,
+        \Fruitcake\Cors\HandleCors::class,
         \MOLiBot\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         // \MOLiBot\Http\Middleware\TrimStrings::class,
         // \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-
-        \Fruitcake\Cors\HandleCors::class,
     ];
 
     /**
