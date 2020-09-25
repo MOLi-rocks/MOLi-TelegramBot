@@ -8,6 +8,7 @@
         "php": "^7.2",
         "ext-bcmath": "*",
         "ext-json": "*",
+        "ext-simplexml": "*",
         "barryvdh/laravel-cors": "^1.0",
         "doctrine/dbal": "^2.5",
         "fideloper/proxy": "^4.0",

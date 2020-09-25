@@ -4,7 +4,6 @@ namespace MOLiBot\DataSources;
 
 use MOLiBot\Exceptions\DataSourceRetriveException;
 use Exception;
-use SoapBox\Formatter\Formatter;
 
 class NcnuRss extends Source
 {
@@ -31,13 +30,9 @@ class NcnuRss extends Source
 
             $fileContents = $response->getBody()->getContents();
 
-            $formatted = Formatter::make($fileContents, Formatter::XML)->toArray();
+            $simpleXml = simplexml_load_string($fileContents, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-            if (!is_array($formatted['channel']['item'])) {
-                $formatted['channel']['item'] = [$formatted['channel']['item']];
-            }
-
-            return $formatted;
+            return @json_decode(@json_encode($simpleXml), 1);
         } catch (Exception $e) {
             throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
         }
