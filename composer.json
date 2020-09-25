@@ -9,6 +9,7 @@
         "ext-bcmath": "*",
         "ext-json": "*",
         "ext-simplexml": "*",
+        "ext-libxml": "*",
         "barryvdh/laravel-cors": "^1.0",
         "doctrine/dbal": "^2.5",
         "fideloper/proxy": "^4.0",
