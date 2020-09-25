@@ -32,7 +32,7 @@ class NcnuRss extends Source
 
             $simpleXml = simplexml_load_string($fileContents, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-            return @json_decode(@json_encode($simpleXml), 1);
+            return json_decode(json_encode($simpleXml), 1);
         } catch (Exception $e) {
             throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
         }

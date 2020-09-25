@@ -4,7 +4,6 @@ namespace MOLiBot\DataSources;
 
 use MOLiBot\Exceptions\DataSourceRetriveException;
 use Exception;
-use SoapBox\Formatter\Formatter;
 
 class CPCProductPrice extends Source
 {
@@ -87,9 +86,9 @@ class CPCProductPrice extends Source
         // SOAP response to regular XML
         $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
 
-        $formatter = Formatter::make($xml, Formatter::XML);
+        $simpleXml = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-        $json = $formatter->toArray();
+        $json = json_decode(json_encode($simpleXml), 1);
 
         return $json['diffgrdiffgram']['NewDataSet']['tbTable'];
     }
