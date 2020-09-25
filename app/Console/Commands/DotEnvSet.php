@@ -41,7 +41,8 @@ class DotEnvSet extends Command
         try {
             list($key, $value) = $this->getKeyValue();
         } catch (\InvalidArgumentException $e) {
-            return $this->error($e->getMessage());
+            $this->error($e->getMessage());
+            return 1;
         }
 
         $envFilePath = app()->environmentFilePath();
@@ -55,7 +56,9 @@ class DotEnvSet extends Command
 
             $returnStr = 'Environment variable with key ' . $key . ' has been changed';
 
-            return $this->info($returnStr);
+            $this->info($returnStr);
+
+            return 0;
         }
 
         $contents = $contents . "\n{$key}={$value}\n";
@@ -64,7 +67,9 @@ class DotEnvSet extends Command
 
         $returnStr = 'A new environment variable with key ' . $key . ' has been set';
 
-        return $this->info($returnStr);
+        $this->info($returnStr);
+
+        return 0;
     }
 
     /**

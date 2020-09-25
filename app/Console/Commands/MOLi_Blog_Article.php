@@ -92,10 +92,10 @@ class MOLi_Blog_Article extends Command
                 $this->info('Mission Complete!');
             }
 
-            return;
+            return 0;
         } catch (Exception $e) {
             $this->error($e->getMessage());
-            return;
+            return 1;
         }
     }
 

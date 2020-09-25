@@ -51,5 +51,7 @@ class TokenList extends Command
         $tokens = $this->MOLiBotApiTokenService->listToken();
         $headers = ['User', 'Token', 'created_at'];
         $this->table($headers, $tokens);
+
+        return 0;
     }
 }
