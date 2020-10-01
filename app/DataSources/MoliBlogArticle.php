@@ -4,6 +4,7 @@ namespace MOLiBot\DataSources;
 
 use MOLiBot\Exceptions\DataSourceRetriveException;
 use Exception;
+use voku\helper\ASCII;
 
 class MoliBlogArticle extends Source
 {
@@ -26,7 +27,7 @@ class MoliBlogArticle extends Source
      * @param $page
      * @return void
      */
-    public function setPage($page)
+    public function setPage($page) : void
     {
         if (!empty($page)) {
             $this->page = $page;

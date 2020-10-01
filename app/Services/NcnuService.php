@@ -57,11 +57,11 @@ class NcnuService
     }
 
     /**
-     * @param null $keyword
+     * @param $keyword
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getStaffContact($keyword = NULL)
+    public function getStaffContact($keyword = null)
     {
         try {
             $contents = $this->staffContactSource->getContent($keyword);

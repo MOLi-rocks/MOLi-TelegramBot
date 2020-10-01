@@ -195,11 +195,11 @@ class MOLiBotController extends Controller
     }
 
     /**
-     * @param null $keyword
+     * @param $keyword
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getStaffContact($keyword = NULL)
+    public function getStaffContact($keyword = null)
     {
         return $this->ncnuService->getStaffContact($keyword);
     }

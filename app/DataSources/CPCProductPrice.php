@@ -42,7 +42,7 @@ class CPCProductPrice extends Source
      * @param $prodId
      * @return void
      */
-    public function setHistoryProdId($prodId)
+    public function setHistoryProdId($prodId) : void
     {
         if (!empty($prodId)) {
             $this->historyProdId = $prodId;
@@ -79,7 +79,7 @@ class CPCProductPrice extends Source
      * @param $response
      * @return array
      */
-    private function handleResponse($response)
+    private function handleResponse($response) : array
     {
         $fileContents = $response->getBody()->getContents();
 

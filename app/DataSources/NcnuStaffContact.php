@@ -20,11 +20,11 @@ class NcnuStaffContact extends Source
     }
 
     /**
-     * @param null $keyword
+     * @param $keyword
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
      */
-    public function getContent($keyword = NULL) : array
+    public function getContent($keyword = null) : array
     {
         try {
             $response = $this->httpClient->request(
