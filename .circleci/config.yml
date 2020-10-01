@@ -32,26 +32,26 @@ jobs:
       - restore_cache:
           keys:
             # "composer.lock" can be used if it is committed to the repo
-            - composer-{{ checksum "composer.json" }}
+            - composer-{{ checksum "composer.lock" }}
             # fallback to using the latest cache if no exact match is found
             - composer
       - run: composer --version
       - run: composer config --global github-oauth.github.com $GH_TOKEN
       - run: composer install --prefer-dist --optimize-autoloader --no-ansi --no-interaction
       - save_cache:
-          key: composer-{{ checksum "composer.json" }}
+          key: composer-{{ checksum "composer.lock" }}
           paths:
             - vendor
 
       # node cache
       - restore_cache:
           keys:
-            - npm-{{ checksum "package.json" }}
+            - npm-{{ checksum "package.lock" }}
             - npm
       - run: node -v && npm -v
       - run: npm install
       - save_cache:
-          key: npm-{{ checksum "package.json" }}
+          key: npm-{{ checksum "package.lock" }}
           paths:
             - node_modules
             - ~/.yarn
