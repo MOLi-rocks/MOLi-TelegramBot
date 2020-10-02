@@ -21,9 +21,7 @@ class MoliBlogDataTest extends TestCase
 
         $data = $dataSource->getContent();
 
-        $this->assertArraySubset([
-            'posts' => []
-        ], $data);
+        $this->assertIsArray($data['posts'], 'posts must be an array');
     }
 
     /**
@@ -42,9 +40,7 @@ class MoliBlogDataTest extends TestCase
 
         $data = $dataSource->getContent();
 
-        $this->assertArraySubset([
-            'posts' => []
-        ], $data);
+        $this->assertIsArray($data['posts'], 'posts must be an array');
 
         $this->assertTrue($data['meta']['pagination']['page'] === $page);
     }

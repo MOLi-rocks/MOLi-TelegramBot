@@ -21,8 +21,6 @@ class NcdrRssDataTest extends TestCase
 
         $data = $dataSource->getContent();
 
-        $this->assertArraySubset([
-            'entry' => []
-        ], $data);
+        $this->assertIsArray($data['entry'], 'entry must be an array');
     }
 }

@@ -75,10 +75,10 @@ class KktixDataTest extends TestCase
 
         $mockHeader = ['Content-Type' => 'application/json; charset=utf-8'];
 
-        $mockBody = '';
+        $mockBody = '{"title":"MOLi \u8fd1\u671f\u516c\u958b\u6d3b\u52d5 - KKTIX","updated":"2020-10-02T10:19:35.508+08:00"}';
 
         $mock = new MockHandler([
-            new Response(200, $mockHeader, $mockBody),
+            new Response(404, $mockHeader, $mockBody),
         ]);
 
         $handlerStack = HandlerStack::create($mock);
