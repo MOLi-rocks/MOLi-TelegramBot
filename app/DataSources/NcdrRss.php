@@ -36,7 +36,7 @@ class NcdrRss extends Source
 
             return $fileContents;
         } catch (Exception $e) {
-            throw new DataSourceRetrieveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetrieveException($e->getMessage() ?: 'Can\'t Retrieve Data', $e->getCode() ?: 502);
         }
     }
 }

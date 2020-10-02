@@ -40,7 +40,7 @@ class MoliKktix extends Source
 
             return $fileContents;
         } catch (Exception $e) {
-            throw new DataSourceRetrieveException($e->getMessage() ?: 'Can\'t Retrieve Data' , $e->getCode() ?: 502);
+            throw new DataSourceRetrieveException($e->getMessage() ?: 'Can\'t Retrieve Data', $e->getCode() ?: 502);
         }
     }
 }
