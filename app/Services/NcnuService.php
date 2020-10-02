@@ -2,6 +2,7 @@
 
 namespace MOLiBot\Services;
 
+use Exception;
 use MOLiBot\Repositories\PublishedNcnuRssRepository;
 use MOLiBot\DataSources\NcnuRss as RssDataSource;
 use MOLiBot\DataSources\NcnuStaffContact as StaffContactDataSource;
@@ -59,7 +60,6 @@ class NcnuService
     /**
      * @param $keyword
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getStaffContact($keyword = null)
     {
@@ -81,7 +81,9 @@ class NcnuService
             }
 
             return $result;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
+            return [];
+        } catch (\GuzzleHttp\Exception\TransferException $e) {
             return [];
         }
     }
