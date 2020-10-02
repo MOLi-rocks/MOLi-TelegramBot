@@ -3,6 +3,8 @@
 Homestead.yaml
 Homestead.json
 .env
+.env.backup
+.phpunit.result.cache
 .idea/
 .DS_Store
 /public/hot
