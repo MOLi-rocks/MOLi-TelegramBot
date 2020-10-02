@@ -2,7 +2,7 @@
 
 namespace MOLiBot\DataSources;
 
-use MOLiBot\Exceptions\DataSourceRetriveException;
+use MOLiBot\Exceptions\DataSourceRetrieveException;
 use Exception;
 
 class MoliDoorStatus extends Source
@@ -21,7 +21,7 @@ class MoliDoorStatus extends Source
 
     /**
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
+     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetrieveException
      */
     public function getContent() : array
     {
@@ -32,7 +32,7 @@ class MoliDoorStatus extends Source
 
             return $fileContents;
         } catch (Exception $e) {
-            throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetrieveException($e->getMessage(), $e->getCode());
         }
     }
 }

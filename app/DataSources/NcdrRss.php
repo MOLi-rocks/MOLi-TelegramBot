@@ -2,7 +2,7 @@
 
 namespace MOLiBot\DataSources;
 
-use MOLiBot\Exceptions\DataSourceRetriveException;
+use MOLiBot\Exceptions\DataSourceRetrieveException;
 use Exception;
 
 class NcdrRss extends Source
@@ -21,7 +21,7 @@ class NcdrRss extends Source
 
     /**
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
+     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetrieveException
      */
     public function getContent() : array
     {
@@ -36,7 +36,7 @@ class NcdrRss extends Source
 
             return $fileContents;
         } catch (Exception $e) {
-            throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetrieveException($e->getMessage(), $e->getCode());
         }
     }
 }

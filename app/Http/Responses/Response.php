@@ -15,7 +15,7 @@ class Response
      * @param array $data
      * @return JsonResponse
      */
-    public function jsonResponse($status, $code = 1, $msg = '', $data = [])
+    public function jsonResponse(int $status, $code = 1, $msg = '', $data = []) : JsonResponse
     {
         $data = $this->format($code, $msg, $data);
         return response()->json($data, $status);
@@ -29,7 +29,7 @@ class Response
      * @param array $data
      * @return array
      */
-    private function format($code, $msg, $data)
+    private function format(int $code, string $msg, array $data) : array
     {
         return [
             'Code' => $code,
