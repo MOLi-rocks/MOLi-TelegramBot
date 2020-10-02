@@ -43,11 +43,9 @@ class MoliBlogArticle extends Source
         try {
             $response = $this->httpClient->request('GET', $this->url . '&page=' . $this->page);
 
-            $fileContents = json_decode($response->getBody()->getContents(), true);
-
-            return $fileContents;
+            return  json_decode($response->getBody()->getContents(), true);
         } catch (Exception $e) {
-            throw new DataSourceRetrieveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetrieveException($e->getMessage() ?: 'Can\'t Retrieve Data', $e->getCode() ?: 502);
         }
     }
 }
