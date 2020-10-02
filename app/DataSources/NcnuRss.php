@@ -34,7 +34,7 @@ class NcnuRss extends Source
 
             return json_decode(json_encode($simpleXml), 1);
         } catch (Exception $e) {
-            throw new DataSourceRetrieveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetrieveException($e->getMessage() ?: 'Can\'t Retrieve Data', $e->getCode() ?: 502);
         }
     }
 }
