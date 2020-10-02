@@ -2,7 +2,7 @@
 
 namespace MOLiBot\DataSources;
 
-use MOLiBot\Exceptions\DataSourceRetriveException;
+use MOLiBot\Exceptions\DataSourceRetrieveException;
 use Exception;
 
 class NcnuStaffContact extends Source
@@ -20,11 +20,11 @@ class NcnuStaffContact extends Source
     }
 
     /**
-     * @param null $keyword
+     * @param $keyword
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
+     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetrieveException
      */
-    public function getContent($keyword = NULL) : array
+    public function getContent($keyword = null) : array
     {
         try {
             $response = $this->httpClient->request(
@@ -36,7 +36,7 @@ class NcnuStaffContact extends Source
 
             return str_getcsv($fileContents, "\n");
         } catch (Exception $e) {
-            throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetrieveException($e->getMessage(), $e->getCode());
         }
     }
 }

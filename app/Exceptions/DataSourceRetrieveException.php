@@ -4,6 +4,6 @@ namespace MOLiBot\Exceptions;
 
 use RuntimeException;
 
-class DataSourceRetriveException extends RuntimeException
+class DataSourceRetrieveException extends RuntimeException
 {
 }

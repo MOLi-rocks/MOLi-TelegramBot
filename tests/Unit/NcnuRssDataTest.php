@@ -21,10 +21,6 @@ class NcnuRssDataTest extends TestCase
 
         $data = $dataSource->getContent();
 
-        $this->assertArraySubset([
-            'channel' => [
-                'item' => []
-            ]
-        ], $data);
+        $this->assertIsArray($data['channel']['item'], 'channel.item must be an array');
     }
 }

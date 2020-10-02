@@ -2,7 +2,7 @@
 
 namespace MOLiBot\DataSources;
 
-use MOLiBot\Exceptions\DataSourceRetriveException;
+use MOLiBot\Exceptions\DataSourceRetrieveException;
 use Exception;
 
 class CPCProductPrice extends Source
@@ -25,7 +25,7 @@ class CPCProductPrice extends Source
 
     /**
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
+     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetrieveException
      */
     public function getContent() : array
     {
@@ -34,7 +34,7 @@ class CPCProductPrice extends Source
 
             return $this->handleResponse($response);
         } catch (Exception $e) {
-            throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetrieveException($e->getMessage(), $e->getCode());
         }
     }
 
@@ -42,7 +42,7 @@ class CPCProductPrice extends Source
      * @param $prodId
      * @return void
      */
-    public function setHistoryProdId($prodId)
+    public function setHistoryProdId($prodId) : void
     {
         if (!empty($prodId)) {
             $this->historyProdId = $prodId;
@@ -51,7 +51,7 @@ class CPCProductPrice extends Source
 
     /**
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
+     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetrieveException
      */
     public function getHistoryContent() : array
     {
@@ -71,7 +71,7 @@ class CPCProductPrice extends Source
 
             return $this->handleResponse($response);
         } catch (Exception $e) {
-            throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetrieveException($e->getMessage(), $e->getCode());
         }
     }
 
@@ -79,7 +79,7 @@ class CPCProductPrice extends Source
      * @param $response
      * @return array
      */
-    private function handleResponse($response)
+    private function handleResponse($response) : array
     {
         $fileContents = $response->getBody()->getContents();
 

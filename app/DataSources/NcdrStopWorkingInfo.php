@@ -2,7 +2,7 @@
 
 namespace MOLiBot\DataSources;
 
-use MOLiBot\Exceptions\DataSourceRetriveException;
+use MOLiBot\Exceptions\DataSourceRetrieveException;
 use Exception;
 
 class NcdrStopWorkingInfo extends Source
@@ -21,7 +21,7 @@ class NcdrStopWorkingInfo extends Source
 
     /**
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
+     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetrieveException
      */
     public function getContent() : array
     {
@@ -39,7 +39,7 @@ class NcdrStopWorkingInfo extends Source
 
             return json_decode($response->getBody()->getContents(), true);
         } catch (Exception $e) {
-            throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetrieveException($e->getMessage(), $e->getCode());
         }
     }
 }

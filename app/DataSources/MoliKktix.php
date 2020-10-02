@@ -2,7 +2,7 @@
 
 namespace MOLiBot\DataSources;
 
-use MOLiBot\Exceptions\DataSourceRetriveException;
+use MOLiBot\Exceptions\DataSourceRetrieveException;
 use Exception;
 
 class MoliKktix extends Source
@@ -21,7 +21,7 @@ class MoliKktix extends Source
 
     /**
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetriveException
+     * @throws \GuzzleHttp\Exception\GuzzleException|DataSourceRetrieveException
      */
     public function getContent() : array
     {
@@ -31,7 +31,7 @@ class MoliKktix extends Source
             $fileContents = json_decode($response->getBody()->getContents(), true);
 
             if (!isset($fileContents['entry'])) {
-                throw new Exception('Entry Not Exist', 503);
+                throw new Exception('Entry Not Exist', 404);
             }
 
             if (!is_array($fileContents['entry'])) {
@@ -40,7 +40,7 @@ class MoliKktix extends Source
 
             return $fileContents;
         } catch (Exception $e) {
-            throw new DataSourceRetriveException($e->getMessage(), $e->getCode());
+            throw new DataSourceRetrieveException($e->getMessage() ?: 'Can\'t Retrieve Data', $e->getCode() ?: 502);
         }
     }
 }

@@ -79,8 +79,8 @@ class Handler extends ExceptionHandler
                 );
             }
 
-            if ($exception instanceof DataSourceRetriveException) {
-                return $res->jsonResponse(404, -1, 'Data Retrive Failed');
+            if ($exception instanceof DataSourceRetrieveException) {
+                return $res->jsonResponse(502, -1, 'Data Retrieve Failed');
             }
 
             if ($exception instanceof ModelNotFoundException) {
