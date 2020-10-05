@@ -60,6 +60,7 @@ class NcnuService
     /**
      * @param $keyword
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getStaffContact($keyword = null)
     {
@@ -82,8 +83,6 @@ class NcnuService
 
             return $result;
         } catch (Exception $e) {
-            return [];
-        } catch (\GuzzleHttp\Exception\TransferException $e) {
             return [];
         }
     }
