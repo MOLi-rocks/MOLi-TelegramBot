@@ -4,7 +4,6 @@
 [![CircleCI](https://circleci.com/gh/MOLi-rocks/MOLi-TelegramBot/tree/master.svg?style=svg)](https://circleci.com/gh/MOLi-rocks/MOLi-TelegramBot/tree/master)
 [![State-of-the-art Shitcode](https://img.shields.io/static/v1?label=State-of-the-art&message=Shitcode&color=7B5804)](https://github.com/trekhleb/state-of-the-art-shitcode)
 
-
 ## 開發環境說明
 
 ### PHP 版本
@@ -43,6 +42,13 @@
     4. `DB_PASSWORD` 請設定資料庫連線密碼
     5. 以上設定完成後可使用 `php artisan migrate` 產生資料庫結構
 6. `php artisan serve` 即可運行，或是將 Web Server root 指向 `{your-project}/public/` 目錄
+
+## 資料來源
+- [MOLi Blog](https://blog.moli.rocks/)
+- [MOLi@KKTIX](https://moli.kktix.cc/)
+- [NCNU OpenData API](https://api.ncnu.edu.tw/)
+- [民生示警公開資料平台](https://alerts.ncdr.nat.gov.tw/)
+- [台灣中油牌價 DataSet](https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx)
 
 ## 教學文件
 
