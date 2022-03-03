@@ -7,7 +7,7 @@
 ## 開發環境說明
 
 ### PHP 版本
-雖然依賴只須 >= 7.2.5，但是因為 PHP 支援版本的原因，所以開發是使用 7.4
+雖然依賴只須 >=7.2.5，但是因為 PHP 支援版本的原因，所以開發是使用 7.4
 
 ### 編輯器
 可以使用 PhpStorm 當作 IDE，學生可以免費使用授權版，此 IDE 非常強大，但是也因為 Laravel magic function 太多導致無法精確的判斷，可以使用 [laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper) 來幫助 IDE 識別。
@@ -15,7 +15,7 @@
 ### 開發環境（A、B 擇一使用）
 
 #### A. Laradock（推薦）
-如遇資料庫問題請將 MySQL 改成 5.7 版，別用 latest
+如遇資料庫問題請將 MySQL 版本改成 5.7，避免使用 latest
 
 #### B. 實體安裝
 
@@ -29,7 +29,6 @@
 自帶 PHP， 可以透過 brew 安裝 MariaDB。
 
 ## Laravel 設定
-
 1. clone 本專案
 2. 使用 `composer install` 安裝依賴套件，有任何問題在此時會跳出通知並暫停（例如：PHP 版本不符）
    > 如在正式環境可加上 `--no-dev` 參數，將只安裝必要套件
@@ -51,7 +50,6 @@
 - [台灣中油牌價 DataSet](https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx)
 
 ## 教學文件
-
-1. [Laravel 7.x 官方文件](https://laravel.com/docs/7.x)
-2. [英文影片教學](https://laracasts.com/)
-3. [Laradock](https://laradock.io/)
+- [Laravel 7.x 官方文件](https://laravel.com/docs/7.x)
+- [英文影片教學](https://laracasts.com/)
+- [Laradock](https://laradock.io/)
