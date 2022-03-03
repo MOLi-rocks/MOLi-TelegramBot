@@ -27,7 +27,7 @@ Route::any('/connect-test', 'MOLiBotController@connectTester');
 
 Route::get('/ncdr-rss', 'MOLiBotController@getNCDR_RSS');
 
-Route::get('/ncnu-staff-contact/{keyword?}', 'MOLiBotController@getStaffContact');
+//Route::get('/ncnu-staff-contact/{keyword?}', 'MOLiBotController@getStaffContact');
 
 Route::get('/fuel-price', 'MOLiBotController@getFuelPrice');
 
