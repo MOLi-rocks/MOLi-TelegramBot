@@ -16,7 +16,7 @@ class NcnuRss extends Source
     {
         parent::__construct();
 
-        $this->url = 'https://www.ncnu.edu.tw/ncnuweb/ann/RSS.aspx';
+        $this->url = 'https://api.ncnu.edu.tw/API/get.aspx?json=info_ncnu&month_include=1&include_expired=f';
     }
 
     /**
@@ -30,9 +30,7 @@ class NcnuRss extends Source
 
             $fileContents = $response->getBody()->getContents();
 
-            $simpleXml = simplexml_load_string($fileContents, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-            return json_decode(json_encode($simpleXml), 1);
+            return json_decode($fileContents, 1);
         } catch (Exception $e) {
             throw new DataSourceRetrieveException($e->getMessage() ?: 'Can\'t Retrieve Data', $e->getCode() ?: 502);
         }
