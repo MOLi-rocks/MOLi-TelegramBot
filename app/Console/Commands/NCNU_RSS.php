@@ -84,19 +84,23 @@ class NCNU_RSS extends Command
             $items = $contents['info_ncnu']['item'];
 
             foreach ($items as $item) {
-                $hashtag = '#' . $item['category'];
-
                 if (!$this->ncnuService->checkRssPublished($item['uid'])) {
                     if ($this->option('init')) {
                         $this->ncnuService->storePublishedRss($item['uid']);
                     } else {
                         $seg_list = Jieba::cut($item['title']);
 
-                        foreach ($seg_list as $seg_list_item) {
-                            $hashtag .= ' #' . $seg_list_item;
+                        if ( !empty($item['category']) ) {
+                            $hashtag = '#' . $item['category'] . ' ';
+                        } else {
+                            $hashtag = '';
                         }
 
-                        $rawMsg = $item['title'] . PHP_EOL . $item['ori_web_url'];
+                        foreach ($seg_list as $seg_list_item) {
+                            $hashtag .= '#' . $seg_list_item . ' ';
+                        }
+
+                        $rawMsg = '(' . $item['publish_start_at'] . ') ' . $item['title'] . PHP_EOL . $item['ori_web_url'];
 
                         // send to Telegram Channel
                         $this->telegramService->sendMessage(
