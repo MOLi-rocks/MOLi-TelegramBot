@@ -32,6 +32,7 @@ jobs:
       - restore_cache:
           keys:
             - php_deps-{{ checksum "composer.lock" }}
+            - php_deps
       - run: composer config --global github-oauth.github.com $GH_TOKEN
       - run: composer install --prefer-dist --optimize-autoloader --no-ansi --no-interaction
       - save_cache:
@@ -44,6 +45,7 @@ jobs:
       - restore_cache:
           keys:
             - node_deps-{{ checksum "package-lock.json" }}
+            - node_deps
       - run: npm install
       - save_cache:
           key: node_deps-{{ checksum "package-lock.json" }}
