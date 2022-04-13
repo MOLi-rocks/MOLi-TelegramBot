@@ -2,12 +2,12 @@
 #
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
       # Specify the version you desire here
-      - image: circleci/php:7.4-node-browsers
+      - image: cimg/php:7.4-node
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -21,37 +21,34 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
-      - run: sudo docker-php-ext-install zip bcmath
+      #- run: sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
+      #- run: sudo pecl install zip bcmath
       - run: sudo composer self-update
-      - run: php -v
+      - run: php -v && composer --version
 
       # Download and cache dependencies
 
       # composer cache
       - restore_cache:
           keys:
-            # "composer.lock" can be used if it is committed to the repo
-            - composer-{{ checksum "composer.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - composer
-      - run: composer --version
+            - php_deps-{{ checksum "composer.lock" }}
+            - php_deps
       - run: composer config --global github-oauth.github.com $GH_TOKEN
       - run: composer install --prefer-dist --optimize-autoloader --no-ansi --no-interaction
       - save_cache:
-          key: composer-{{ checksum "composer.lock" }}
+          key: php_deps-{{ checksum "composer.lock" }}
           paths:
             - vendor
 
+      - run: node -v && npm -v
       # node cache
       - restore_cache:
           keys:
-            - npm-{{ checksum "package-lock.json" }}
-            - npm
-      - run: node -v && npm -v
+            - node_deps-{{ checksum "package-lock.json" }}
+            - node_deps
       - run: npm install
       - save_cache:
-          key: npm-{{ checksum "package-lock.json" }}
+          key: node_deps-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
             - ~/.yarn
