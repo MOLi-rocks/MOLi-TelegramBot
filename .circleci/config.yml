@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # Specify the version you desire here
-      - image: circleci/php:7.4-node-browsers
+      - image: cimg/php:7.4-node
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -22,7 +22,7 @@ jobs:
       - checkout
 
       - run: sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
-      - run: sudo docker-php-ext-install zip bcmath
+      - run: sudo pecl install zip bcmath
       - run: sudo composer self-update
       - run: php -v
 
