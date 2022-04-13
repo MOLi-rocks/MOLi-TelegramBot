@@ -21,8 +21,8 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
-      - run: sudo pecl install zip bcmath
+      #- run: sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
+      #- run: sudo pecl install zip bcmath
       - run: sudo composer self-update
       - run: php -v
 
