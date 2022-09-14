@@ -55,6 +55,14 @@
                 background-color: #2a2a2e;
                 color: #cfcfd1;
             }
+            
+            rect {
+                fill: #2a2a2e;
+            }
+
+            g > text {
+                fill: #ffffff;
+            }
         }
     </style>
 </head>
