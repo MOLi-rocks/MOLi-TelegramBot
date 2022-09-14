@@ -14002,12 +14002,14 @@
             /**
      * Class Telegram.
      *
+     * @method static list<\Telegram\Bot\Api> getBots(string $name)
+     * @mixin \Telegram\Bot\BotsManager
      */ 
         class Telegram {
                     /**
          * Set the IoC Container.
          *
-         * @param $container Container instance
+         * @param \Telegram\Bot\Container $container Container instance
          * @return \Telegram\Bot\BotsManager 
          * @static 
          */ 
@@ -14032,7 +14034,7 @@
                     /**
          * Get a bot instance.
          *
-         * @param string $name
+         * @param string|null $name
          * @throws TelegramSDKException
          * @return \Telegram\Bot\Api 
          * @static 
@@ -14045,7 +14047,7 @@
                     /**
          * Reconnect to the given bot.
          *
-         * @param string $name
+         * @param string|null $name
          * @throws TelegramSDKException
          * @return \Telegram\Bot\Api 
          * @static 
@@ -14058,7 +14060,7 @@
                     /**
          * Disconnect from the given bot.
          *
-         * @param string $name
+         * @param string|null $name
          * @return \Telegram\Bot\BotsManager 
          * @static 
          */ 
@@ -14106,7 +14108,7 @@
                     /**
          * Return all of the created bots.
          *
-         * @return \Telegram\Bot\Api[] 
+         * @return \Telegram\Bot\array<string, Api>
          * @static 
          */ 
         public static function getBots()
@@ -14115,9 +14117,11 @@
                         return $instance->getBots();
         }
                     /**
-         * Builds the list of commands for the given commands array.
+         * 
          *
-         * @param array $commands
+         * @deprecated Will be removed in SDK v4
+         * @internal Builds the list of commands for the given commands array.
+         * @param \Telegram\Bot\list<string|\Telegram\Bot\class-string<\Telegram\Bot\Commands\CommandInterface>> $commands A list of command names or FQCNs of CommandInterface instances.
          * @return array An array of commands which includes global and bot specific commands.
          * @static 
          */ 
@@ -14176,6 +14180,16 @@
         {
                         /** @var \Facade\FlareClient\Flare $instance */
                         return $instance->filterExceptionsUsing($filterExceptionsCallable);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function filterReportsUsing($filterReportsCallable)
+        {
+                        /** @var \Facade\FlareClient\Flare $instance */
+                        return $instance->filterReportsUsing($filterReportsCallable);
         }
                     /**
          * 
