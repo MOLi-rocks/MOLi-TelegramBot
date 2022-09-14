@@ -14002,12 +14002,14 @@
             /**
      * Class Telegram.
      *
+     * @method static list<\Telegram\Bot\Api> getBots(string $name)
+     * @mixin \Telegram\Bot\BotsManager
      */ 
         class Telegram {
                     /**
          * Set the IoC Container.
          *
-         * @param $container Container instance
+         * @param \Telegram\Bot\Container $container Container instance
          * @return \Telegram\Bot\BotsManager 
          * @static 
          */ 
@@ -14020,7 +14022,7 @@
          * Get the configuration for a bot.
          *
          * @param string|null $name
-         * @throws \InvalidArgumentException
+         * @throws InvalidArgumentException
          * @return array 
          * @static 
          */ 
@@ -14032,7 +14034,8 @@
                     /**
          * Get a bot instance.
          *
-         * @param string $name
+         * @param string|null $name
+         * @throws TelegramSDKException
          * @return \Telegram\Bot\Api 
          * @static 
          */ 
@@ -14044,7 +14047,8 @@
                     /**
          * Reconnect to the given bot.
          *
-         * @param string $name
+         * @param string|null $name
+         * @throws TelegramSDKException
          * @return \Telegram\Bot\Api 
          * @static 
          */ 
@@ -14056,14 +14060,14 @@
                     /**
          * Disconnect from the given bot.
          *
-         * @param string $name
-         * @return void 
+         * @param string|null $name
+         * @return \Telegram\Bot\BotsManager 
          * @static 
          */ 
         public static function disconnect($name = null)
         {
                         /** @var \Telegram\Bot\BotsManager $instance */
-                        $instance->disconnect($name);
+                        return $instance->disconnect($name);
         }
                     /**
          * Get the specified configuration value for Telegram.
@@ -14081,13 +14085,13 @@
                     /**
          * Get the default bot name.
          *
-         * @return string 
+         * @return string|null 
          * @static 
          */ 
-        public static function getDefaultBot()
+        public static function getDefaultBotName()
         {
                         /** @var \Telegram\Bot\BotsManager $instance */
-                        return $instance->getDefaultBot();
+                        return $instance->getDefaultBotName();
         }
                     /**
          * Set the default bot name.
@@ -14104,13 +14108,27 @@
                     /**
          * Return all of the created bots.
          *
-         * @return \Telegram\Bot\Api[] 
+         * @return \Telegram\Bot\array<string, Api>
          * @static 
          */ 
         public static function getBots()
         {
                         /** @var \Telegram\Bot\BotsManager $instance */
                         return $instance->getBots();
+        }
+                    /**
+         * 
+         *
+         * @deprecated Will be removed in SDK v4
+         * @internal Builds the list of commands for the given commands array.
+         * @param \Telegram\Bot\list<string|\Telegram\Bot\class-string<\Telegram\Bot\Commands\CommandInterface>> $commands A list of command names or FQCNs of CommandInterface instances.
+         * @return array An array of commands which includes global and bot specific commands.
+         * @static 
+         */ 
+        public static function parseBotCommands($commands)
+        {
+                        /** @var \Telegram\Bot\BotsManager $instance */
+                        return $instance->parseBotCommands($commands);
         }
          
     }
@@ -14162,6 +14180,16 @@
         {
                         /** @var \Facade\FlareClient\Flare $instance */
                         return $instance->filterExceptionsUsing($filterExceptionsCallable);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function filterReportsUsing($filterReportsCallable)
+        {
+                        /** @var \Facade\FlareClient\Flare $instance */
+                        return $instance->filterReportsUsing($filterReportsCallable);
         }
                     /**
          * 
