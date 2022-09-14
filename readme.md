@@ -44,9 +44,9 @@
 - [MOLi@KKTIX](https://moli.kktix.cc/)
 - [NCNU OpenData API](https://api.ncnu.edu.tw/)
 - [民生示警公開資料平台](https://alerts.ncdr.nat.gov.tw/)
-- [台灣中油牌價 DataSet](https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx)
+- [中油主產品牌價](https://data.gov.tw/datasets/search?p=1&size=100&s=dataset_view_times_desc&rft=%E5%8F%B0%E7%81%A3%E4%B8%AD%E6%B2%B9)
 
 ## 教學文件
-- [Laravel 7.x 官方文件](https://laravel.com/docs/7.x)
+- [Laravel 8.x 官方文件](https://laravel.com/docs/8.x)
 - [英文影片教學](https://laracasts.com/)
 - [Laradock](https://laradock.io/)
