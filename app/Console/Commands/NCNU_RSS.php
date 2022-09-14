@@ -81,22 +81,26 @@ class NCNU_RSS extends Command
 
             $contents = $this->ncnuService->getRss();
 
-            $items = $contents['channel']['item'];
+            $items = $contents['info_ncnu']['item'];
 
             foreach ($items as $item) {
-                $hashtag = '';
-
-                if (!$this->ncnuService->checkRssPublished($item['guid'])) {
+                if (!$this->ncnuService->checkRssPublished($item['uid'])) {
                     if ($this->option('init')) {
-                        $this->ncnuService->storePublishedRss($item['guid']);
+                        $this->ncnuService->storePublishedRss($item['uid']);
                     } else {
                         $seg_list = Jieba::cut($item['title']);
+
+                        if ( !empty($item['category']) ) {
+                            $hashtag = '#' . $item['category'] . ' ';
+                        } else {
+                            $hashtag = '';
+                        }
 
                         foreach ($seg_list as $seg_list_item) {
                             $hashtag .= '#' . $seg_list_item . ' ';
                         }
 
-                        $rawMsg = $item['title'] . PHP_EOL . 'http://www.ncnu.edu.tw/ncnuweb/ann/' . $item['link'];
+                        $rawMsg = '(' . $item['publish_start_at'] . ') ' . $item['title'] . PHP_EOL . $item['ori_web_url'];
 
                         // send to Telegram Channel
                         $this->telegramService->sendMessage(
@@ -110,7 +114,7 @@ class NCNU_RSS extends Command
                         $lineMsg = PHP_EOL . $rawMsg;
                         $this->LINENotifyService->sendMsgToAll($lineMsg);
 
-                        $this->ncnuService->storePublishedRss($item['guid']);
+                        $this->ncnuService->storePublishedRss($item['uid']);
 
                         // 避免太過頻繁發送
                         sleep(5);

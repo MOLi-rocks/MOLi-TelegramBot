@@ -99,14 +99,6 @@ class SearchStaffContactCommand extends Command
             ]);
 
             WhoUseWhatCommand::where('user-id', '=', $messageFrom)->delete();
-        } else {
-            $this->replyWithChatAction(['action' => Actions::TYPING]);
-            $this->replyWithMessage([
-                'text' => '此功能限一對一對話',
-                'reply_to_message_id' => $messageId
-            ]);
-
-            return response('OK', 200); // 強制結束 command
         }
 
         return response('OK', 200);
