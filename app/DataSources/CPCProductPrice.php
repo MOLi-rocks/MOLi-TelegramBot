@@ -18,7 +18,7 @@ class CPCProductPrice extends Source
     {
         parent::__construct();
 
-        $this->url = 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx/getCPCMainProdListPrice';
+        $this->url = 'https://vipmbr.cpc.com.tw/CPCSTN/ListPriceWebService.asmx/getCPCMainProdListPrice_XML';
 
         $this->historyUrl = 'https://vipmember.tmtd.cpc.com.tw/OpenData/ListPriceWebService.asmx/getCPCMainProdListPrice_Historical';
     }
@@ -83,13 +83,8 @@ class CPCProductPrice extends Source
     {
         $fileContents = $response->getBody()->getContents();
 
-        // SOAP response to regular XML
-        $xml = preg_replace('/(<\/?)(\w+):([^>]*>)/', '$1$2$3', $fileContents);
+        $simpleXml = simplexml_load_string($fileContents, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-        $simpleXml = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-        $json = json_decode(json_encode($simpleXml), 1);
-
-        return $json['diffgrdiffgram']['NewDataSet']['tbTable'];
+        return json_decode(json_encode($simpleXml), 1);
     }
 }

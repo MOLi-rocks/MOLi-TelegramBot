@@ -31,7 +31,7 @@ Route::get('/ncdr-rss', 'MOLiBotController@getNCDR_RSS');
 
 Route::get('/fuel-price', 'MOLiBotController@getFuelPrice');
 
-Route::get('/history-fuel-price', 'MOLiBotController@getHistoryFuelPrice');
+//Route::get('/history-fuel-price', 'MOLiBotController@getHistoryFuelPrice');
 
 Route::group(['middleware' => 'bot.token'], function () {
     Route::post('messages', 'TelegramController@postSendMessage');
