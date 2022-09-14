@@ -85,6 +85,8 @@ class CPCProductPrice extends Source
 
         $simpleXml = simplexml_load_string($fileContents, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-        return json_decode(json_encode($simpleXml), 1);
+        $json = json_decode(json_encode($simpleXml), 1);
+        
+        return $json['Table']
     }
 }
