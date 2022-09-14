@@ -102,7 +102,7 @@
                 </div>
                 <div class="row padding-top">
                     <div class="col center-text">
-                        <h1>請查看 LINE 通知，並確認 LINE Notify 並沒有被封鎖！</h1>
+                        <h1>請查看 LINE 通知，並確認 LINE Notify 服務沒有被封鎖！</h1>
                     </div>
                 </div>
             @else
