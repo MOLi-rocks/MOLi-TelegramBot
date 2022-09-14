@@ -87,6 +87,6 @@ class CPCProductPrice extends Source
 
         $json = json_decode(json_encode($simpleXml), 1);
         
-        return $json['Table']
+        return $json['Table'];
     }
 }
