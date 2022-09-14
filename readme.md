@@ -1,13 +1,10 @@
 # MOLi-TelegramBot
-![Laravel Version](https://img.shields.io/badge/Laravel-7.x-brightgreen.svg)
-![PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.2.5-orange.svg)
+![Laravel Version](https://img.shields.io/badge/Laravel-8.x-brightgreen.svg)
+![PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.4-orange.svg)
 [![CircleCI](https://circleci.com/gh/MOLi-rocks/MOLi-TelegramBot/tree/master.svg?style=svg)](https://circleci.com/gh/MOLi-rocks/MOLi-TelegramBot/tree/master)
 [![State-of-the-art Shitcode](https://img.shields.io/static/v1?label=State-of-the-art&message=Shitcode&color=7B5804)](https://github.com/trekhleb/state-of-the-art-shitcode)
 
 ## 開發環境說明
-
-### PHP 版本
-雖然依賴只須 >=7.2.5，但是因為 PHP 支援版本的原因，所以開發是使用 7.4
 
 ### 編輯器
 可以使用 PhpStorm 當作 IDE，學生可以免費使用授權版，此 IDE 非常強大，但是也因為 Laravel magic function 太多導致無法精確的判斷，可以使用 [laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper) 來幫助 IDE 識別。
