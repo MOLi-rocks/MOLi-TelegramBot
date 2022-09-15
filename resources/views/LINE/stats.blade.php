@@ -159,6 +159,10 @@
                     legend: {
                         alignment: 'center',
                         position: 'bottom'
+                    },
+                    tooltip: {
+                        isHtml: true,
+                        trigger: 'selection'
                     }
                 };
 
@@ -168,6 +172,10 @@
                     legend: {
                         alignment: 'center',
                         position: 'bottom'
+                    },
+                    tooltip: {
+                        isHtml: true,
+                        trigger: 'selection'
                     }
                 };
 
@@ -177,6 +185,10 @@
                     legend: {
                         alignment: 'center',
                         position: 'bottom'
+                    },
+                    tooltip: {
+                        isHtml: true,
+                        trigger: 'selection'
                     }
                 };
 
